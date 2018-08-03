@@ -8,7 +8,7 @@
     {% set tab = [] %}
     {% for Acolor in product.getAllowedColors() %}
         {% if Acolor.getFavourite == 1 %}
-            {% set tab = tab|merge( [Acolor.refUnique]) %}
+            {% set tab = tab|merge( [Acolor.getColor().getLabel()]) %}
         {% endif %}
     {% endfor %}
     <script>
@@ -45,18 +45,6 @@
             var photo = document.getElementById(id);
             photo.style.display = null;
 
-            var miniatures = $(".card-product-photos-other.autre");
-            $.each(miniatures, function () {
-                if(this.alt == id){
-                    this.style.display = "none";
-                }
-                else{
-                    this.style.display = null;
-                }
-
-            });
-
-
 
         }
 
@@ -79,6 +67,8 @@
             {% endfor %}
 
             for (var j = 0; j < t.length; j++) {
+                console.log(id);
+                console.log(t[j]);
                 if (id == t[j]) {
                     textHeart.style.display = null;
                 }

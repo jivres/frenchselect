@@ -126,10 +126,12 @@
                 </div>
             </section>
 
+
+
             {% if access is defined and access is not null %}
-                {% if access|length == 0 or not access.allowed %}
-                    <div class="lightbox lightbox-blurred lightbox-after">
-                        <div class="lightbox-content orange">
+                <section class="container-fluid sub-title-brands p-2">
+                    <div class="container-book-detail">
+                        <div class="container-book-detail-text">
                             <h1>Vous n'avez pas accès au catalogue de cette marque</h1>
                             {% if access.isCreated %}
                                 <p>Demander à accéder au catalogue :</p>
@@ -150,204 +152,199 @@
                                 <p>{{ access.reason }}</p>
                             {% endif %}
                         </div>
+                        {% if brand.getLifestyle2() != null %}
+                            <div class="mask-book"><img class="img-fluid bandeau-marque"
+                                                        src="{{ asset('uploads/'~brand.getLifestyle2().url) }}">
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </section>
+            {% else %}
+
+
+
+                <div class="text-center bandeau-catalogue p-4">
+                    <h5>Catalogue produits</h5>
+                </div>
+
+                <div class="container-fluid bg-white">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-lg-4 ctn-button-filter nav-item dropdown">
+                                <button class="btn button-filter dropdown-toggle" type="button" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">Collection
+                                </button>
+                                <div class="dropdown-menu">
+                                    {% for collec in collections %}
+                                        <a class="dropdown-item" href="#"
+                                           onclick="changeCollection(event, {{ collec.id }})">{{ collec }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <form autocomplete="off">
+                                    <div class="input-group form" id="searchbar">
+                                        <input class="border-bottom border-dark" id="product-search-input" type='text'
+                                               name='target'
+                                               placeholder="Je recherche un produit" align="center"
+                                               onkeyup="filter(this.value)" onfocus="this.placeholder=''"
+                                               onblur="this.placeholder='Je recherche un produit'">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-2 ctn-button-filter nav-item dropdown">
+                                <button class="btn button-filter dropdown-toggle" type="button" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">Trier par
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Meilleures ventes</a>
+                                    <a class="dropdown-item" href="#">Prix croissant</a>
+                                    <a class="dropdown-item" href="#">Prix décroissant</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 ctn-button-filter">
+                                <button id="btn-filter" class="btn button-filter" type="button" data-toggle="collapse"
+                                        data-target="#filterbarContent" aria-controls="filterbarContent"
+                                        aria-expanded="false"
+                                        aria-label="Filters navigation">Ajouter des filtres
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- PRODUITS -->
+
+                    <div class="p-2 bg-white">
+                        <div class="container-list-products bg-white">
+                            <div class="row tab-content" id="myTabContent">
+                                <div class="col-3 column-filters m-2 p-4 shadow-sm collapse" id="filterbarContent">
+                                    <div class="container-btn-filters text-center"><a onclick="reinit()"
+                                                                                      class="button-fb p-2">Réinitialiser</a>
+                                    </div>
+                                    <div class="container-filters">
+                                        <div id="targets">
+                                            <a data-toggle="collapse" href="#collapseTargets" role="button"
+                                               aria-expanded="false" aria-controls="collapseTargets"><h2>Cibles</h2></a>
+                                            <div class="collapse" id="collapseTargets">
+                                                {% for target in targets %}
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="cb{{ target.getLabel() }}"
+                                                               onchange="filter('')"
+                                                               value="target:{{ target.getId() }}">
+                                                        <label class="form-check-label"
+                                                               for="cb{{ target.getLabel() }}">{{ target.getLabel() }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        <div id="categories">
+                                            <a data-toggle="collapse" href="#collapseCategories" role="button"
+                                               aria-expanded="false" aria-controls="collapseCategories"><h2>
+                                                    Catégories</h2>
+                                            </a>
+                                            <div class="collapse" id="collapseCategories">
+                                                {% for categorie in primaryCategories %}
+                                                    {% set productsFilter = [] %}
+                                                    {% for p in categorie.getProducts().toArray() %}
+                                                        {% if p.isActive and p.collection.id == collection.id %}
+                                                            {% set productsFilter = productsFilter|merge([ p ]) %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if productsFilter is not empty %}
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                   id="cb{{ categorie.getLabel() }}"
+                                                                   onchange="filter('')"
+                                                                   value="category:{{ categorie.getId() }}">
+                                                            <label class="form-check-label"
+                                                                   for="cb{{ categorie.getLabel() }}">{{ categorie.getLabel() }}</label>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+
+                                        </div>
+
+                                        <div id="sizes">
+                                            <a data-toggle="collapse" href="#collapseSizes" role="button"
+                                               aria-expanded="false"
+                                               aria-controls="collapseSizes"><h2>Tailles</h2></a>
+                                            <div class="collapse" id="collapseSizes">
+                                                {% for size in sizes %}
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="cb{{ size.getVal() }}"
+                                                               onchange="filter('')"
+                                                               value="size:{{ size.getId() }}">
+                                                        <label class="form-check-label"
+                                                               for="cb{{ size.getVal() }}">{{ size.getVal() }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        <div id="couleurs">
+                                            <a data-toggle="collapse" href="#collapseColors" role="button"
+                                               aria-expanded="false"
+                                               aria-controls="collapseColors"><h2>Couleurs</h2></a>
+                                            <div class="collapse" id="collapseColors">
+                                                {% for color in colors %}
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="cb{{ color.getLabel() }}"
+                                                               onchange="filter('')"
+                                                               value="color:{{ color.getId() }}">
+                                                        <label class="form-check-label"
+                                                               for="cb{{ color.getLabel() }}">{{ color.getLabel() }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        <div id="reduction">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input"
+                                                       id="cbReduction"
+                                                       onchange="filter('')"
+                                                       value="reduction:true">
+                                                <label class="form-check-label"
+                                                       for="cbReduction">En réduction</label>
+                                            </div>
+
+                                        </div>
+
+                                        <div id="favourite">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input"
+                                                       id="cdFavourite"
+                                                       onchange="filter('')"
+                                                       value="favourite:true">
+                                                <label class="form-check-label"
+                                                       for="cbFavourite">Coup de coeur</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col" id="products">
+                                    {% if carts is defined %}
+                                        {% include 'products/productlist.html.twig' with { 'cart' : cart, 'products' : products, 'carts' : carts } %}
+                                    {% else %}
+                                        {% include 'products/productlist.html.twig' with { 'products' : products } %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             {% endif %}
-            <!-- MENU SECONDAIRE -->
-
-            <div class="text-center bandeau-catalogue p-4">
-                <h5>Catalogue produits</h5>
-            </div>
         {% endif %}
-        <div class="container-fluid bg-white">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-lg-4 ctn-button-filter nav-item dropdown">
-                        <button class="btn button-filter dropdown-toggle" type="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Collection
-                        </button>
-                        <div class="dropdown-menu">
-                            {% for collec in collections %}
-                                <a class="dropdown-item" href="#"
-                                   onclick="changeCollection(event, {{ collec.id }})">{{ collec }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <form autocomplete="off">
-                            <div class="input-group form" id="searchbar">
-                                <input class="border-bottom border-dark" id="product-search-input" type='text'
-                                       name='target'
-                                       placeholder="Je recherche un produit" align="center"
-                                       onkeyup="filter(this.value)" onfocus="this.placeholder=''"
-                                       onblur="this.placeholder='Je recherche un produit'">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-lg-2 ctn-button-filter nav-item dropdown">
-                        <button class="btn button-filter dropdown-toggle" type="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Trier par
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Meilleures ventes</a>
-                            <a class="dropdown-item" href="#">Prix croissant</a>
-                            <a class="dropdown-item" href="#">Prix décroissant</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 ctn-button-filter">
-                        <button id="btn-filter" class="btn button-filter" type="button" data-toggle="collapse"
-                                data-target="#filterbarContent" aria-controls="filterbarContent" aria-expanded="false"
-                                aria-label="Filters navigation">Ajouter des filtres
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- PANIER TITLE -->
-            <!--<div class="bar fake-bar-for-fix"></div>
-        <article class="article-bar article-bar-to-fix">
-            <div class="panier bar panier-bar row">
-                <p class="bar-btn panier-btn">
-                    <a class="btn" data-toggle="collapse" href="#panier" aria-expanded="false" aria-controls="panier">
-                        <img src="{{ asset('bundles/b2b/img/basket.png') }}" width="21" height="19">
-                        <span>Mon panier</span>
-                        <span class="caret caret-horizontal"></span>
-                    </a>
-                </p>
-            </div>
-
-            <div class="panier bar-collapse collapse" id="panier">
-                <div class="row">
-                    Panier
-                </div>
-            </div>
-        </article>-->
-
-            <!-- PRODUITS -->
-
-            <div class="p-2 bg-white">
-                <div class="container-list-products bg-white">
-                    <div class="row tab-content" id="myTabContent">
-                        <div class="col-3 column-filters m-2 p-4 shadow-sm collapse" id="filterbarContent">
-                            <div class="container-btn-filters text-center"><a onclick="reinit()" class="button-fb p-2">Réinitialiser</a>
-                            </div>
-                            <div class="container-filters">
-                                <div id="targets">
-                                    <a data-toggle="collapse" href="#collapseTargets" role="button"
-                                       aria-expanded="false" aria-controls="collapseTargets"><h2>Cibles</h2></a>
-                                    <div class="collapse" id="collapseTargets">
-                                        {% for target in targets %}
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input"
-                                                       id="cb{{ target.getLabel() }}"
-                                                       onchange="filter('')"
-                                                       value="target:{{ target.getId() }}">
-                                                <label class="form-check-label"
-                                                       for="cb{{ target.getLabel() }}">{{ target.getLabel() }}</label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div id="categories">
-                                    <a data-toggle="collapse" href="#collapseCategories" role="button"
-                                       aria-expanded="false" aria-controls="collapseCategories"><h2>Catégories</h2></a>
-                                    <div class="collapse" id="collapseCategories">
-                                        {% for categorie in primaryCategories %}
-                                            {% set productsFilter = [] %}
-                                            {% for p in categorie.getProducts().toArray() %}
-                                                {% if p.isActive and p.collection.id == collection.id %}
-                                                    {% set productsFilter = productsFilter|merge([ p ]) %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if productsFilter is not empty %}
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input"
-                                                           id="cb{{ categorie.getLabel() }}"
-                                                           onchange="filter('')"
-                                                           value="category:{{ categorie.getId() }}">
-                                                    <label class="form-check-label"
-                                                           for="cb{{ categorie.getLabel() }}">{{ categorie.getLabel() }}</label>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-
-                                </div>
-
-                                <div id="sizes">
-                                    <a data-toggle="collapse" href="#collapseSizes" role="button" aria-expanded="false"
-                                       aria-controls="collapseSizes"><h2>Tailles</h2></a>
-                                    <div class="collapse" id="collapseSizes">
-                                        {% for size in sizes %}
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input"
-                                                       id="cb{{ size.getVal() }}"
-                                                       onchange="filter('')"
-                                                       value="size:{{ size.getId() }}">
-                                                <label class="form-check-label"
-                                                       for="cb{{ size.getVal() }}">{{ size.getVal() }}</label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div id="couleurs">
-                                    <a data-toggle="collapse" href="#collapseColors" role="button" aria-expanded="false"
-                                       aria-controls="collapseColors"><h2>Couleurs</h2></a>
-                                    <div class="collapse" id="collapseColors">
-                                        {% for color in colors %}
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input"
-                                                       id="cb{{ color.getLabel() }}"
-                                                       onchange="filter('')"
-                                                       value="color:{{ color.getId() }}">
-                                                <label class="form-check-label"
-                                                       for="cb{{ color.getLabel() }}">{{ color.getLabel() }}</label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div id="reduction">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input"
-                                               id="cbReduction"
-                                               onchange="filter('')"
-                                               value="reduction:true">
-                                        <label class="form-check-label"
-                                               for="cbReduction">En réduction</label>
-                                    </div>
-
-                                </div>
-
-                                <div id="favourite">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input"
-                                               id="cdFavourite"
-                                               onchange="filter('')"
-                                               value="favourite:true">
-                                        <label class="form-check-label"
-                                               for="cbFavourite">Coup de coeur</label>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col" id="products">
-                            {% if carts is defined %}
-                                {% include 'products/productlist.html.twig' with { 'cart' : cart, 'products' : products, 'carts' : carts } %}
-                            {% else %}
-                                {% include 'products/productlist.html.twig' with { 'products' : products } %}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
         {% if cible is defined and cible is not null %}
             <section class="container-fluid brands-competitor p-4">
                 <h2>Les marques complémentaires</h2>

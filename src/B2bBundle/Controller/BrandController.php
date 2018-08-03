@@ -79,10 +79,17 @@ class BrandController extends Controller
 
     public function calculUnivers(Brand $brand)
     {
+        $logger = $this->get('logger');
         $em = $this->getDoctrine()->getManager();
-        $univers = $em->getRepository('B2bBundle:Univers')->findAll();
-        $styleunivers = $em->getRepository('B2bBundle:StyleUnivers')->findAll();
+        foreach ($brand->getUnivers() as $univer) {
+            $brand->removeUnivers($univer);
+        }
 
+        $univers = $em->getRepository('B2bBundle:Univers')->findAll();
+        $temp =$em->getRepository('B2bBundle:BrandUniversCalcul')->findBy(array('brand' => $brand));
+        foreach($temp as $t){
+            $em->remove($t);
+        }
         $tabUniversCalcul = array();
         $tabPoidsCalcul = array();
         $brandStyle = $brand->getStyles()->toArray();
@@ -90,12 +97,9 @@ class BrandController extends Controller
             $cpt = 0;
             $univStyle = $univ->getStyles();
             foreach ($univStyle as $style) {
-                if (in_array($style, $brandStyle)) {
-                    foreach ($styleunivers as $row) {
-                        if ($row->getStyle() == $style && $row->getUnivers() == $univ) {
-                            $cpt = $cpt + $row->getPoids();
-                        }
-                    }
+                if (in_array($style->getStyle(), $brandStyle)) {
+                    $logger->debug('Poids :'.$style->getPoids());
+                    $cpt = $cpt + $style->getPoids();
                 }
             }
             array_push($tabUniversCalcul, $univ->getId());
@@ -186,8 +190,8 @@ class BrandController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($users as $u){
-                if(($u->getMail() == $brand->getMail()) && ($brand->getMail() != $mail) ){
+            foreach ($users as $u) {
+                if (($u->getMail() == $brand->getMail()) && ($brand->getMail() != $mail)) {
 
                     $this->addFlash("danger", "L'adresse email est déjà utilisée par un autre compte ");
                     return $this->render('brand/edit.html.twig', array(
@@ -198,6 +202,7 @@ class BrandController extends Controller
                 }
             }
             $this->getDoctrine()->getManager()->flush();
+            $this->calculUnivers($brand);
 
             return $this->redirectToRoute('backoffice_brand_show', array('id' => $brand->getId()));
         }
@@ -320,13 +325,13 @@ class BrandController extends Controller
             foreach ($brand->getSalesmen() as $row) {
                 $bool = true;
                 $temp = $row->getSalesman();
-                foreach($temp->getShops() as $salesmanshop){
-                    if($salesmanshop->getShop()->getName() == $request->get('shopName') && $salesmanshop->getBrand() == $brand){
+                foreach ($temp->getShops() as $salesmanshop) {
+                    if ($salesmanshop->getShop()->getName() == $request->get('shopName') && $salesmanshop->getBrand() == $brand) {
                         $bool = false;
                         break;
                     }
                 }
-                if($bool)$salesmen[] = $row->getSalesman();
+                if ($bool) $salesmen[] = $row->getSalesman();
             }
             return $this->render('shop/salesman-list.html.twig', array('salesmen' => $salesmen));
         }

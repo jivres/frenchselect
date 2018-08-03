@@ -21,7 +21,7 @@
                     {% endfor %}
                     <p>Montant total : {{ c.getTotal() }} €</p>
                 </div>
-                <button class="btn btn-orange" onclick="location.href='{{ path('cart_show', {'id' : c.id }) }}';">Accéder à ce panier</button>
+                <a href="{{ path('cart_show', {'id' : c.id }) }}">Accéder à ce panier</a>
                 <a href="{{ path('cart_delete', {'id' : c.id, 'redirect' : "true" }) }}">Supprimer ce panier</a>
 
             {% endfor %}

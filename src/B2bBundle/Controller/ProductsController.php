@@ -105,11 +105,11 @@ class ProductsController extends Controller
                 $cart = $cart[0];
             }
         }
-
+        $cible = $em->getRepository('B2bBundle:Target')->findOneBy(array('id' => $request->get('cible')));
         if ($collections) {
             $collection = $collections[0];
             if (!$isRestricted || $access->getAllowed()) {
-                $cible = $em->getRepository('B2bBundle:Target')->findOneBy(array('id' => $request->get('cible')));
+
                 $products = $em->getRepository('B2bBundle:Product')->getForCollection($collection, $cible);
             }
         }
