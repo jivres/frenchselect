@@ -44,10 +44,10 @@ class BrandRepository extends EntityRepository {
             }
         }
         $QueryBuilder = $this->createQueryBuilder('b')
-            ->innerJoin('b.categories', 'categorie')
-            ->innerJoin('b.univers', 'univers')
-            ->innerJoin('b.feature', 'feature')
-            ->innerJoin('b.priceRange', 'priceRange')
+            ->leftJoin('b.categories', 'categorie')
+            ->leftJoin('b.univers', 'univers')
+            ->leftJoin('b.feature', 'feature')
+            ->leftJoin('b.priceRange', 'priceRange')
             ->leftJoin('b.targets', 'targets')
             ->where('b.isActive = TRUE')
             ->andWhere('b.brandName LIKE :text')
