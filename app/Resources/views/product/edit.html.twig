@@ -1,0 +1,44 @@
+
+<h1 class="text-center">{{ product.name }}</h1>
+
+<div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8 login-form border rounded">
+    {{ form_start(edit_form) }}
+    {{ form_row(edit_form.refModel) }}
+    {{ form_row(edit_form.name) }}
+    {{ form_row(edit_form.label) }}
+    {{ form_row(edit_form.description) }}
+    {{ form_row(edit_form.priceHT) }}
+    {{ form_row(edit_form.recommendedPriceTTC) }}
+    {{ form_row(edit_form.material) }}
+    {{ form_row(edit_form.maintenance) }}
+    {{ form_row(edit_form.dimensions) }}
+    {{ form_row(edit_form.primaryCat) }}
+    {{ form_row(edit_form.secondaryCat) }}
+    {{ form_row(edit_form.tertiaryCategory) }}
+    {{ form_row(edit_form.target) }}
+    {{ form_row(edit_form.country) }}
+
+    <h3>Tailles existantes</h3>
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(edit_form.sizes) }}</span></label>
+        {{ form_widget(edit_form.sizes) }}
+    </div>
+
+    <h3>Couleurs existantes</h3>
+    <ul class="colors" data-prototype="{{ form_widget(edit_form.allowedColors.vars.prototype)|e('html_attr') }}">
+        {% for color in edit_form.allowedColors %}
+            <li>{{ form_widget(color) }}</li>
+        {% endfor %}
+    </ul>
+        <div class="text-center">
+    <input class="btn btn-primary" type="submit" value="Modifier le produit" />
+        </div>
+    {{ form_widget(edit_form._token) }}
+    {{ form_end(edit_form, { 'render_rest': false }) }}
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>

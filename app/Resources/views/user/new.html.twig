@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>User creation</h1>
+
+    {{ form_start(form) }}
+    <div class="form-group row">
+        {{ form_label(form.mail, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+        <div class="col-sm-9">
+            {{ form_widget(form.mail) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.username, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+        <div class="col-sm-9">
+            {{ form_widget(form.username) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.password, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+        <div class="col-sm-9">
+            {{ form_widget(form.password) }}
+        </div>
+    </div>
+        {{ form_widget(form) }}
+        <input type="submit" value="Créer" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('backoffice_user_index') }}">Retour à la liste</a>
+        </li>
+    </ul>
+{% endblock %}

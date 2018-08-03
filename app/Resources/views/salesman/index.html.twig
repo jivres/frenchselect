@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Commerciaux</li>
+    </ol>
+
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_salesman_new') }}" class="btn btn-primary">Créer un nouveau commercial</a>
+</div>
+
+
+    <table class="table table-striped mt-3 bg-white border">
+        <thead>
+            <tr>
+                <th scope="col">Statut</th>
+                <th scope="col">Commercial</th>
+                <th scope="col">Société</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for salesman in salesmen %}
+            <tr>
+                <td>{% if salesman.isEnabled %}Actif{% else %}Non actif{% endif %}</td>
+                <td>{{ salesman.lastName }} {{ salesman.firstName }}</td>
+                <td>{{ salesman.companyName }}</td>
+                <td>
+                    <a href="{{ path('backoffice_salesman_show', { 'id': salesman.id }) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('backoffice_salesman_edit', { 'id': salesman.id }) }}" class="btn btn-primary">Modifier</a>
+                    {% if is_granted('ROLE_ADMIN') and not salesman.isEnabled %}
+                        <a href="{{ path('backoffice_salesman_activate', { 'id': salesman.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

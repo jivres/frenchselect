@@ -1,0 +1,94 @@
+{% set active = 'marques' %}
+{% extends "B2bBundle::Vitrine/layout.html.twig" %}
+
+{% block title %}
+    French Select - La marque {{ brand.getBrandName() }}
+{% endblock %}
+
+    {% block body %}
+
+
+        <section class="container-fluid padding-start pb-4" id="section-start">
+
+            <div class="container container-brand-detail-master mt-3">
+                <div class="container-brand-detail">
+                    <div class="mask-brand" id="lifestyle_div">
+                        {% if cible.label =="Homme" %}
+                            <img class="img-fluid bandeau-marque"
+                                 src="{{ asset('uploads/'~brand.getLifestyleHomme().url) }}">
+                        {% elseif cible.label =="Femme" %}
+                            <img class="img-fluid bandeau-marque"
+                                 src="{{ asset('uploads/'~brand.getLifestyleFemme().url) }}">
+                        {% elseif cible.label=="Enfant" %}
+                            <img class="img-fluid bandeau-marque"
+                                 src="{{ asset('uploads/'~brand.getLifestyleEnfant().url) }}">
+                        {% endif %}
+                    </div>
+                    <div class="container-brand-detail-text">
+                        <div class="container-button-backb"><a href="{{ path('marques') }}" id="btn-retour"><span
+                                        class="button-backb p-2"><img
+                                            src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/> Retour aux marques</span></a>
+                        </div>
+                        <h1>{{ brand.getBrandName() }}</h1>
+                        <p style="font-size:15px"><a href="{{ brand.getUrlwebsite() }}"
+                                                     target="_blank">{{ brand.getUrlwebsite() }}</a></p>
+                        <p class="font-weight-bold p-4">{{ brand.getSlogan() }}</p>
+                        <p>{{ brand.getDescription() }}</p>
+                        <div class="d-flex justify-content-center p-4">
+                            {% if brand.getUrlFac() != "" %}
+                                <div class="icons-network"><a href="{{ brand.getUrlFac() }}" target="_blank"><i
+                                                class="fab fa-facebook-f"></i></a></div>
+                            {% endif %}
+                            {% if brand.getUrlInsta() != "" %}
+                                <div class="icons-network"><a href="{{ brand.getUrlInsta() }}" target="_blank"><i
+                                                class="fab fa-instagram"></i></a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="container-fluid sub-title-brands p-2">
+            <h2>Catalogue des produits</h2>
+            <div class="container-book-detail">
+                <div class="container-book-detail-text">
+                    <h1>Demandez l'accès</h1>
+                    <p class="p-2">Pour avoir l'accès au catalogue des produits de cette marque, envoyez-nous une
+                        demande.</p>
+                    <a href="{{ path('contact') }}"><span
+                                class="button-fc p-2">Contactez-nous</span></a>
+                </div>
+                {% if brand.getLifestyle2() != null %}
+                    <div class="mask-book"><img class="img-fluid bandeau-marque"
+                                                src="{{ asset('uploads/'~brand.getLifestyle2().url) }}">
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="container-fluid brands-competitor p-4">
+            <h2>Les marques complémentaires</h2>
+            {% set hommeRecommande = [] %}
+            {% set femmeRecommande = [] %}
+            {% set enfantRecommande = [] %}
+            {% for row in brandRecommande %}
+                {% set hommeRecommande = hommeRecommande|merge([row.getRecommandeHomme()]) %}
+                {% set femmeRecommande = femmeRecommande|merge([row.getRecommandeFemme()]) %}
+                {% set enfantRecommande = enfantRecommande|merge([row.getRecommandeEnfant()]) %}
+
+            {% endfor %}
+            {% if cible.label =="Homme" %}
+                {% include 'B2bBundle::Vitrine/brandlist.html.twig' with { 'brands' : hommeRecommande, 'cible' : cible } %}
+            {% elseif cible.label =="Femme" %}
+                {% include 'B2bBundle::Vitrine/brandlist.html.twig' with { 'brands' : femmeRecommande, 'cible' : cible } %}
+            {% elseif cible.label=="Enfant" %}
+                {% include 'B2bBundle::Vitrine/brandlist.html.twig' with { 'brands' : enfantRecommande, 'cible' : cible } %}
+            {% endif %}
+
+
+
+            <div class="container-btn text-center"><a href="{{ path('marques') }}" class="button-fh p-2 mb-4">Découvrez
+                    toutes nos marques</a></div>
+        </section>
+
+    {% endblock %}

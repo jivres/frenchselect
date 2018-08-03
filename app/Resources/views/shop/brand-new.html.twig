@@ -1,0 +1,45 @@
+{% set active = 'customers' %}
+{% extends "layout.html.twig" %}
+
+{% block title %}Showroom French Select - Nouvelle boutique{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+
+{% block content %}
+    <section class="container-fluid">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('brand_customer_index') }}">Mes Clients</a></li>
+            <li class="breadcrumb-item"><a
+                        href={{ path('brand_customer_show', {'id': customer.id}) }}>{{ customer }}</a></li>
+            <li class="breadcrumb-item active">Nouvelle boutique</li>
+        </ol>
+        <div class="d-flex justify-content-center">
+        <a href="{{ path('brand_customer_show', {'id': customer.id}) }}" class="btn btn-primary">Retour au client</a>
+        </div>
+
+        <h1 class="text-center">{{ customer }} - Nouvelle boutique</h1>
+
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8 login-form border rounded">
+                {{ form_start(form) }}
+
+                {% include 'shop/form.html.twig' with {'form': form} %}
+
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" value="Créer la boutique"/>
+                </div>
+                {{ form_widget(form._token) }}
+                {{ form_end(form, { 'render_rest': false }) }}
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+
+    </section>
+{% endblock %}

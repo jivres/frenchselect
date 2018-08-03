@@ -1,0 +1,40 @@
+backoffice_collection_desactivate:
+    path:    /{id}/desactivate
+    defaults: { _controller: "B2bBundle:Collection:desactivate"}
+    methods:  GET
+
+backoffice_collection_activate:
+    path:    /{id}/activate
+    defaults: { _controller: "B2bBundle:Collection:activate"}
+    methods:  GET
+
+backoffice_collection_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Collection:new" }
+    methods:  [GET, POST]
+
+backoffice_collection_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Collection:edit" }
+    methods:  [GET, POST]
+
+backoffice_collection_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Collection:delete" }
+    methods:  DELETE
+
+
+backoffice_product_import:
+    path:     /{collection}/import
+    defaults: { _controller: "B2bBundle:Product:import", collection: "-1" }
+    methods:  [GET, POST]
+
+backoffice_product_import_fixing:
+    path:     /import/fixing
+    defaults: { _controller: "B2bBundle:Product:importFixing" }
+    methods:  POST
+
+backoffice_product_import_ending_1:
+    path:     /{id}/import/ending/1
+    defaults: { _controller: "B2bBundle:Product:importEnding1" }
+    methods:  [GET, POST]

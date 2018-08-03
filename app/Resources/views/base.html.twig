@@ -1,0 +1,11 @@
+{% set active = 'admin' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B Admin{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+{% block content %}
+    {% block body %}{% endblock %}
+{% endblock %}

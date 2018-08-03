@@ -1,0 +1,113 @@
+b2b_backoffice_index:
+    path:     /
+    defaults: { _controller: B2bBundle:Backoffice:index }
+
+b2b_backoffice_color:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/color.yml"
+    prefix:   /color
+
+b2b_backoffice_size:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/size.yml"
+    prefix:   /size
+
+b2b_backoffice_style:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/style.yml"
+    prefix:   /style
+
+b2b_backoffice_univers:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/univers.yml"
+    prefix:   /univers
+
+b2b_backoffice_styleuniverscalcul:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/styleuniverscalcul.yml"
+    prefix:   /styleuniverscalcul
+
+b2b_backoffice_paymentmethod:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/paymentmethod.yml"
+    prefix:   /paymentmethod
+
+b2b_backoffice_primarycategory:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/primarycategory.yml"
+    prefix:   /primarycategory
+
+b2b_backoffice_brand:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/brand.yml"
+    prefix:   /brand
+
+b2b_backoffice_country:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/country.yml"
+    prefix:   /country
+
+b2b_backoffice_shop:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/shop.yml"
+    prefix:   /shop
+
+b2b_backoffice_access:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/access.yml"
+    prefix:   /access
+
+
+b2b_backoffice_pricerange:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/pricerange.yml"
+    prefix:   /pricerange
+
+b2b_backoffice_paymentterms:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/paymentterms.yml"
+    prefix:   /paymentterms
+
+b2b_backoffice_season:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/season.yml"
+    prefix:   /season
+
+b2b_backoffice_target:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/target.yml"
+    prefix:   /target
+
+b2b_backoffice_secondarycategory:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/secondarycategory.yml"
+    prefix:   /secondarycategory
+
+b2b_backoffice_user:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/user.yml"
+    prefix:   /user
+
+b2b_backoffice_salon:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/salon.yml"
+    prefix:   /salon
+
+b2b_backoffice_delivery:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/delivery.yml"
+    prefix:   /delivery
+
+b2b_backoffice_admin:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/admin.yml"
+    prefix:   /admin
+
+b2b_backoffice_salesman:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/salesman.yml"
+    prefix:   /salesman
+
+b2b_backoffice_contact:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/contact.yml"
+    prefix:   /contact
+
+b2b_backoffice_command:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/command.yml"
+    prefix:   /command
+
+b2b_backoffice_customer:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/customer.yml"
+    prefix:   /customer
+
+b2b_backoffice_collection:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/collection.yml"
+    prefix:   /collection
+
+b2b_backoffice_brand_recommande:
+    path:     /brandrecommande
+    defaults: { _controller: "B2bBundle:Brands:brandRecommande" }
+    methods:  GET
+
+b2b_backoffice_product:
+    resource: "@B2bBundle/Resources/config/routing/backoffice/product.yml"
+    prefix:   /product

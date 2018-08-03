@@ -1,0 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>French Select - Nouveau compte</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Nouveau compte</h1>
+<p>Nouvelle demande de création d'un compte client par {{ user.getContacts[0].getLastName() }},{{ user.getContacts[0].getFirstName() }} de la société {{ user.getCompanyName() }} !</p>
+<p>Cliquez sur ce lien pour activer son compte : {{ url('backoffice_customer_index') }}</p>
+</body>
+</html>

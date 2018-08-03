@@ -1,0 +1,41 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function selectShop(id, customerName, shopName, customerId, path) {
+            location.href = path;
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-primary btn-orange ml-2 mr-2" href="{{ path('salesman_select_customer') }}">Se connecter pour un Client</a>
+        </div>
+
+        <h1>Mes Clients</h1>
+
+        {% for brandshop in brandshops %}
+            <h2>Marque {{ brandshop.brand }}</h2>
+
+            {% include 'shop/shoplist.html.twig' with { 'shops': brandshop.shops, 'brand': brandshop.brand } %}
+        {% endfor %}
+
+        <a href="{{ path('backoffice_customer_new') }}" class="btn btn-primary">Créer un nouveau client</a>
+    </div>
+{% endblock %}

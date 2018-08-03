@@ -1,0 +1,203 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function cancel() {
+            $('.lightbox').hide();
+            $('#accept-lightbox').hide();
+            $('#refuse-lightbox').hide();
+        }
+
+        $(document).ready(function() {
+            cancel();
+        });
+        function acceptMessage(id) {
+            $('#access-id').html(id);
+            $('.lightbox').show();
+            $('#accept-lightbox').show();
+        }
+
+        function refuseMessage(id) {
+            $('#access-id').html(id);
+            $('.lightbox').show();
+            $('#refuse-lightbox').show();
+        }
+
+        function accept() {
+            var id = $('#access-id').html();
+            var reason = $('#access-accept-reason').val();
+            $.ajax({
+                url: "{{ path('backoffice_access_accept') }}",
+                type: 'POST',
+                data: {id: id, reason: reason},
+                datatype: 'json'
+            }).done(function() {
+                $('#accept-lightbox').hide();
+                $('.lightbox').hide();
+                location.reload();
+            });
+        }
+
+        function refuse() {
+            var id = $('#access-id').html();
+            var reason = $('#access-refuse-reason').val();
+            /*if (reason == '') {
+                var form = document.getElementById("refuse-lightbox");
+                form.checkValidity();
+                form.classList.add("was-validated");
+                return;
+            }*/
+            $.ajax({
+                url: "{{ path('backoffice_access_refuse') }}",
+                type: 'POST',
+                data: {id: id, reason: reason},
+                datatype: 'json'
+            }).done(function() {
+                $('#refuse-lightbox').hide();
+                $('.lightbox').hide();
+                location.reload();
+            });
+        }
+
+        /*(function() {
+            "use strict";
+            window.addEventListener("load", function() {
+                var form = document.getElementById("needs-validation");
+                form.addEventListener("submit", function(event) {
+                    console.log('form validity');
+                    console.log(form.checkValidity());
+                    if (form.checkValidity() == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add("was-validated");
+                }, false);
+            }, false);
+        }());*/
+    </script>
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Demandes d'accès à une marque</li>
+    </ol>
+
+    <h1 class="text-center">Demandes d'accès à une marque</h1>
+
+    <span id="access-id" style="display:none;"></span>
+
+    <div class="lightbox lightbox-center">
+        <div class="lightbox-content">
+            <div id="accept-lightbox">
+                <div class="form-group">
+                    <label for="access-accept-reason">Raison de l'acceptation</label>
+                    <textarea class="form-control" id="access-accept-reason" rows="3" placeholder="Raison de l'acceptation"></textarea>
+                    <div class="row">
+                        <button style="display:block; margin:5px auto" onclick="cancel();" class="btn btn-outline-primary">Annuler</button>
+                        <button style="display:block; margin:5px auto;" onclick="accept();" class="btn btn-outline-success" type="submit">Accepter</button>
+                    </div>
+                </div>
+            </div>
+            <div id="refuse-lightbox">
+                <div class="form-group">
+                    <label for="access-refuse-reason">Raison du refus</label>
+                    <textarea class="form-control" id="access-refuse-reason" rows="3" placeholder="Raison du refus" required></textarea>
+                    <div class="invalid-feedback">
+                        Vous devez saisir la raison du refus.
+                    </div>
+                    <div class="row">
+                        <button style="display:block; margin:5px auto" onclick="cancel();" class="btn btn-outline-primary">Annuler</button>
+                        <button style="display:block; margin:5px auto;" onclick="refuse();" class="btn btn-outline-danger" type="submit">Refuser</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border rounded p-3 m-3 bg-white">
+    <h2 class="text-center">Demandes en cours</h2>
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Marque</th>
+                <th>Motif</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for access in accessToHandle %}
+            <tr>
+                <td>{{ access.customer }}</td>
+                <td>{{ access.brand }}</td>
+                <td>{{ access.motive }}</td>
+                <td>
+                    <button onclick="acceptMessage({{ access.id }});" class="btn btn-outline-success">Accepter</button>
+                    <button onclick="refuseMessage({{ access.id }});" class="btn btn-outline-danger">Refuser</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+<div class="border rounded p-3 m-3 bg-white">
+    <h2 class="text-center">Demandes acceptées</h2>
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr>
+            <th>Client</th>
+            <th>Marque</th>
+            <th>Motif</th>
+            <th>Raison</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for access in accessAccepted %}
+            <tr>
+                <td>{{ access.customer }}</td>
+                <td>{{ access.brand }}</td>
+                <td>{{ access.motive }}</td>
+                <td>{{ access.reason }}</td>
+                <td>
+                    <button onclick="acceptMessage({{ access.id }});" class="btn btn-outline-success">Accepter</button>
+                    <button onclick="refuseMessage({{ access.id }});" class="btn btn-outline-danger">Refuser</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="border rounded p-3 m-3 bg-white">
+    <h2 class="text-center">Demandes refusées</h2>
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr>
+            <th>Client</th>
+            <th>Marque</th>
+            <th>Motif</th>
+            <th>Raison</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for access in accessRefused %}
+            <tr>
+                <td>{{ access.customer }}</td>
+                <td>{{ access.brand }}</td>
+                <td>{{ access.motive }}</td>
+                <td>{{ access.reason }}</td>
+                <td>
+                    <button onclick="acceptMessage({{ access.id }});" class="btn btn-outline-success">Accepter</button>
+                    <button onclick="refuseMessage({{ access.id }});" class="btn btn-outline-danger">Refuser</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

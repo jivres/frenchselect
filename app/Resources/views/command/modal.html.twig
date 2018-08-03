@@ -1,0 +1,40 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+                {% if viewer == 'brand' %}
+                    Détail de la commande n°{{ command.id }} - {{ command.cartCollection.customer }}
+                {% else %}
+                    Détail de la commande n°{{ command.id }} - {{ command.cartCollection.brand }}
+                {% endif %}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="d-flex justify-content-center">
+                <a href="#" class="btn btn-primary btn-orange ml-2 mr-2">PDF</a>
+                <a href="#" class="btn btn-primary btn-orange ml-2 mr-2">Excel avec code EAN</a>
+                <a href="#" class="btn btn-primary btn-orange ml-2 mr-2">Imprimer</a>
+            </div>
+            <hr>
+            {% if readonly is not defined %}
+            <div class="d-flex justify-content-center">
+                <a href="{{ path("command_edit", { 'id' : command.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Modifier la commande</a>
+                <a href="{{ path("command_validate", { 'id' : command.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Valider la commande </a>
+                <a href="{{ path("command_cancel", { 'id' : command.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Annuler la commande</a>
+            </div>
+            {% endif %}
+
+            {% include 'command/detail.html.twig' with { 'command' : command } %}
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            {% if not readonly is defined %}
+            <button type="button" class="btn btn-primary">Valider les modifications (inutile)</button>
+            {% endif %}
+        </div>
+    </div>
+</div>

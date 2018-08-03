@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script>
+        function search() {
+            var searchText = $('#salesman').val();
+
+            $.ajax({
+                url: "{{ path('brand_search_salesmen', {'id': brand.id}) }}",
+                type: 'POST',
+                data: {search_text: searchText},
+                datatype: 'json'
+            }).done(function (data) {
+                $("#salesmen").html(data).show();
+            });
+        }
+
+        function uncheckAll(entity) {
+            $("." + entity + "-check").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+
+        function selectSalesman(salesmanId, salesmanName) {
+            var salesmen_ids = $("#salesmen-ids");
+            var salesman_check = $("#salesman-" + salesmanId);
+            var assignedSalesman = $("#assignedSalesman");
+
+            // Checkbox déjà checked : il faut retirer les infos du commercial
+            if ($(salesman_check).prop("checked")) {
+                $(salesman_check).prop("checked", false);
+                $(salesmen_ids).val("");
+                $(assignedSalesman).val("");
+                $("#assign").hide();
+            } else { // On sélectionne le commercial
+                uncheckAll('salesman')
+                $(salesmen_ids).val(salesmanId);
+                $(assignedSalesman).val(salesmanName);
+                $(salesman_check).prop("checked", true);
+                $("#assign").show();
+            }
+
+
+            // Checkbox déjà checked : il faut retirer les infos du commercial
+            /*if ($(salesman_check).prop("checked")) {
+                $(salesman_check).prop("checked", false);
+                $(salesmen_ids).val($(salesmen_ids).val().replace(salesmanId + " ", ""));
+                $(assignedSalesman).val($(assignedSalesman).val().replace(", " + salesmanName, "").replace(salesmanName, ""));
+
+                // Il était le seul sélectionné
+                if (!$(salesmen_ids).val().trim()) {
+                    $(assignedSalesman).val("");
+                    $("#assign").hide();
+                } else {
+                    var ids = $(salesmen_ids).val().trim().split(' '); // on transforme la liste en tableau
+                    if (ids.length === 1) { // pour savoir s'il ne reste qu'un seul id : un commercial
+                        $(".forSalesman").text("le commercial");
+                    }
+                }
+            } else { // On sélectionne le commercial : on l'ajoute à la liste des commerciaux sélectionnées
+                $(salesmen_ids).val($(salesmen_ids).val() + salesmanId + " ");
+                if (!$(assignedSalesman).val().trim()) {
+                    $(assignedSalesman).val(salesmanName);
+                    $(".forSalesman").text("le commercial");
+                } else {
+                    $(assignedSalesman).val($(assignedSalesman).val() + ", " + salesmanName);
+                    $(".forSalesman").text("les commerciaux");
+                }
+                $(salesman_check).prop("checked", true);
+                $("#assign").show();
+            }*/
+        }
+
+        function assign() {
+            var ids = JSON.stringify($("#salesmen-ids").val().trim().split(' '));
+            var departments = $("input[name='departments']:checked").map(function () {
+                return $(this).val();
+            }).get();
+
+            var route = "{{ path('brand_assign_salesmen', {'id': brand.id, 'ids': ''})|escape('js') }}" + ids;
+            route += "&departments=" + JSON.stringify(departments);
+            window.location = route;
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', {'id': brand.id}) }}">{{ brand }}</a></li>
+        <li class="breadcrumb-item active">Assigner un commercial</li>
+    </ol>
+
+    <h1 class="text-center">{{ brand }} - Assigner un commercial à la marque</h1>
+
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <label class="form-control-plaintext">Veuillez sélectionner le commercial que vous souhaitez assigner à la
+                marque :</label>
+        </div>
+        <div class="form-group mb-2 col-md-4">
+            <input type="text" class="form-control col-md-12" id="salesman" placeholder="Numéro, nom, société...">
+        </div>
+        <button id="search-button" type="button" class="btn btn-orange mb-2" onclick="search();">Rechercher <img
+                    src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14"></button>
+    </form>
+
+    <div id="salesmen">
+
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label font-weight-bold control-label">Veuillez sélectionner les départements couverts par
+            <span class="forSalesman">le commercial</span> :</label>
+        <div id="departments" style="column-width:230px">
+            {% for department in departments %}
+                <div class="checkbox">
+                    <label for="department-{{ department.id }}" class>
+                        <input type="checkbox" id="department-{{ department.id }}" name="departments"
+                               value="{{ department.id }}">
+                        {{ department }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form class="form-inline" id="assign" style="display:none;">
+        <div class="form-group mb-2">
+            <label class="form-control-plaintext">Assigner <span class="forSalesman">le commercial</span></label>
+        </div>
+        <div class="form-group mb-2 col-md-3">
+            <input type="text" readonly class="form-control col-md-12" id="assignedSalesman" value="">
+        </div>
+        <div class="form-group mb-2">
+            <label class="form-control-plaintext" id="forBrand"> à la marque {{ brand }}</label>
+        </div>
+        <input type="text" id="salesmen-ids" style="display:none;">
+        <button type="button" id="assign-button" onclick="assign();" class="btn btn-orange ml-2 mb-2">Valider</button>
+    </form>
+
+    <script>
+        // Pour pouvoir appuyer sur Entrée sans que la page se recharge
+        $(document).ready(function () {
+            $("#salesman").keydown(function (event) {
+                if (event.key !== "Enter")
+                    return;
+                $('#search-button').click();
+                event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

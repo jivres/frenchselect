@@ -1,0 +1,60 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Boutique</th>
+            {% if is_granted('ROLE_BRAND') %}
+            <th>Commerciaux</th>
+            {% endif %}
+            <th>Ville</th>
+            <th>Pays</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for shop in shops %}
+            <tr>
+                <td>{{ shop.name }}</td>
+                {% if is_granted('ROLE_BRAND') %}
+                <td>
+                    {% if shop.salesmen|length == 0 %}
+                        <i>Aucun commercial affecté </i><br>
+                        <a href="{{ path('shop_assign_salesman', { 'id': shop.id }) }}" class="btn btn-outline-success">
+                            Assigner un commercial
+                        </a>
+                    {% else %}
+                        <ul class="list-unstyled">
+                        {% for salesmanshop in shop.salesmen %}
+                            <li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    {{ salesmanshop.brand }} - {{ salesmanshop.salesman }}
+                                {% elseif salesmanshop.brand == app.user %}
+                                    {{ salesmanshop.salesman }}
+                                {% endif %}
+                                <a href="{{ path('shop_deassign_salesman', { 'id': shop.id, 'salesmanshop': salesmanshop.id }) }}" class="btn btn-outline-danger">
+                                    Désassigner le commercial
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('shop_assign_salesman', { 'id': shop.id }) }}" class="btn btn-outline-success">
+                                    Assigner un commercial
+                                </a>
+                            </li>
+                        {% endif %}
+                        </ul>
+                    {% endif %}
+                </td>
+                {% endif %}
+                <td>{{ shop.town }}</td>
+                <td>{{ shop.country }}</td>
+                <td>
+                    <a href="{{ path('backoffice_shop_show', { 'id': shop.id }) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('b2b_customer_shop_edit', { 'id': shop.id }) }}" class="btn btn-primary">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

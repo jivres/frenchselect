@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        {% if collection is not null %}
+            <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', {'id': collection.brand.id}) }}">{{ collection.brand }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('collection_show', { 'id': collection.id }) }}">Collection {{ collection }}</a></li>
+            <li class="breadcrumb-item active"> Importation des produits</li>
+        {% else %}
+            <li class="breadcrumb-item active">Importation des produits</li>
+        {% endif %}
+    </ol>
+
+<div class="d-flex justify-content-center">
+    <a href="{{ path('collection_show', { 'id': collection.id }) }}" class="btn btn-primary">Retour à la collection</a>
+</div>
+
+    <h1 class="text-center">{{ collection }} - Importation de produits</h1>
+
+
+<div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8 login-form border rounded">
+    <div class="row">
+        <div class="col text-center">
+            Vous pouvez trouver un squelette excel <a href="{{ asset('bundles/b2b/docs/Importation_Produits.xlsx') }}"
+               target="_blank" style="text-decoration: underline;font-weight: bold">ici</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <!-- <form class="" action="#" method="post">
+                <input type="file" name="file">
+            </form> -->
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="text-center">
+            <input  class="btn btn-primary" type="submit" value="Importer les produits">
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-2">
+    </div>
+</div>
+
+{% endblock %}

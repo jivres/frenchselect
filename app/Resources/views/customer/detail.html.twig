@@ -1,0 +1,37 @@
+<div class="row">
+    <h3 class="col-md-12">Identifiant</h3>
+
+    <dt class="col-sm-3">Statut</dt>
+    <dd class="col-sm-9">
+        {% if customer.isActive %}
+            Actif
+        {% else %}
+            Non actif
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Nom d'utilisateur</dt>
+    <dd class="col-sm-9">{{ customer.username }}</dd>
+
+</div>
+<div class="row">
+    <h3 class="col-md-12">Informations sur la société</h3>
+
+    <dt class="col-sm-3">Nom du client</dt>
+    <dd class="col-sm-9">{{ customer.companyName }}</dd>
+
+    <dt class="col-sm-3">TVA</dt>
+    <dd class="col-sm-9">{{ customer.numTVA }}</dd>
+
+    <dt class="col-sm-3">Adresse de facturation</dt>
+    <dd class="col-sm-9">{{ customer.billingAddress }}</dd>
+
+    <dt class="col-sm-3">Code Postal de facturation</dt>
+    <dd class="col-sm-9">{{ customer.billingZP }}</dd>
+
+    <dt class="col-sm-3">Ville de facturation</dt>
+    <dd class="col-sm-9">{{ customer.billingTown }}</dd>
+
+    <dt class="col-sm-3">Pays de facturation</dt>
+    <dd class="col-sm-9">{{ customer.billingCountry }}</dd>
+</div>

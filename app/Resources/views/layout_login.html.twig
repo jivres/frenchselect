@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="fr">
+    {% block javascripts %}
+        <script src="{{ asset('bundles/b2b/js/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/main.js') }}" async></script>
+        <script src="{{ asset('bundles/b2b/js/fontawesome-all.min.js') }}" async></script>
+        <script>
+            function displayCart() {
+                $('#cart-short').toggle();
+            }
+        </script>
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link href="{{ asset('bundles/b2b/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/main.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/lightbox.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/responsive.css') }}" rel="stylesheet">
+        <style>
+            .alert {
+                margin: 1rem;
+            }
+
+            span.placeholder {
+                white-space: pre-wrap;
+            }
+        </style>
+    {% endblock %}
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Old+Standard+TT" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('bundles/b2b/img/favicon.ico') }}"/>
+</head>
+
+<body>
+
+<!-- MENU PRINCIPAL -->
+<div class="text-center">
+    <!-- LOGO -->
+    <a class="navbar-brand logo" href="{{ path('index') }}">
+        <img src="{{ asset('bundles/b2b/img/logo-french-select.svg') }}" alt="logo"
+             class="d-inline-block align-center"/>
+    </a>
+</div>
+
+{% block content %}
+{% endblock %}
+
+
+<footer class="modal-footer">
+    <!--Footer Links-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 text-center"><img src="{{ asset('bundles/b2b/img/logo-french-select-blanc.svg') }}"
+                                                   alt="logo" width="100px"/></div>
+            <div class="col-lg-3">
+                <h6>Vous êtes une boutique ?</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ path('index') }}">Nos services pour les boutiques</a></li>
+                    <li><a href="{{ path('marques') }}">> Découvrez notre marketplace</a></li>
+                    <li><a href="{{ path('salons_boutiques') }}">> Nos showrooms de mode</a></li>
+                    <li><a href="{{ path('inscription') }}">Inscrivez-vous gratuitement</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h6>Vous êtes une marque ?</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ path('offres_marques') }}">Nos services pour les marques</a></li>
+                    <li><a href="{{ path('showroom') }}">> Le marketplace professionel de mode</a></li>
+                    <li><a href="{{ path('agence_commerciale') }}">> L'agence commerciale de mode</a></li>
+                    <li><a href="{{ path('tarifs_marques') }}">Nos tarifs professionnels</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h6><a href="{{ path('inscription') }}">Contactez-nous</a></h6>
+                <h6>Nous suivre sur les réseaux</h6>
+                <div class="footer-icons"><a href="https://www.facebook.com/profile.php?id=100013779673917&fref=ts"
+                                             target="_blank" title="Facebook French Select"><i
+                                class="fab fa-facebook-f"></i></a> <a
+                            href="https://www.instagram.com/showroomfrenchselect/" target="_blank"
+                            title="Instagram French Select"><i class="fab fa-instagram"></i></a> <a
+                            href="https://twitter.com/frenchselectFR" target="_blank" title="Twitter French Select"><i
+                                class="fab fa-twitter"></i></a></div>
+
+                <div class="p-1"><a href="#"><img src="{{ asset('bundles/b2b/img/flag_fr.png') }}" alt="Francais"
+                                                  height="20px"/> FR</a> -
+                    <a class="m-0 p-1" style="text-align:right;"
+                       href="../en/<?php echo $table_trad[basename($_SERVER['PHP_SELF'], '.php')]; ?>"><img
+                                src="{{ asset('bundles/b2b/img/flag_en.png') }}" alt="Anglais" height="20px"/> EN</a>
+                </div>
+
+            </div>
+        </div>
+        <!--/.Footer Links-->
+
+        <!--Copyright-->
+        <div id="copyright" class="footer-copyright py-3 text-center"><a href="{{ path('mentions_legales') }}">Mentions
+                légales</a> - <a href="{{ path('cgu') }}">CGU</a> - <a href="{{ path('confidentialite') }}">Confidentialité</a>
+            - <a href="{{ path('cookies') }}">Cookies</a> - © 2018 Copyright French Select
+        </div>
+        <!--/.Copyright-->
+    </div>
+    <!--/.Footer-->
+</footer>
+</body>
+</html>

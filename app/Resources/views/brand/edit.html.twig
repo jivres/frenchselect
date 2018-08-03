@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item active">{{ brand.brandName }}</li>
+    </ol>
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_brand_index') }}" class="btn btn-primary">Retour à la liste</a>
+    <a href="{{ path('backoffice_brand_show', { 'id': brand.id }) }}" class="btn btn-primary">Voir la marque</a>
+</div>
+
+    <h1 class="text-center">Marque - {{ brand.brandName }}</h1>
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+        {{ form_start(form) }}
+
+        {% include 'brand/form.html.twig' with {'form': form} %}
+
+            <div class="text-center mt-3">
+        {{ form_widget(form._token) }}
+        <input class="btn btn-primary" type="submit" value="Modifier la marque" />
+            </div>
+        {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+    <div class="m-3 text-right">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-outline-danger del" type="submit" value="Supprimer la marque">
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+            });
+        });
+    </script>
+{% endblock %}

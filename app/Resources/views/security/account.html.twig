@@ -1,0 +1,63 @@
+{% set active = 'account' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Informations personnelles {% endblock %}
+
+{% block content %}
+
+
+    <div class="row">
+
+    <div class="col-lg-2 p-4 shadow-sm bg-white">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <h2>Mon compte</h2>
+            </li>
+            <li class="nav-item">
+                <h2>Ma société</h2>
+            </li>
+            <li class="nav-item">
+                <h2>Mes boutiques</h2>
+                <ul>
+                    <li>Boutique 1</li>
+                    <li>Boutique 2</li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Se déconnecter</h2>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-10">
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8">
+                <div class="text-right">
+                    <a href="{{ path('account_infos_edit') }}" class="btn btn-primary">Modifier les informations</a>
+                </div>
+                <div class="login-form border rounded">
+                {% if admin is not null %}
+                    <dt class="col-sm-3">Adresse mail</dt>
+                    <dd class="col-sm-9">{{ user.mail }}</dd>
+
+                    <dt class="col-sm-3">Nom d'utilisateur</dt>
+                    <dd class="col-sm-9">{{ user.username }}</dd>
+
+                    <dt class="col-sm-3">Nom</dt>
+                    <dd class="col-sm-9">{{ admin.name }}</dd>
+                {% elseif customer is not null %}
+                    {% include 'customer/detail.html.twig' with {'customer': customer} %}
+                {% elseif salesman is not null %}
+                    {% include 'salesman/detail.html.twig' with {'salesman': salesman} %}
+                {% elseif brand is not null %}
+                    {% set var = 1 %}
+                    {% include 'brand/detail.html.twig' with {'brand': brand} %}
+                {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+    </div>
+{% endblock %}

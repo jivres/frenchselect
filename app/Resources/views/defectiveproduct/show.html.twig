@@ -1,0 +1,25 @@
+{% set active = 'commands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('command_index') }}">Mes Commandes</a></li>
+            <li class="breadcrumb-item active">Signaler un produit défectueux</li>
+        </ol>
+
+        {% include 'defectiveproduct/detail.html.twig' with {'report': report} %}
+    </div>
+{% endblock %}

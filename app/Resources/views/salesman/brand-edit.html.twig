@@ -1,0 +1,44 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commerciaux{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('salesman_index') }}">Mes Commerciaux</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('salesman_show', {'id': salesman.id}) }}">Commercial {{ salesman }}</a></li>
+            <li class="breadcrumb-item active">Modifier</li>
+        </ol>
+
+        <div class="col-lg-8" style="margin:auto;">
+            {{ form_start(edit_form) }}
+
+            {% include 'salesman/form.html.twig' with {'form': edit_form} %}
+
+            {{ form_widget(edit_form._token) }}
+            <div class="row">
+                <input class="btn btn-primary" type="submit" value="Modifier le commercial" />
+            </div>
+            {{ form_end(edit_form, { 'render_rest': false }) }}
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" style="margin:auto; padding-top:2%">
+                <a href="{{ path('salesman_index') }}" class="btn btn-primary">Retour à la liste</a>
+                {{ form_start(delete_form) }}
+                <input class="btn btn-primary" type="submit" value="Supprimer">
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

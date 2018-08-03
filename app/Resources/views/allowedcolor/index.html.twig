@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Allowedcolors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Refunique</th>
+                <th>Eancode</th>
+                <th>Colorcode</th>
+                <th>Favourite</th>
+                <th>Reduction</th>
+                <th>Additionalinformation</th>
+                <th>Deliverystart</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for allowedColor in allowedColors %}
+            <tr>
+                <td><a href="{{ path('allowedcolor_show', { 'id': allowedColor.id }) }}">{{ allowedColor.id }}</a></td>
+                <td>{{ allowedColor.refUnique }}</td>
+                <td>{{ allowedColor.eanCode }}</td>
+                <td>{{ allowedColor.colorCode }}</td>
+                <td>{% if allowedColor.favourite %}Yes{% else %}No{% endif %}</td>
+                <td>{{ allowedColor.reduction }}</td>
+                <td>{{ allowedColor.additionalInformation }}</td>
+                <td>{% if allowedColor.deliveryStart %}{{ allowedColor.deliveryStart|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('allowedcolor_show', { 'id': allowedColor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('allowedcolor_edit', { 'id': allowedColor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('allowedcolor_new') }}">Create a new allowedColor</a>
+        </li>
+    </ul>
+{% endblock %}

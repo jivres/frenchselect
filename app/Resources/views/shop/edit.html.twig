@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_shop_index') }}">Boutiques</a></li>
+        <li class="breadcrumb-item active">Modifier</li>
+    </ol>
+
+    <h1 class="text-center">Modification de la boutique - {{ shop.name }}</h1>
+
+    <div class="col-lg-6" style="margin:auto;">
+        {{ form_start(edit_form) }}
+            {% include 'shop/form.html.twig' with {'form': edit_form} %}
+
+            <h2>Client</h2>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    {{ form_widget(edit_form.customer) }}
+                </div>
+            </div>
+
+            <h2>Commerciaux</h2>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    {{ form_widget(edit_form.salesmen) }}
+                </div>
+            </div>
+
+            {{ form_widget(edit_form._token) }}
+            <input class="btn btn-primary" type="submit" value="Modifier" />
+        {{ form_end(edit_form, { 'render_rest': false }) }}
+    </div>
+
+    <a href="{{ path('backoffice_shop_index') }}" class="btn btn-primary">Retour à la liste</a>
+    {{ form_start(delete_form) }}
+    <input class="btn btn-primary" type="submit" value="Supprimer">
+    {{ form_end(delete_form) }}
+{% endblock %}

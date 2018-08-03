@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head lang="fr">
+    {% block javascripts %}
+        <script src="{{ asset('bundles/b2b/js/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/b2b/js/main.js') }}" async></script>
+        <script src="{{ asset('bundles/b2b/js/fontawesome-all.min.js') }}" async></script>
+        <script>
+            function displayCart() {
+                $('#cart-short').toggle();
+            }
+        </script>
+        <script>
+            function products() {
+                {% if (app.user.connectedFor is defined) and (app.user.connectedFor is not null) %}
+                var ids =[];
+                {% for shop in app.user.connectedForShops %}
+                   ids.push("{{ shop.id }}")
+                {% endfor %}
+                var ids = JSON.stringify(ids);
+                window.location = "{{ path('connect_for_shop', {'ids': ''})|escape('js') }}" + ids;
+                {% endif %}
+
+            }
+        </script>
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link href="{{ asset('bundles/b2b/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/main.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/lightbox.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/b2b/css/responsive.css') }}" rel="stylesheet">
+        <style>
+            .alert {
+                margin: 1rem;
+            }
+
+            span.placeholder {
+                white-space: pre-wrap;
+            }
+        </style>
+    {% endblock %}
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Old+Standard+TT" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('bundles/b2b/img/favicon.ico') }}"/>
+</head>
+
+<body>
+
+<!-- MENU PRINCIPAL -->
+<nav role="navigation" class="navbar navbar-expand-lg navbar-light">
+    <!-- LOGO -->
+    <a class="navbar-brand logo" href="{{ path('b2b_homepage') }}">
+        <img src="{{ asset('bundles/b2b/img/logo-french-select.svg') }}" alt="logo"
+             class="d-inline-block align-center"/>
+    </a>
+
+    {% block menu %}
+        <!-- Affecter à 'active' une valeur de menu -->
+        {% if active is not defined %}{% set active = '' %}{% endif %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% if is_granted('ROLE_ADMIN') %} <!-- ADMINISTRATEUR -->
+                    <li class="nav-item {% if active == 'admin' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('b2b_backoffice_index') }}"> <span
+                                    class="sr-only">(current)</span>Administration</a>
+                    </li>
+                    <li class="nav-item {% if active == 'statistics' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('statistics_index') }}">Statistiques</a>
+                    </li>
+                {% elseif is_granted('ROLE_CUSTOMER') %} <!-- CLIENT -->
+                    <li class="nav-item {% if active == 'customers' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('customers_index') }}"> <span class="sr-only">(current)</span>Mes
+                            marques</a>
+                    </li>
+                    <li class="nav-item {% if active == 'commands' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('command_index') }}">Mes commandes</a>
+                    </li>
+                {% elseif is_granted('ROLE_BRAND') %} <!-- MARQUE -->
+                    <li class="nav-item {% if active == 'brands' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('b2b_homepage') }}"> <span class="sr-only">(current)</span>Tableau
+                            de bord</a>
+                    </li>
+                    <li class="nav-item {% if active == 'commands' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('command_index') }}">Mes commandes</a>
+                    </li>
+                    <li class="nav-item {% if active == 'customers' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('brand_customer_index') }}">Mes clients</a>
+                    </li>
+                    <li class="nav-item {% if active == 'salesmen' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('salesman_index') }}">Mes commerciaux</a>
+                    </li>
+                {% elseif is_granted('ROLE_SALESMAN') %} <!-- COMMERCIAL -->
+                    <li class="nav-item {% if active == 'brands' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('brands_index') }}"> <span class="sr-only">(current)</span>Mes
+                            marques</a>
+                    </li>
+                    <li class="nav-item {% if active == 'customers' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('salesman_shops_index') }}">Mes clients</a>
+                    </li>
+                    {% if (app.user.subordinates|length > 0) %}
+                        <li class="nav-item {% if active == 'salesmen' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('salesman_subordinates') }}">Mes sous-commerciaux</a>
+                        </li>
+                    {% endif %}
+                    {% if (app.user.connectedFor is not null) %}
+                        <li class="nav-item {% if active == 'commands' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('command_index') }}">Mes commandes</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item {% if active == 'statistics' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('statistics_index') }}">Statistiques</a>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_CUSTOMER') %}
+                    {% if carts is not defined %}
+                        {% set carts=app.user.carts %}
+                    {% endif %}
+                    <li class="nav-item dropdown" id="cart-item">
+                        <a class="nav-link dropdown-toggle" href="javascript:displayCart()" id="cartsDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Mon panier
+                        </a>
+                        {% if cart is defined %}
+                            {% include 'cart/short.html.twig' with { 'cart' : cart, 'carts' : carts } %}
+                        {% else %}
+                            {% include 'cart/short.html.twig' with { 'carts' : carts } %}
+                        {% endif %}
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown {% if active == 'account' %}active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="{{ path('account_infos') }}" id="navbarDropdown"
+                       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mon compte</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('account_infos') }}">Mes informations personnelles</a>
+
+                        {% if not is_granted('ROLE_ADMIN') and is_granted('ROLE_CUSTOMER') %}
+                            <a class="dropdown-item" href="{{ path('b2b_customer_shops') }}">Mes boutiques</a>
+                        {% endif %}
+                        {% if not is_granted('ROLE_ADMIN') and is_granted('ROLE_BRAND') %} <!-- MARQUE -->
+                            <a class="dropdown-item" href="{{ path('collection_index') }}">Mes collections</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('account_logout') }}">Déconnexion</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    {% endblock %}
+</nav>
+
+{% if (app.user.connectedFor is defined) and (app.user.connectedFor is not null) %}
+    <nav class="custom-navbar navbar-expand-md navbar-menu navbar-menu-subprimary p-2">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('command_select_customer') }}" title="Changer de client">Changer de
+                    client</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('deconnect_shop') }}" title="Se déconnecter">Se déconnecter</a>
+            </li>
+            {% if carts is not defined %}
+                {% set carts=app.user.connectedFor.carts %}
+            {% endif %}
+            <li class="nav-item dropdown" id="cart-item">
+                <a class="nav-link dropdown-toggle" href="javascript:displayCart()" id="cartsDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Mes commandes en cours
+                </a>
+                {% if cart is defined %}
+                    {% include 'cart/short.html.twig' with { 'cart' : cart, 'carts' : carts } %}
+                {% else %}
+                    {% include 'cart/short.html.twig' with { 'carts' : carts } %}
+                {% endif %}
+            </li>
+            <li>
+                <a class="nav-link" href="javascript:products()" >Mes produits
+                </a>
+            </li>
+        </ul>
+        <div class="mt-2">
+            Connecté pour le client : <span style="font-weight:bold;"> {{ app.user.connectedFor }}</span>
+            -
+            {% if app.user.connectedForShops|length == 0 %}
+                Boutique sélectionnée :
+            {% else %}
+                Boutiques sélectionnées :
+            {% endif %}
+            <span style="font-weight:bold;" class="connected-shops">
+                        {% for shop in app.user.connectedForShops %}
+                            <span class="connected-shop"> {{ shop.name }}</span>
+                        {% endfor %}
+                    </span>
+        </div>
+    </nav>
+{% endif %}
+
+<div class="flash-messages">
+    <div class="empty"></div>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+{% block content %}
+
+
+{% endblock %}
+
+<footer class="modal-footer">
+    <!--Footer Links-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 text-center"><img src="{{ asset('bundles/b2b/img/logo-french-select-blanc.svg') }}"
+                                                   alt="logo" width="100px"/></div>
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-4">
+                <h6>Nous suivre sur les réseaux</h6>
+                <div class="footer-icons"><a href="https://www.facebook.com/profile.php?id=100013779673917&fref=ts"
+                                             target="_blank" title="Facebook French Select"><i
+                                class="fab fa-facebook-f"></i></a> <a
+                            href="https://www.instagram.com/showroomfrenchselect/" target="_blank"
+                            title="Instagram French Select"><i class="fab fa-instagram"></i></a> <a
+                            href="https://twitter.com/frenchselectFR" target="_blank" title="Twitter French Select"><i
+                                class="fab fa-twitter"></i></a></div>
+
+            </div>
+        </div>
+        <!--/.Footer Links-->
+
+        <!--Copyright-->
+        <div id="copyright" class="footer-copyright py-3 text-center">© 2018 Copyright French Select</div>
+        <!--/.Copyright-->
+    </div>
+    <!--/.Footer-->
+</footer>
+</body>
+</html>

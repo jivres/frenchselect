@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <script>
+        $(document).ready(function() {
+
+            $collectionHolder = $('ul.contacts');
+            var total = $collectionHolder.find('li').length;
+            $collectionHolder.find('li').each(function(index) {
+                if (index !== total - 1) {
+                    var $newFormLi = $(this);
+
+                    $newFormLi.append('<a href="#" class="remove-tag">Supprimer</a>');
+
+                    // handle the removal, just for this example
+                    $('.remove-tag').click(function(e) {
+                        e.preventDefault();
+                        $(this).parent().remove();
+                        return false;
+                    });
+                }});
+        });
+
+    </script>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_customer_index') }}">Clients</a></li>
+        <li class="breadcrumb-item active">{{ customer.companyName }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_customer_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_customer_show', { 'id': customer.id }) }}" class="btn btn-primary">Voir le
+            client</a>
+    </div>
+
+    <div class="text-center">
+        <h1>Client - {{ customer.companyName }}</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+
+            {% include 'customer/form.html.twig' with {'form': edit_form} %}
+            <div class="text-center">
+                {{ form_widget(edit_form._token) }}
+                <input class="btn btn-primary" type="submit" value="Modifier le client"/>
+                {{ form_end(edit_form, { 'render_rest': false }) }}
+            </div>
+        </div>
+
+        <div class="col-lg-2">
+        </div>
+    </div>
+    <div class="m-3 text-right">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-outline-danger del" type="submit" value="Supprimer le client">
+        {{ form_end(delete_form) }}
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% set active = 'commands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Nouvelle Facture {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ asset('js/fos_js_routes.js') }}"></script>
+
+    <script>
+        function uncheckAll(entity) {
+            $("." + entity + "-check").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+
+        function search() {
+            var searchText = $('#customer').val();
+
+            $.ajax({
+                url: "{{ path('customer_search_customer') }}",
+                type: 'POST',
+                data: {search_text: searchText},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#customers").html(data).show();
+            });
+        }
+
+        function selectCustomer(customerId, customerName) {
+            var customer_id = $("#customer-id");
+            var customer_check = $("#customer-" + customerId);
+            var selectedCustomer = $("#selectedCustomer");
+
+            // Checkbox déjà checked : il faut retirer les infos du client
+            if ($(customer_check).prop("checked")) {
+                $(customer_check).prop("checked", false);
+                $(customer_id).val("");
+                $(selectedCustomer).val("");
+                $("#assign-customer").hide();
+            } else { // On sélectionne le client
+                uncheckAll('customer');
+                $(customer_id).val(customerId);
+                $(selectedCustomer).val(customerName);
+                $(customer_check).prop("checked", true);
+                $("#assign-customer").show();
+            }
+        }
+
+        function selectCommand(commandId) {
+            var command_id = $("#command-id");
+            var command_check = $("#command-" + commandId);
+            var selectedCommand = $("#selectedCommand");
+
+            // Checkbox déjà checked : il faut retirer les infos de la commande
+            if ($(command_check).prop("checked")) {
+                $(command_check).prop("checked", false);
+                $(command_id).val("");
+                $(selectedCommand).val("");
+                $("#assign-command").hide();
+            } else { // On sélectionne la commande
+                uncheckAll('command');
+                $(command_id).val(commandId);
+                $(selectedCommand).val(commandId);
+                $(command_check).prop("checked", true);
+                $("#assign-command").show();
+            }
+        }
+
+        function assignCustomer() {
+            var customer_id = $("#customer-id").val();
+
+            $.ajax({
+                url: "{{ path('invoice_create_header') }}",
+                type: 'POST',
+                data: {customer_id: customer_id},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#invoice-header").html(data).show();
+            });
+
+            $.ajax({
+                url: "{{ path('command_search_command') }}",
+                type: 'POST',
+                data: {customer_id: customer_id},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#commands").html(data).show();
+            });
+        }
+
+        function createCommand() {
+            var customerId = $("#customer-id").val();
+            var commandId  = $("#command-id").val();
+            window.location = Routing.generate('invoice_create', {customer_id: customerId, command_id: commandId}, true);
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('command_index') }}">Mes Commandes</a></li>
+            <li class="breadcrumb-item active">Nouvelle Facture</li>
+        </ol>
+
+        <h2>Créer une nouvelle facture</h2>
+
+        <div class="card mt-3" id="select-customer">
+            <div class="card-header">
+                <h3>Choix du client</h3>
+            </div>
+            <div class="card-body">
+                <form class="form-inline">
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext">Veuillez sélectionner le client :</label>
+                    </div>
+
+                    <div class="form-group mb-2 col-md-4">
+                        <input type="text" class="form-control col-md-12" id="customer" placeholder="Numéro du client, nom de la boutique, société...">
+                    </div>
+                    <button id="search-button" type="button" class="btn btn-orange mb-2" onclick="search();">Rechercher <img src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14"></button>
+                </form>
+
+                <div id="customers">
+
+                </div>
+
+                <form class="form-inline" id="assign-customer" style="display:none;">
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext">Sélectionner le client </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-3">
+                        <input type="text" readonly class="form-control col-md-12" id="selectedCustomer" value="">
+                    </div>
+                    <input type="text" id="customer-id" style="display:none;">
+                    <button type="button" id="select-button" onclick="assignCustomer();" class="btn btn-orange ml-2 mb-2">Valider</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-3" id="select-command">
+            <div class="card-header">
+                <h3>Choix de la commande</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group mb-2">
+                    <label class="form-control-plaintext">Veuillez sélectionner la commande :</label>
+                </div>
+
+                <div id="commands">
+
+                </div>
+
+                <form class="form-inline" id="assign-command" style="display:none;">
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext">Sélectionner la commande </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-3">
+                        <input type="text" readonly class="form-control col-md-12" id="selectedCommand" value="">
+                    </div>
+                    <input type="text" id="command-id" style="display:none;">
+                    <button type="button" id="select-button" onclick="createCommand();" class="btn btn-orange ml-2 mb-2">Créer la facture</button>
+                </form>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="invoice">
+            <h2 style="text-align:center;">Aperçu de la Facture</h2>
+            <div id="invoice-header">
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Pour pouvoir appuyer sur Entrée sans que la page se recharge
+        $(document).ready(function () {
+            $("#customer").keydown(function(event) {
+                if(event.key !== "Enter")
+                    return;
+                $('#search-button').click();
+                event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

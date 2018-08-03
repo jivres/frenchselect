@@ -1,0 +1,38 @@
+backoffice_admin_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Admin:index" }
+    methods:  GET
+
+backoffice_admin_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Admin:show" }
+    methods:  GET
+
+backoffice_admin_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Admin:new" }
+    methods:  [GET, POST]
+
+backoffice_admin_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Admin:edit" }
+    methods:  [GET, POST]
+
+backoffice_admin_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Admin:delete" }
+    methods:  DELETE
+
+backoffice_admin_export:
+    path:     export/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Admin:export, _format: xlsx }
+
+backoffice_user_activate:
+    path:     /{id}/activate
+    defaults: { _controller: "B2bBundle:Security:activate" }
+    methods:  GET
+
+backoffice_user_desactivate:
+    path:     /{id}/desactivate
+    defaults: { _controller: "B2bBundle:Security:desactivate" }
+    methods:  GET

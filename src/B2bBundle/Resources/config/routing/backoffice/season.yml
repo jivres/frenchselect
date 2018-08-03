@@ -1,0 +1,24 @@
+backoffice_season_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Season:index" }
+    methods:  GET
+
+backoffice_season_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Season:show" }
+    methods:  GET
+
+backoffice_season_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Season:new" }
+    methods:  [GET, POST]
+
+backoffice_season_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Season:edit" }
+    methods:  [GET, POST]
+
+backoffice_season_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Season:delete" }
+    methods:  DELETE

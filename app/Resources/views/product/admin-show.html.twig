@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', { 'id': product.getBrand().id }) }}">{{ product.getBrand().getBrandName() }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('collection_show', { 'id': product.collection.id }) }}">Collection {{ product.collection.name }}</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('collection_show', { 'id': product.collection.id }) }}" class="btn btn-primary">Retour à la collection</a>
+        <a href="{{ path('backoffice_product_edit', { 'id': product.id }) }}" class="btn btn-primary">Modifier le produit</a>
+    </div>
+
+    {% include 'product/show.html.twig' with { 'product' : product } %}
+
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Liste des factures</li>
+    </ol>
+
+    <div class="border rounded p-3 m-3 bg-white">
+        <h2 class="text-center">Factures non payées - Retard de paiement</h2>
+        {% if remindedInvoices|length > 0 %}
+            {% include 'invoice/list.html.twig' with {'invoices': remindedInvoices, 'admin': true} %}
+        {% else %}
+            <i>Aucune facture en relance</i>
+        {% endif %}
+    </div>
+
+    <div class="border rounded p-3 m-3 bg-white">
+        <h2 class="text-center">Factures non payées - Paiments en attente</h2>
+        {% if waitingInvoices|length > 0 %}
+            {% include 'invoice/list.html.twig' with {'invoices': waitingInvoices, 'admin': true} %}
+        {% else %}
+            <i>Aucun paiement en attente</i>
+        {% endif %}
+    </div>
+
+    <div class="border rounded p-3 m-3 bg-white">
+        <h2 class="text-center">Toutes les factures</h2>
+        {% include 'invoice/list.html.twig' with {'invoices': invoices, 'admin': true} %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped table-hover">
+        <thead>
+        <tr>
+            {% if (checkbox is defined) and (checkbox == true) %}
+                <th></th>
+            {% endif %}
+            <th>N° Client</th>
+            <th>Société</th>
+            <th>Code Postal</th>
+            <th>Ville</th>
+            <th>Pays</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+            <tr onclick="selectCustomer('{{ customer.id }}', '{{ customer.companyName }}')">
+                {% if (checkbox is defined) and (checkbox == true) %}
+                    <td>
+                        <div class="form-check">
+                            <input type="checkbox" id="customer-{{ customer.id }}" name="radioCustomer" class="customer-check form-check-input ml-5">
+                            <label class="form-check-label" for="customer-{{ customer.id }}"></label>
+                        </div>
+                    </td>
+                {% endif %}
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.companyName }}</td>
+                <td>{{ customer.billingZP }}</td>
+                <td>{{ customer.billingTown }}</td>
+                <td>{{ customer.billingCountry }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p>{{ customers|length }} {% if customers|length > 1 %}clients trouvés{% else %}client trouvé{% endif %}</p>

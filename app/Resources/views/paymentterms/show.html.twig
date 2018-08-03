@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Paymentterm</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ paymentTerm.id }}</td>
+            </tr>
+            <tr>
+                <th>Label</th>
+                <td>{{ paymentTerm.label }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('backoffice_paymentterms_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('backoffice_paymentterms_edit', { 'id': paymentTerm.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

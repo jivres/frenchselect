@@ -1,0 +1,19 @@
+products_index:
+    path:     /index/{id}/
+    defaults: { _controller: "B2bBundle:Products:index" }
+    methods:  [GET, POST]
+
+products_search:
+    path:     /search
+    defaults: { _controller: "B2bBundle:Products:search" }
+    methods:   POST
+
+products_details:
+    path:     /details/{id}/
+    defaults: { _controller: "B2bBundle:Products:details" }
+    methods:  [GET, POST]
+
+products_for_collection:
+    path:     /list_for_collection/{id}/
+    defaults: { _controller: "B2bBundle:Products:productsForCollection" }
+    methods:   [GET, POST]

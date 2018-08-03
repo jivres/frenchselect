@@ -1,0 +1,142 @@
+{% set active = 'commands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function searchCommand() {
+            var searchText = $('#command').val();
+
+            $.ajax({
+                url: "{{ path('report_search_command') }}",
+                type: 'POST',
+                data: {search_text: searchText},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#commands").html(data).show();
+            });
+        }
+
+        function searchProducts() {
+            var id = $("#command-id").val();
+            var searchText = $('#product').val();
+            $.ajax({
+                url: "{{ path('report_new_form') }}",
+                type: 'POST',
+                data: {command_id: id, search_text: searchText},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#form").html(data).show();
+            });
+        }
+
+        function selectCommand(commandId) {
+            var command_id = $("#command-id");
+            var command_check = $("#command-" + commandId);
+            var selectedCommand = $("#selectedCommand");
+
+            // Checkbox déjà checked : il faut retirer les infos de la commande
+            if ($(command_check).prop("checked")) {
+                $(command_check).prop("checked", false);
+                $(command_id).val("");
+                $(selectedCommand).val("");
+                $("#select").hide();
+                $("#products").hide();
+            } else { // On sélectionne la commande
+                $(command_id).val(commandId);
+                $(selectedCommand).val(commandId);
+                $(command_check).prop("checked", true);
+                $("#select").show();
+            }
+        }
+
+        function assign() {
+            $("#products").show();
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('command_index') }}">Mes Commandes</a></li>
+            <li class="breadcrumb-item active">Signaler un produit défectueux</li>
+        </ol>
+
+        <!-- SELECTION DE LA COMMANDE -->
+        <h2>Sélection de la commande</h2>
+
+        <form class="form-inline">
+            <div class="form-group mb-2">
+                <label class="form-control-plaintext">Veuillez sélectionner la commande concernée par le défaut :</label>
+            </div>
+            <div class="form-group mb-2 col-md-4">
+                <input type="text" class="form-control col-md-12" id="command" placeholder="Numéro de commande, marque...">
+            </div>
+            <button id="search-button-command" type="button" class="btn btn-orange mb-2" onclick="searchCommand();">Rechercher <img src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14"></button>
+        </form>
+
+        <div id="commands">
+
+        </div>
+
+        <form class="form-inline" id="select" style="display:none;">
+            <div class="form-group mb-2">
+                <label class="form-control-plaintext">Déclarer un produit défectueux pour la commande n°</label>
+            </div>
+            <div class="form-group mb-2 col-md-3">
+                <input type="text" readonly class="form-control col-md-12" id="selectedCommand" value="">
+            </div>
+            <input type="text" id="command-id" style="display:none;">
+            <button type="button" id="select-button" onclick="assign();" class="btn btn-orange ml-2 mb-2">Valider</button>
+        </form>
+
+        <div id="products" style="display:none;">
+            <!-- RECHERCHE DES PRODUITS -->
+            <h2>Recherche des produits</h2>
+
+            <form class="form-inline">
+                <div class="form-group mb-2">
+                    <label class="form-control-plaintext">Veuillez rechercher les produits de cette commande :</label>
+                </div>
+                <div class="form-group mb-2 col-md-4">
+                    <input type="text" class="form-control col-md-12" id="product" placeholder="Référence produit, nom...">
+                </div>
+                <button id="search-button-products" type="button" class="btn btn-orange mb-2" onclick="searchProducts();">Rechercher <img src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14"></button>
+            </form>
+
+            <div id="form">
+
+            </div>
+        </div>
+
+        <script>
+            // Pour pouvoir appuyer sur Entrée sans que la page se recharge
+            $(document).ready(function () {
+                $("#command").keydown(function(event) {
+                    if(event.key !== "Enter")
+                        return;
+                    $("#search-button-command").click();
+                    event.preventDefault();
+                });
+                $("#products").keydown(function(event) {
+                    if(event.key !== "Enter")
+                        return;
+                    $("#search-button-products").click();
+                    event.preventDefault();
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

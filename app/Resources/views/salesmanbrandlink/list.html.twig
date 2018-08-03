@@ -1,0 +1,42 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Marque</th>
+            <th>Départements</th>
+            {% if is_granted('ROLE_ADMIN') %}<th>Actions</th>{% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for brand_link in brand_links %}
+            <tr>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('backoffice_brand_show', { 'id': brand_link.brand.id }) }}">
+                            {{ brand_link.brand }}
+                        </a>
+                    {% else %}
+                        {{ brand_link.brand }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if brand_link.departments|length == 0 %}
+                        <i>Aucun département</i>
+                    {% endif %}
+                    <h5 style="display:inline-block">
+                        {% for departement in brand_link.departments %}
+                            <span class="badge badge-secondary">{{ departement }}</span>
+                        {% endfor %}
+                    </h5>
+                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('backoffice_salesman_edit_brand', {'id': brand_link.id, 'salesman': brand_link.salesman.id}) }}" class="btn btn-outline-primary">Modifier</a>
+                        <!--<a href="" class="btn btn-outline-danger">Supprimer</a>-->
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

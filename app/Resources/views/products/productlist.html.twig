@@ -1,0 +1,61 @@
+<div class="row flex-justify-center">
+    {% for product_item in products %}
+        {% set product = product_item.product %}
+        {% set productFind = false %}
+        {% set cartForBrand = null %}
+
+        {% if is_granted('ROLE_CUSTOMER') %}
+            {% set carts = app.user.carts %}
+        {% elseif is_granted('ROLE_BRAND') %}
+            {% set carts = app.user.connectedFor.carts %}
+        {% endif %}
+        {% if carts is not null %}
+            {% for cart in carts %}
+                    {% set productFind = cart.find(product) %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="col-md-3 m-2 product-item {% if not product.hasStock()%}no-stock{% endif %} card-product shadow-sm">
+        <a href="{{ path('products_details', {'id' : product.id }) }}">
+            {% if product.getMainPicture() != null %}
+                <img id="mainPicture" class="product-img" src="{{ asset('uploads/'~product.getMainPicture().url() ) }}">
+            {% else %}
+                <img id="mainPicture" class="product-img" src="{{ asset('bundles/b2b/img/product/defaut.png' ) }}">
+            {% endif %}
+            <div class="product-detail">
+                <p class="product-name">{{ product.name }} -- {{ product.getRef() }}</p>
+                <p class="product-type">{{ product.primarycat }}</p>
+                <p class="product-type">{{ product.getTertiaryCategory() }}</p>
+
+                {% for Acolor in product.getAllowedColors() %}
+                    {% if Acolor.color.getPicture() is not null %}
+                        <img class="color-box"
+                             src="{{ asset('uploads/'~Acolor.color.getPicture().url ) }}">
+                    {% else %}
+                        <span class="color-box"
+                              style="background-color:#{{ Acolor.color.color.hexTriplet }};"></span>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="product-separator"></div>
+                <p class="product-price">{{ product.getPriceHT }} €</p>
+
+                {% set bool = false %}
+                {% for Acolor in product.getAllowedColors() %}
+                    {% if Acolor.getFavourite == 1 %}
+                        {% set bool = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if bool %}
+                    <img id="heart" src="{{ asset('bundles/b2b/img/heart.png') }}" alt="coup de coeur">
+                {% endif %}
+                {% if productFind %}
+                    <img id="check" src="{{ asset('bundles/b2b/img/basket-valid.png') }}" alt="in basket">
+                {% endif %}
+
+
+        </div>
+        </a>
+        </div>
+    {% endfor %}
+</div>

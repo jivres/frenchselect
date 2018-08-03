@@ -1,0 +1,24 @@
+account_login_check:
+    path:   /login_check
+
+account_logout:
+    path:   /logout
+
+account_infos:
+    defaults: { _controller: "B2bBundle:Security:account" }
+    path:   /
+
+account_infos_edit:
+    defaults: { _controller: "B2bBundle:Security:edit" }
+    path:   /edit
+    methods:  [GET, POST]
+
+connect_for_shop:
+    defaults: { _controller: "B2bBundle:Security:connectShop" }
+    path:   /connect_shop
+    methods:  GET
+
+deconnect_shop:
+    defaults: { _controller: "B2bBundle:Security:deconnectShop" }
+    path:   /deconnect_shop
+    methods:  GET

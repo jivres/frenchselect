@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Produits</li>
+    </ol>
+
+    <h1 class="text-center">Liste des Produits</h1>
+
+    <table class="table table-stripped avectri">
+        <thead>
+            <tr>
+                <th>Référence</th>
+                <th data-tri="1" class="selection" data-type="text">Nom</th>
+                <th>Description</th>
+                <th>Catégorie </th>
+                <th>Prix HT</th>
+                <th>Prix recommandé TTC</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td><a href="{{ path('backoffice_product_show', { 'id': product.id }) }}">{{ product.refModel }}</a></td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.primaryCat.label }} > {{ product.secondaryCat.label }} > {{ product.tertiaryCategory }}</td>
+                <td>{{ product.priceHT|number_format(2, '.', ' ')}} €</td>
+                <td>{{ product.recommendedPriceTTC|number_format(2, '.', ' ')}} €</td>
+                <td>
+                    <a href="{{ path('backoffice_product_show', { 'id': product.id }) }}" class="btn btn-outline-dark">Détail</a>
+                    <a href="{{ path('backoffice_product_edit', { 'id': product.id }) }}" class="btn btn-outline-dark">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('backoffice_product_new') }}" class="btn btn-primary">Créer un nouveau produit</a>
+{% endblock %}

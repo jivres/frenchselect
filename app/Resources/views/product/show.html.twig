@@ -1,0 +1,173 @@
+<script>
+    function changeColor(id) {
+        var pict = document.getElementById("mainPicture");
+        pict.style.display = "none";
+        var car = document.getElementsByClassName("carousel slide");
+        for (var i = 0; i < car.length; i++) {
+            car[i].style.display = "none";
+        }
+        var toto = document.getElementById(id);
+        toto.style.display = null;
+    }
+</script>
+
+
+<h1 class="text-center">{{ product.name }}</h1>
+
+<div class="col-lg-7 col-md-7 product-photos">
+</div>
+
+
+<div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8 login-form border rounded">
+        <dl class="row">
+            <dt class="col-sm-3">Photo</dt>
+            <dd class="col-sm-9">
+                {% if product.getMainPicture() != null %}
+                    <img id="mainPicture" class="product-img img-fluid"
+                         src="{{ asset('uploads/'~product.getMainPicture().url() ) }}">
+                {% else %}
+                    <img id="mainPicture" class="product-img img-fluid"
+                         src="{{ asset('bundles/b2b/img/product/defaut.png' ) }}">
+                {% endif %}
+                {% for Acolor in product.getAllowedColors() %}
+                {% if Acolor == null %}
+                <img id="mainPicture" class="product-img img-fluid"
+                     src="{{ asset('bundles/b2b/img/product/defaut.png' ) }}">
+                {% else %}
+                <div id="{{ Acolor.getColor() }}" style="display: none;" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for pict in Acolor.getFigures() %}
+                        {% if loop.first %}
+                        <div class="carousel-item active">
+                            {% else %}
+                            <div class="carousel-item">
+                                {% endif %}
+                                <img class="d-block w-100" src="{{ asset('uploads/'~pict.url ) }}" alt="{{ pict.url }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                           data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                           data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+            </dd>
+
+            <dt class="col-sm-3">Référence</dt>
+            <dd class="col-sm-9">{{ product.ref }}</dd>
+
+            <dt class="col-sm-3">Nom</dt>
+            <dd class="col-sm-9">{{ product.name }}</dd>
+
+            <dt class="col-sm-3">Libellé complet</dt>
+            <dd class="col-sm-9">{{ product.label }}</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">{{ product.description }}</dd>
+
+            <dt class="col-sm-3">Catégorie (3°)</dt>
+            <dd class="col-sm-9">{{ product.tertiaryCategory }}</dd>
+
+            <dt class="col-sm-3">Prix HT</dt>
+            <dd class="col-sm-9">{{ product.priceHT }}</dd>
+
+            <dt class="col-sm-3">Prix recommandé TTC</dt>
+            <dd class="col-sm-9">{{ product.recommendedPriceTTC }}</dd>
+
+            <dt class="col-sm-3">Matière</dt>
+            <dd class="col-sm-9">{{ product.material }}</dd>
+
+            <dt class="col-sm-3">Entretien</dt>
+            <dd class="col-sm-9">{{ product.maintenance }}</dd>
+
+            <dt class="col-sm-3">Dimensions</dt>
+            <dd class="col-sm-9">{{ product.dimensions }}</dd>
+
+            <dt class="col-sm-3">Tailles existantes</dt>
+            <dd class="col-sm-9">
+                {% for size in product.allowedSizes %}
+                    <kbd>{{ size.size }}</kbd>
+                {% endfor %}
+            </dd>
+        </dl>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="text-center">
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-primary"
+           href="{{ path('backoffice_product_add_color', { 'id' : product.id }) }}">Ajouter
+            une couleur</a>
+        <a href="{{ path('backoffice_product_availabilities', { 'id': product.id }) }}" class="btn btn-primary">Gérer
+            les stocks</a>
+    {% endif %}
+</div>
+
+<table class="table table-striped bg-white">
+    <thead>
+    <tr>
+        <th>Reférence</th>
+        <th>Code EAN</th>
+        <th>Couleur</th>
+        <th>Code Couleur</th>
+        <th>Réduction</th>
+        <th>Coups de cœur</th>
+        <th>Début de livraison</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for allowedColor in product.allowedColors %}
+        <tr>
+            <td>{{ allowedColor.refUnique }}</td>
+            <td>{{ allowedColor.eanCode }}</td>
+            <td>
+                <div class="row" onclick="changeColor( '{{ allowedColor.color }}' )">
+                    <div class="col-1">
+                        {% if allowedColor.color.picture is null %}
+                            <span class="color-box"
+                                  style="background-color:#{{ allowedColor.color.color.hexTriplet }};"></span>
+                        {% else %}
+                            <img class="color-box" src="{{ asset('uploads/' ~ allowedColor.color.picture.url) }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-8">
+                        {{ allowedColor.color }}
+                    </div>
+                </div>
+            </td>
+            <td>{{ allowedColor.colorCode }}</td>
+            <td>{{ allowedColor.reduction|number_format }} %</td>
+            <td>
+                {% if allowedColor.favourite %}
+                    OUI
+                {% else %}
+                    NON
+                {% endif %}
+            </td>
+            <td>{% if allowedColor.deliveryStart %}{{ allowedColor.deliveryStart|date('D d F Y') }}{% endif %}</td>
+            <td>
+                <a href="{{ path('allowedcolor_edit', { 'id' : allowedColor.id }) }}"
+                   class="btn btn-primary">Éditer</a>
+                <a href="{{ path('backoffice_product_color_picture', { 'product': product.id, 'allowedColor' : allowedColor.id }) }}"
+                   class="btn btn-primary">Gérer les photos</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</div>

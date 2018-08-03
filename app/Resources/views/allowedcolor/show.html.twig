@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Allowedcolor</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ allowedColor.id }}</td>
+            </tr>
+            <tr>
+                <th>Refunique</th>
+                <td>{{ allowedColor.refUnique }}</td>
+            </tr>
+            <tr>
+                <th>Eancode</th>
+                <td>{{ allowedColor.eanCode }}</td>
+            </tr>
+            <tr>
+                <th>Colorcode</th>
+                <td>{{ allowedColor.colorCode }}</td>
+            </tr>
+            <tr>
+                <th>Favourite</th>
+                <td>{% if allowedColor.favourite %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Reduction</th>
+                <td>{{ allowedColor.reduction }}</td>
+            </tr>
+            <tr>
+                <th>Additionalinformation</th>
+                <td>{{ allowedColor.additionalInformation }}</td>
+            </tr>
+            <tr>
+                <th>Deliverystart</th>
+                <td>{% if allowedColor.deliveryStart %}{{ allowedColor.deliveryStart|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('allowedcolor_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('allowedcolor_edit', { 'id': allowedColor.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

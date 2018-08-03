@@ -1,0 +1,19 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}Showroom French Select - Mes Clients{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('brand_customer_index') }}">Mes Clients</a></li>
+            <li class="breadcrumb-item active">{{ customer.companyName }}</li>
+        </ol>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('brand_customer_index') }}" class="btn btn-primary btn-orange ml-2 mr-2">Retour à la liste</a>
+        </div>
+
+        {% include 'customer/show.html.twig' with {'customer': customer} %}
+    </div>
+{% endblock %}

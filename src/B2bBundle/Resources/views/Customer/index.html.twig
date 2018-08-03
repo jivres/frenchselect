@@ -1,0 +1,91 @@
+{% set active = 'account' %}
+{% extends "layout.html.twig" %}
+
+{% block title %}Mon B2B - Mes Boutiques{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <section class="content">
+        <div class="row">
+            <h1>Mes boutiques</h1>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <a href="{{path('b2b_customer_shop_add', {'id': user.id}) }}" class="btn btn-outline-success">Ajouter une boutique</a>
+        </div>
+        <div class="row">
+            <div class="col">
+
+                <div class="card-group text-center">
+                    {% for s in user.shops %}
+                    <div class="card col-md-3 col-sm-12">
+                        {% if s.pic is not null %}
+                            <img class="card-img-top" src="{{asset('uploads/' ~ s.pic.url)}}" alt="Photo de la boutique">
+                        {% else %}
+                            <i>Aucune photo pour la boutique</i>
+                        {% endif %}
+                        <div class="card-block">
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><h3 class="card-title">{{s.name}}</h3></li>
+                                <li class="list-group-item">{{s.address}}</li>
+                                <li class="list-group-item">{{s.zipCode}}, {{s.town}}</li>
+                                <li class="list-group-item"><b>Commerciaux :</b>
+                                    <ul class="list-unstyled">
+                                        {% for salesmanshop in s.salesmen %}
+                                        <li>{{salesmanshop.salesman.companyName}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="list-group-item"><b>Cibles :</b>
+                                    <ul class="list-unstyled">
+                                        {% for t in s.targets %}
+                                            <li>{{t.label}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="list-group-item"><b>Catégories :</b>
+                                    <ul class="list-unstyled">
+                                        {% for c in s.categories %}
+                                            <li>{{c.label}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="list-group-item"><b>Styles :</b>
+                                    <ul class="list-unstyled">
+                                        {% for style in s.styles %}
+                                            <li>{{style.label}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="list-group-item"><b>Contacts :</b>
+                                    {% for contact in s.contacts %}
+                                        <ul class="list-group-item">
+                                            <li>{{ contact.function }}</li>
+                                            <li>{{contact.lastname}} {{ contact.firstname }}</li>
+                                            <li>{{ contact.mail }}</li>
+                                            <li>{{ contact.phone }}</li>
+                                        </ul>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                            <a href="{{ path('b2b_customer_shop_edit', {'id' : s.id}) }}" class="btn btn-primary" style="margin: 2%;">Modifier</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

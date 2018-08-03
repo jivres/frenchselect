@@ -1,0 +1,374 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Test -->
+    {% set tab = [] %}
+    {% for Acolor in product.getAllowedColors() %}
+        {% if Acolor.getFavourite == 1 %}
+            {% set tab = tab|merge( [Acolor.refUnique]) %}
+        {% endif %}
+    {% endfor %}
+    <script>
+        function updateQuantity(tr) {
+            var total = 0;
+            $(tr).find("td.quantity input").each(function () {
+                if ($(this).val()) {
+                    total += parseInt($(this).val());
+                }
+            });
+            $(tr).find("td.qt-total").text(total);
+            $(tr).find("td.price-total").text((Math.round((total * {{ product.priceHT }} * 100)) / 100).toFixed(2) + " €");
+
+            total = 0;
+            totaux = $("td.price-total");
+            $.each(totaux, function () {
+                total += parseInt($(this).html());
+
+            });
+           $("a#total-price").text(total + "€");
+        }
+
+        function quantityChanged(id) {
+            updateQuantity($(".cart-row-" + id));
+        }
+
+
+        function changePicture(id, color) {
+            var photos = document.getElementsByClassName(color);
+            for (var i = 0; i < photos.length; i++) {
+                photos[i].style.display = "none";
+            }
+
+            var photo = document.getElementById(id);
+            photo.style.display = null;
+
+            var miniatures = $(".card-product-photos-other.autre");
+            $.each(miniatures, function () {
+                if(this.alt == id){
+                    this.style.display = "none";
+                }
+                else{
+                    this.style.display = null;
+                }
+
+            });
+
+
+
+        }
+
+        function changeColor(id) {
+            var t = [];
+
+            var pict = document.getElementById("mainPicture");
+            pict.style.display = "none";
+            var car = document.getElementsByClassName("photos");
+            for (var i = 0; i < car.length; i++) {
+                car[i].style.display = "none";
+            }
+            var toto = document.getElementById(id);
+            toto.style.display = null;
+            var couleur = document.getElementById("couleur");
+            couleur.innerHTML = id;
+            var textHeart = document.getElementById("textHeart");
+            {% for k in tab %}
+            t.push("{{ k }}");
+            {% endfor %}
+
+            for (var j = 0; j < t.length; j++) {
+                if (id == t[j]) {
+                    textHeart.style.display = null;
+                }
+                else {
+                    textHeart.style.display = "none";
+                }
+            }
+
+            var autres = document.getElementsByClassName("autre");
+            for (var m = 0; m < autres.length; m++) {
+                autres[m].style.display = "none";
+            }
+
+            var pictos = document.getElementsByClassName(id);
+            for (var l = 0; l < pictos.length; l++) {
+                pictos[l].style.display = null;
+            }
+
+        }
+
+
+        $(document).ready(function () {
+            $("tr.cart-row").each(function () {
+                updateQuantity($(this));
+            })
+        });
+    </script>
+    <script>
+        function back() {
+            {% if (app.user.connectedFor is defined) and (app.user.connectedFor is not null) %}
+            var ids = [];
+            {% for shop in app.user.connectedForShops %}
+            ids.push("{{ shop.id }}")
+            {% endfor %}
+            var ids = JSON.stringify(ids);
+            window.location = "{{ path('connect_for_shop', {'ids': ''})|escape('js') }}" + ids;
+            {% endif %}
+        }
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table th {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    {% set productFind = false %}
+    {% set cartForBrand = null %}
+
+    {% if is_granted('ROLE_CUSTOMER') %}
+        {% set carts = app.user.carts %}
+    {% elseif is_granted('ROLE_BRAND') %}
+        {% set carts = app.user.connectedFor.carts %}
+    {% endif %}
+
+    {% if carts is not null %}
+        {% for cart in carts %}
+                {% set productFind = cart.find(product) %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="container-fluid bg-white p-4">
+        <div class="container-button-backb m-2">
+            {% if (app.user.connectedFor is defined) and (app.user.connectedFor is not null) %}
+                <a href="javascript:back()" id="btn-retour">
+                <span class="button-backbh p-2">
+                    <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour à la liste
+                </span>
+                </a>
+
+            {% else %}
+                <a href="{{ path('products_index', { 'id': product.collection.brand.id, 'cible': product.target.id }) }}" id="btn-retour">
+                <span class="button-backbh p-2">
+                    <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour à la liste
+                </span>
+                </a>
+            {% endif %}
+
+        </div>
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-lg-6 product-photos text-center">
+                    {% if product.getMainPicture() != null %}
+                        <img id="mainPicture" class="card-product-photos img-fluid shadow-sm"
+                             src="{{ asset('uploads/'~product.getMainPicture().url() ) }}">
+                    {% else %}
+                        <img id="mainPicture" class="card-product-photos img-fluid shadow-sm"
+                             src="{{ asset('bundles/b2b/img/product/defaut.png' ) }}">
+                    {% endif %}
+                    {% for Acolor in product.getAllowedColors() %}
+                        {% if Acolor == null %}
+                            <img id="mainPicture" class="card-product-photos img-fluid shadow-sm"
+                                 src="{{ asset('bundles/b2b/img/product/defaut.png' ) }}">
+                        {% else %}
+                            <div id="{{ Acolor.getColor() }}" style="display: none;"
+                                 class="card-product-photos img-fluid shadow-sm photos">
+                                {% for pict in Acolor.getFigures() %}
+
+                                    {% if loop.first %}
+                                        <img id="{{ pict.url }}" class="w-100 photo {{ Acolor.getColor.getId() }}"
+                                             src="{{ asset('uploads/'~pict.url ) }}" alt="{{ pict.url }}">
+                                    {% else %}
+                                        <img id="{{ pict.url }}" class="w-100 photo {{ Acolor.getColor.getId() }}"
+                                             src="{{ asset('uploads/'~pict.url ) }}" alt="{{ pict.url }}"
+                                             style="display: none;">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+
+                    {% for Acolor in product.getAllowedColors() %}
+                        {% if Acolor != null %}
+                            {% for pict in Acolor.getFigures() %}
+                                <img class="card-product-photos-other {{ Acolor.getColor() }} autre"
+                                     src="{{ asset('uploads/'~pict.url ) }}"
+                                     alt="{{ pict.url }}"
+                                     onclick="changePicture('{{ pict.url }}', '{{ Acolor.getColor().getId() }}')"
+                                     style="display: none">
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+
+                <div class="col-lg-6 product-infos">
+                    <div class="product-detail">
+
+
+                        <p class="product-detail-price" id="textHeart" style="display: none">
+                            Coup de coeur
+                        </p>
+
+                        <p class="product-detail-ref">
+                            Référence : {{ product.ref }}
+                        </p>
+
+                        <h5 class="product-detail-name mb-4">
+                            {{ product.tertiaryCategory }} - {{ product.name }}
+
+                            {% if productFind %}
+                                <img id="check" src="{{ asset('bundles/b2b/img/basket-valid.png') }}" alt="in basket">
+                            {% endif %}
+                        </h5>
+
+                        <p>{{ product.label }}</p>
+
+                        <p><span class="product-detail-price">{{ product.priceHT }} €</span> HT</p>
+
+                        <p>Prix de vente conseillé TTC : <span
+                                    class="font-weight-bold">{{ product.recommendedPriceTTC }}
+                                €</span></p>
+
+                        <span class="product-detail-color">Couleur : </span>
+                        <p id="couleur">
+                            {% for Acolor in product.getAllowedColors() %}
+                        <div onclick="changeColor('{{ Acolor.color }}')" class="d-inline-block">
+                            {% if Acolor.color.getPicture() is not null %}
+                                <img class="color-box rounded-circle"
+                                     src="{{ asset('uploads/'~Acolor.color.getPicture().url ) }}">
+                            {% else %}
+                                <span class="color-box rounded-circle"
+                                      style="background-color:#{{ Acolor.color.color.hexTriplet }};"></span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <p class="mt-4">{{ product.description }}</p>
+
+                        <p></p>
+                        <a class="btn btn-product-detail text-uppercase" data-toggle="collapse" href="#collapseDetails"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="collapseExample">
+                            Détails du produit <img class="ml-1"
+                                                    src=" {{ asset('bundles/b2b/img/angle-down-white.svg') }}"
+                                                    height="15px"/>
+                        </a>
+
+                        <div class="collapse mt-4" id="collapseDetails">
+                            <p><span class="text-uppercase">Pays de fabrication</span> <span
+                                        class="font-weight-bold pl-3">{{ product.country }}</span></p>
+
+                            <p><span class="text-uppercase">Matière</span> <span
+                                        class="font-weight-bold pl-3">{{ product.material }}</span></p>
+
+                            <p><span class="text-uppercase">Entretien</span> <span
+                                        class="font-weight-bold pl-3">{{ product.maintenance }}</span></p>
+
+                            <p><span class="text-uppercase">Dimensions</span> <span
+                                        class="font-weight-bold pl-3">{{ product.dimensions }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if cart is not null %}
+            <div class="container shadow-sm">
+                <div class="cart-selection">
+                    <!-- FORMULAIRE DE SAISIE POUR AJOUTER AU PANIER -->
+                    {{ form_start(form) }}
+                    <table class="table table-striped">
+                        <tr>
+                            <th scope="col">Référence</th>
+                            <th scope="col">Couleur</th>
+                            {% for size in sizes %}
+                                <th scope="col">{{ size.size }}</th>
+                            {% endfor %}
+                            <th scope="col">Quantité Totale</th>
+                            <th scope="col">Prix Unitaire HT</th>
+                            <th scope="col">Montant Total HT</th>
+                            <th scope="col">Date de disponibilité</th>
+                        </tr>
+
+
+                        {% for cartRow in form.cartRows %}
+                            <tr class="cart-row cart-row-{{ cartRow.vars.value.id }}">
+                                <th>{{ product.ref }}</th>
+
+
+                                <td onclick="changeColor('{{ cartRow.vars.value.color }}')">
+
+                                    {% if cartRow.vars.value.color.getPicture() is not null %}
+                                        <img class="color-box rounded-circle"
+                                             src="{{ asset('uploads/'~cartRow.vars.value.color.getPicture().url ) }}">
+                                    {% else %}
+                                        <span class="color-box rounded-circle"
+                                              style="background-color:#{{ cartRow.vars.value.color.color.hexTriplet }};"></span>
+                                    {% endif %}
+                                    {{ cartRow.vars.value.color }}
+
+                                    {% if cartRow.vars.value.getAllowedColor.getFavourite == 1 %}
+                                        <img id="heart" src="{{ asset('bundles/b2b/img/heart.png') }}"
+                                             alt="coup de coeur">
+                                    {% endif %}
+
+                                </td>
+
+                                {% for sizeQuantity in cartRow.sizeQuantities %}
+                                    <td scope="col" class="quantity"
+                                        onchange="quantityChanged('{{ cartRow.vars.value.id }}')">
+                                        {% set available = false %}
+                                        {% for availability in product.availabilities %}
+                                            {% if (availability.color == cartRow.vars.value.color) %}
+                                                {% for sizeQ in availability.sizeQuantities %}
+                                                    {% if (sizeQ.size == sizeQuantity.vars.value.size) and (sizeQ.amount > 0) %}
+                                                        {% set available = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if not available %}
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" value="0" disabled>
+                                            </div>
+                                        {% else %}
+                                            {{ form_widget(sizeQuantity) }}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                                <td class="qt-total">0</td>
+                                <td>{{ product.priceHT }} €</td>
+                                <td class="price-total">0 €</td>
+                                <td>{{ cartRow.vars.value.allowedColor.deliveryStart|date('d/m/Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                        {{ form_widget(form._token) }}
+                    </table>
+                    <div class="text-right">
+                        <input class="btn btn-primary" type="submit"
+                               value="{% if justCreated %}Ajouter au panier{% else %}Modifier le panier{% endif %}"/>
+                        <a id="total-price">0 €</a>
+                    </div>
+                    {{ form_end(form, { 'render_rest': false }) }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

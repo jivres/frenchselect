@@ -1,0 +1,131 @@
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function() {
+        initCollection($('ul.brands'));
+        $collectionHolder = $('ul.brands');
+        var total = $collectionHolder.find('li').length;
+        $collectionHolder.find('li').each(function(index) {
+            if (index !== total - 1) {
+            var $newFormLi = $(this);
+
+            $newFormLi.append('<a href="#" class="remove-tag">Supprimer</a>');
+
+            // handle the removal, just for this example
+            $('.remove-tag').click(function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+                return false;
+            });
+        }});
+        $('.js-datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    });
+
+    function initCollection($collectionHolder) {
+        // setup an "add a tag" link
+        var $addLink = $('<a href="#" class="add">Ajouter une marque participante</a>');
+        var $newLinkLi = $('<li></li>').append($addLink);
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove-tag">Supprimer</a>');
+        $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove-tag').click(function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+</script>
+<h3>Informations sur le salon</h3>
+<div class="form-group">
+    <label><span>{{ form_label(form.name) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.name) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.lieu) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.lieu) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.adresse) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.adresse) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.zipCode) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.zipCode) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.ville) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.ville) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.pays) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.pays) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.date_debut) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.date_debut) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.date_fin) }}</span><span class="required-chip">*</span></label>
+    {{ form_widget(form.date_fin) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.description) }}</span></label>
+    {{ form_widget(form.description) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.lifestyle) }}</span></label>
+    {{ form_widget(form.lifestyle) }}
+</div>
+<div class="form-group">
+    <label><span>{{ form_label(form.picture) }}</span></label>
+    {{ form_widget(form.picture) }}
+</div>
+
+<div class="form-group">
+    <h3 class="mt-3">Marques participantes</h3>
+    <ul class="brands" data-prototype="{{ form_widget(form.brands.vars.prototype)|e('html_attr') }}">
+        {% for brand in form.brands %}
+            <li>{{ form_widget(brand) }}</li>
+        {% endfor %}
+    </ul>
+</div>

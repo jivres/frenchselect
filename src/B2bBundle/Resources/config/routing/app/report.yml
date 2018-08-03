@@ -1,0 +1,24 @@
+report_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:DefectiveProductReport:show" }
+    methods:  GET
+
+report_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:DefectiveProductReport:new" }
+    methods:  [GET, POST]
+
+report_set_status:
+    path:     /{id}/setStatus/{status}
+    defaults: { _controller: "B2bBundle:DefectiveProductReport:setStatus" }
+    methods:  GET
+
+report_search_command:
+    path:     /searchCommand
+    defaults: { _controller: "B2bBundle:DefectiveProductReport:searchCommand" }
+    methods:  [POST]
+
+report_new_form:
+    path:     /newForm
+    defaults: { _controller: "B2bBundle:DefectiveProductReport:newForm" }
+    methods: [POST]

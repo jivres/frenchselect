@@ -1,0 +1,55 @@
+{% set active = 'salons_boutiques' %}
+{% extends "B2bBundle::Vitrine/layout.html.twig" %}
+
+{% block title %}
+    French Select - Le salon {{ salon.getName() }}
+{% endblock %}
+
+    {% block body %}
+        <section class="container-fluid padding-start pb-4" id="section-start">
+
+            <div class="container container-brand-detail-master mt-3">
+                <div class="container-brand-detail">
+                    <div class="mask-brand">
+                        {% if salon.getLifestyle() != null %}
+                        <img class="img-fluid bandeau-marque"
+                             src="{{ asset('uploads/'~salon.getLifestyle().url) }}"></div>
+                    {% else %}
+                    <img class="img-fluid bandeau-marque"
+                         src="{{ asset('bundles/b2b/img/salons/lifestyle.jpg') }}"></div>
+                {% endif %}
+                <div class="container-brand-detail-text">
+                    <div class="container-button-backb"><a href="{{ path('salons_boutiques') }}"><span
+                                    class="button-backb p-2"><img
+                                        src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/> Retour aux salons</span></a>
+                    </div>
+                    <h1>{{ salon.getName() }}</h1>
+                    {% if salon.getDateDebut() == salon.getDateFin() %}
+                        <p>
+                            Le {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                            /{{ salon.getDateFin()|date("Y") }}
+                        </p>
+                    {% else %}
+                        <p>
+                            Du {{ salon.getDateDebut()|date("d") }}
+                            au {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                            /{{ salon.getDateFin()|date("Y") }}
+                        </p>
+                    {% endif %}
+                    <p class="font-weight-bold p-4">{{ salon.getLieu() }} - {{ salon.getAdresse() }}
+                        , {{ salon.getVille() }}
+                        - {{ salon.getPays().getName() }}</p>
+                    <p class="p-4">{{ salon.getDescription() }}</p>
+                    <h2>Marques participantes</h2>
+                    <ul>
+                        {% for row in salon.brands if row.getBrand().isEnabled() %}
+                            <li>
+                                <a href="{{ path('details_marques', {'marque': row.getBrand().getBrandName()} ) }}">{{ row.getBrand().getBrandName() }} {% if row.getStand() %} - {{ row.getStand() }} {% endif %}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            </div>
+        </section>
+    {% endblock %}

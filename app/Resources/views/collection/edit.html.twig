@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-datepicker').datepicker({
+                format: 'dd/mm/yyyy'
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item "><a
+                    href="{{ path('backoffice_brand_show', { 'id': collection.brand.id }) }}">{{ collection.brand.brandName }}</a>
+        </li>
+        <li class="breadcrumb-item active">Collection {{ collection }}</li>
+    </ol>
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_brand_show', { 'id': collection.brand.id }) }}" class="btn btn-primary">Retour à la
+            marque</a>
+        <a href="{{ path('collection_show', { 'id': collection.id }) }}" class="btn btn-primary">Voir la collection</a>
+    </div>
+
+    <h1 class="text-center">Collection {{ collection }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+            <div class="row">
+
+                <div class="form-group col-md-12">
+                    {{ form_label(edit_form.name) }}<span class="required-chip">*</span>
+                    {{ form_widget(edit_form.name) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    {{ form_label(edit_form.year) }}<span class="required-chip">*</span>
+                    {{ form_widget(edit_form.year) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(edit_form.season) }}<span class="required-chip">*</span>
+                    {{ form_widget(edit_form.season, {'attr': {'class': 'custom-select'}}) }}
+                </div>
+                <div class="form-group col-md-4 date" id='datetimepicker'>
+                    {{ form_label(edit_form.endDate) }}<span class="required-chip">*</span>
+                    {{ form_widget(edit_form.endDate, {'attr': {'class': 'form-control input-inline js-datepicker'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    {{ form_label(edit_form.lookbook) }}
+                    {{ form_widget(edit_form.lookbook) }}
+                </div>
+
+                <div class="form-group col-md-6">
+                    {{ form_label(edit_form.lifestyle, null) }}
+
+                    {{ form_widget(edit_form.lifestyle) }}
+
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <input class="btn btn-primary" type="submit" value="Modifier la collection"/>
+            </div>
+            {{ form_end(edit_form) }}
+
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="m-3 text-right">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-outline-danger del" type="submit" value="Supprimer">
+        {{ form_end(delete_form) }}
+    </div>
+
+{% endblock %}
+
+
+    {% block js %}
+        <script type="text/javascript">
+            $(function () {
+                $(".del").click(function () {
+                    return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+                });
+            });
+        </script>
+    {% endblock %}

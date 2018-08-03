@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Gestion des pays</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_country_new') }}" class="btn btn-primary">Créer un nouveau pays</a>
+    </div>
+
+    <h1 class="text-center">Gestion des pays</h1>
+
+    <div class="container">
+        <table class="table table-striped mt-3 bg-white border">
+            <thead>
+            <tr>
+                <th scope="col">Pays</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for country in countries %}
+                <tr>
+                    <td>{{ country.name }}</td>
+                    <td>
+                        <a href="{{ path('backoffice_country_show', { 'id': country.id }) }}"
+                           class="btn btn-primary">Voir</a>
+                        <a href="{{ path('backoffice_country_edit', { 'id': country.id }) }}" class="btn btn-primary">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

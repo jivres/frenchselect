@@ -1,0 +1,126 @@
+<script>
+    $(document).ready(function () {
+        initCollection($('ul.contacts'));
+    });
+
+    function initCollection($collectionHolder) {
+        // setup an "add a tag" link
+        var $addLink = $('<a href="#" class="add">Ajouter un contact</a>');
+        var $newLinkLi = $('<li></li>').append($addLink);
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addLink.on('click', function (e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove-contact">Supprimer le contact</a>');
+        $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove-contact').click(function (e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+</script>
+
+<h3 class="mt-3">Identifiant</h3>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label><span>{{ form_label(form.user.mail) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.user.mail) }}
+    </div>
+
+</div>
+<h3>Informations sur le commercial</h3>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.firstName) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.firstName) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.lastName) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.lastName) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.phone) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.phone) }}
+    </div>
+</div>
+
+<h3>Informations sur la société</h3>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label><span>{{ form_label(form.companyName) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.companyName) }}
+    </div>
+    <div class="form-group col-md-6">
+        <label><span>{{ form_label(form.numTVA) }}</span></label>
+        {{ form_widget(form.numTVA) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.deductibleTVA, null, {'label_attr': {'class': 'col-form-label'}}) }}
+        {{ form_widget(form.deductibleTVA) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.billingAddress) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.billingAddress) }}
+    </div>
+    <div class="form-group col-md-2">
+        <label><span>{{ form_label(form.billingZP) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.billingZP) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.billingTown) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.billingTown) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.country) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.country) }}
+    </div>
+</div>
+
+<h3 class="mt-3 mb-3">Contacts</h3>
+
+<ul class="contacts" data-prototype="{{ form_widget(form.contacts.vars.prototype)|e('html_attr') }}">
+    {% for contact in form.contacts %}
+        <li>{{ form_widget(contact) }}</li>
+    {% endfor %}
+</ul>
+
+
+

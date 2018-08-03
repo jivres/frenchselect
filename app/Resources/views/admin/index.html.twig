@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Administrateurs</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_admin_new') }}" class="btn btn-primary">Créer un nouvel administrateur</a>
+    </div>
+
+    <table class="table table-striped mt-3 bg-white border">
+            <thead>
+            <tr>
+                <th scope="col">Statut</th>
+                <th scope="col">Identifiant</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Mot de passe</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for admin in admins %}
+                <tr>
+                    <td>{% if admin.isEnabled %}Actif{% else %}Non actif{% endif %}</td>
+                    <td>{{ admin.username }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.password }}</td>
+                    <td>
+                        <a href="{{ path('backoffice_admin_show', { 'id': admin.id }) }}"
+                           class="btn btn-primary">Voir</a>
+                        <a href="{{ path('backoffice_admin_edit', { 'id': admin.id }) }}" class="btn btn-primary">Modifier</a>
+                        {% if is_granted('ROLE_ADMIN') and not admin.isEnabled %}
+                            <a href="{{ path('backoffice_user_activate', { 'id': admin.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+{% endblock %}

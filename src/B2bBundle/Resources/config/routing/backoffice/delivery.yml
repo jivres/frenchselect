@@ -1,0 +1,3 @@
+backoffice_delivery_index:
+    path:    /delivery
+    defaults: {_controller: "B2bBundle:Delivery:index"}

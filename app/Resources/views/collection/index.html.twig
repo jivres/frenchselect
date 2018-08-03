@@ -1,0 +1,72 @@
+{% set active = 'collections' %}
+{% extends 'layout.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        function selectCollection(id, name, path) {
+            var products_main = $("#products-main");
+            $("#collection-name").text(name);
+
+            $.ajax({
+                url: path,
+                type: 'GET'
+            }).done(function(data) {
+                $(products_main).show();
+                $("#products").html(data).show();
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <h1 class="text-center">Mes Collections</h1>
+
+        <table class="table table-stripped table-hover border bg-white">
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Nom</th>
+                    <th>Année</th>
+                    <th>Saison</th>
+                    <th>Date limite</th>
+                    <th>Nb Produits</th>
+                    <th>Photo</th>
+                    <th>Lookbook</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for collection in collections %}
+                <tr onclick="selectCollection('{{ collection.id }}', '{{ collection.name }}', '{{ path('products_for_collection', {'id': collection.id }) }}');">
+                    <td>{{ collection.id }}</td>
+                    <td>{{ collection.name }}</td>
+                    <td>{{ collection.year }}</td>
+                    <td>{{ collection.season }}</td>
+                    <td>{{ collection.endDate|date('d/m/Y') }}</td>
+                    <td>{{ collection.products|length }}</td>
+                    <td>[Photo]</td>
+                    <td>
+                        {% if collection.lookbook is not null %}
+                            <a class="btn" href="{{ asset('uploads/' ~ collection.lookbook.url) }}"></a>
+                        {% else %}
+                            <i>Aucun lookbook</i>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+        <div id="products-main" style="display:none;">
+            <h2>Liste des produits de la collection - <span id="collection-name"></span></h2>
+
+            <div id="products">
+            </div>
+        </div>
+    </div>
+{% endblock %}

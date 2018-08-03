@@ -1,0 +1,32 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commerciaux{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('salesman_index') }}">Mes Commerciaux</a></li>
+            <li class="breadcrumb-item active">{{ salesman.username }}</li>
+        </ol>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('salesman_edit', { 'id': salesman.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Modifier</a>
+            <a href="{{ path('salesman_remove', { 'id': salesman.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Supprimer</a>
+            <a href="#" class="btn btn-primary btn-orange ml-2 mr-2">Imprimer la fiche</a>
+        </div>
+
+        <h1>Commercial - {{ salesman.username }}</h1>
+
+        {% include 'salesman/detail.html.twig' with {'salesman': salesman} %}
+    </div>
+{% endblock %}

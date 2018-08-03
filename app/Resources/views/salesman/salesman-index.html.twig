@@ -1,0 +1,65 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes sous-commerciaux{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h1>Mes sous-commerciaux</h1>
+
+        <div class="row flex-justify-center">
+            <table class="table table-stripped">
+                <thead>
+                <tr>
+                    <th>Marque</th>
+                    <th>Commercial</th>
+                    <th>Société</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Départements</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for salesman_link in salesmen %}
+                    <tr>
+                        <td>{{ salesman_link.brand }}</td>
+                        {% if 1 == 2 %}
+                            <td><a href="{{ path('salesman_show', {'id': salesman_link.subordinate.id}) }}">{{ salesman_link.subordinate.contact }}</a></td>
+                        {% else %}
+                            <td>{{ salesman_link.subordinate.contact }}</td>
+                        {% endif %}
+                        <td>{{ salesman_link.subordinate.companyName }}</td>
+                        <td>{{ salesman_link.subordinate.contact.phone }}</td>
+                        <td>{{ salesman_link.subordinate.contact.mail }}</td>
+                        <td>
+                            {% if salesman_link.departments|length == 0 %}
+                                <i>Aucun département assigné</i>
+                            {% else %}
+                                <h5>
+                                    {% for d in salesman_link.departments %}
+                                        <span class="badge badge-secondary">{{ d }}</span>
+                                    {% endfor %}
+                                </h5>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('salesman_department_edit', { 'id': salesman_link.id, 'salesman': app.user.id }) }}" class="btn btn-outline-primary">Modifier les départements</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

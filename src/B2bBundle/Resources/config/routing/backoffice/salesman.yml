@@ -1,0 +1,78 @@
+backoffice_salesman_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Salesman:index" }
+    methods:  GET
+
+backoffice_salesman_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Salesman:show" }
+    methods:  GET
+
+backoffice_salesman_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Salesman:new" }
+    methods:  [GET, POST]
+
+backoffice_salesman_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Salesman:edit" }
+    methods:  [GET, POST]
+
+backoffice_salesman_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Salesman:delete" }
+    methods:  DELETE
+
+backoffice_salesman_select_salesman:
+    path:     /{id}/select_salesman
+    defaults: { _controller: "B2bBundle:Salesman:selectSalesman" }
+    methods:  GET
+
+backoffice_salesman_assign_salesman:
+    path:     /{id}/assign_salesman
+    defaults: { _controller: "B2bBundle:Salesman:assignSalesman" }
+    methods:  GET
+
+backoffice_salesman_deassign_salesman:
+    path:     /{id}/deassign_salesman
+    defaults: { _controller: "B2bBundle:Salesman:deassignSalesman" }
+    methods:  GET
+
+backoffice_salesman_search_salesman:
+    path:     /{id}/search_salesman
+    defaults: { _controller: "B2bBundle:Salesman:searchSalesman" }
+    methods:  POST
+
+backoffice_salesman_add_brand:
+    path:     /{id}/add_brand
+    defaults: { _controller: "B2bBundle:Salesman:addBrand" }
+    methods:  [GET, POST]
+
+backoffice_salesman_edit_brand:
+    path:     /{id}/edit_brand
+    defaults: { _controller: "B2bBundle:Salesman:editBrand" }
+    methods:  [GET, POST]
+
+backoffice_salesman_delete_brand:
+    path:     /{id}/delete_brand
+    defaults: { _controller: "B2bBundle:Salesman:deleteBrand" }
+    methods:  DELETE
+
+
+backoffice_salesman_activate:
+    path:     /{id}/activate
+    defaults: { _controller: "B2bBundle:Salesman:activate" }
+    methods:  GET
+
+backoffice_salesman_search:
+    path:     /search_salesman
+    defaults: { _controller: "B2bBundle:Brand:findSalesmen" }
+    methods:   POST
+
+
+backoffice_salesman_brand_link:
+    path:     /{salesman}/brandlink/{brand}
+    defaults: { _controller: "B2bBundle:Salesman:showBrandLink" }
+    methods:  [GET, POST]
+
+

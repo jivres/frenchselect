@@ -1,0 +1,52 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Marque</th>
+            <th>Commercial</th>
+            <th>Société</th>
+            <th>Départements</th>
+            {% if is_granted('ROLE_ADMIN') %}<th>Actions</th>{% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for salesman_link in salesmen %}
+            {% if hierarchy == 'superior' %}
+                {% set salesman = salesman_link.superior %}
+            {% else %}
+                {% set salesman = salesman_link.subordinate %}
+            {% endif %}
+            <tr>
+                <td>{{ salesman_link.brand }}</td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('backoffice_salesman_show', {'id': salesman.id}) }}">{{ salesman.contact }}</a>
+                    {% else %}
+                        {{ salesman.contact }}
+                    {% endif %}
+                </td>
+                <td>{{ salesman.companyName }}</td>
+                <td>
+                    {% if salesman_link.departments|length == 0 %}
+                        <i>Aucun département assigné</i>
+                    {% else %}
+                        <h5>
+                            {% for d in salesman_link.departments %}
+                                <span class="badge badge-secondary">{{ d }}</span>
+                            {% endfor %}
+                        </h5>
+                    {% endif %}
+                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        {% if hierarchy == 'subordinate' %}
+                            <a href="{{ path('salesman_department_edit', { 'id': salesman_link.id, 'salesman': salesmanId }) }}" class="btn btn-outline-primary">Modifier</a>
+                        {% endif %}
+                        <a href="{{ path('backoffice_salesman_deassign_salesman', { 'id': salesman_link.id, 'hierarchy': hierarchy, 'salesman': salesmanId }) }}" class="btn btn-outline-danger">Désassigner</a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

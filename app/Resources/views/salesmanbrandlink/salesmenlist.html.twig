@@ -1,0 +1,48 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped table-hover bg-white border">
+        <thead>
+        <tr>
+            <th>Statut</th>
+            <th>N° Commercial</th>
+            <th>Secteur</th>
+            <th>Commercial</th>
+            <th>Société</th>
+            <th>Code Postal</th>
+            <th>Ville</th>
+            <th>Pays</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for salesman_link in salesmen %}
+            {% set salesman = salesman_link.salesman %}
+            <tr {% if noclick is not defined %}onclick="location.href='{{ path('salesman_show', {'id': salesman.id}) }}'"{% endif %}>
+                <td>
+                    {% if salesman.isActive %}
+                        Actif
+                    {% else %}
+                        En cours de vérification
+                    {% endif %}
+                </td>
+                <td>{{ salesman.id }}</td>
+                <td>
+                    {% if salesman_link.departments|length == 0 %}
+                        <i>Aucun département assigné</i>
+                    {% else %}
+                        <h5>
+                        {% for dep in salesman_link.departments %}
+                            <span class="badge badge-secondary">{{ dep }}</span>
+                        {% endfor %}
+                        </h5>
+                    {% endif %}
+                </td>
+                <td>{{ salesman.lastName }} {{ salesman.firstName }}</td>
+                <td>{{ salesman.companyName }}</td>
+                <td>{{ salesman.billingZP }}</td>
+                <td>{{ salesman.billingTown }}</td>
+                <td>{{ salesman.country }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p>{{ salesmen|length }} {% if salesmen|length > 1 %}commerciaux{% else %}commercial{% endif %}</p>

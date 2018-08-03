@@ -1,0 +1,99 @@
+<script>
+    $(document).ready(function() {
+        $('ul.pictures').each(function() {
+            initCollection($(this));
+        });
+    });
+
+    function initCollection($collectionHolder) {
+        // setup an "add a tag" link
+        var $addLink = $('<a href="#" class="add">Ajouter</a>');
+        var $newLinkLi = $('<li></li>').append($addLink);
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        console.log('AddTag');
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove">Supprimer</a>');
+        $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove').click(function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+</script>
+
+{{ form_start(form) }}
+
+<table class="table table-stripped">
+    <tr>
+        <!--<th scope="col">Sélection</th>-->
+        <th scope="col">Ref</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Couleur</th>
+        <th scope="col">Taille</th>
+        <th scope="col">Prix HT</th>
+        <th scope="col">Quantité</th>
+        <th scope="col">Photos</th>
+        <th scope="col">Commentaire</th>
+    </tr>
+    {% for defectiveproduct in form.defectiveproducts %}
+        <tr>
+            <!--<td></td>-->
+            <td>{{ defectiveproduct.vars.value.product.ref }}</td>
+            <td>{{ defectiveproduct.vars.value.product.name }}</td>
+            <td>{{ defectiveproduct.vars.value.color }}</td>
+            <td>{{ defectiveproduct.vars.value.size }}</td>
+            <td>{{ defectiveproduct.vars.value.product.priceHT }} €</td>
+            <td>{{ form_widget(defectiveproduct.quantity) }}</td>
+            <td>
+                <ul class="pictures" data-prototype="{{ form_widget(defectiveproduct.pictures.vars.prototype)|e('html_attr') }}">
+                    {% for picture in defectiveproduct.pictures %}
+                        <li>{{ form_widget(picture) }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ form_widget(defectiveproduct.comment) }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{{ form_widget(form._token) }}
+<input class="btn btn-primary btn-orange" type="submit" value="Valider la demande de retour" />
+{{ form_end(form, { 'render_rest': false }) }}

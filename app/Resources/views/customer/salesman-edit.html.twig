@@ -1,0 +1,38 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('salesman_shops_index') }}">Mes Clients</a></li>
+            <li class="breadcrumb-item active">Modifier</li>
+        </ol>
+
+        <div class="col-lg-8" style="margin:auto;">
+            {{ form_start(edit_form) }}
+
+            {% include 'customer/form.html.twig' with {'form': edit_form} %}
+
+            {{ form_widget(edit_form._token) }}
+            <input class="btn btn-primary" type="submit" value="Modifier le client" />
+            {{ form_end(edit_form, { 'render_rest': false }) }}
+        </div>
+
+        <a href="{{ path('salesman_shops_index') }}" class="btn btn-primary">Retour à la liste</a>
+        {{ form_start(delete_form) }}
+        <input class="btn btn-primary" type="submit" value="Supprimer">
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

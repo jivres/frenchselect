@@ -1,0 +1,19 @@
+brand_product:
+    resource: "@B2bBundle/Resources/config/routing/brand/product.yml"
+    prefix:   /product
+
+brand_salesman:
+    resource: "@B2bBundle/Resources/config/routing/brand/salesman.yml"
+    prefix:   /salesman
+
+brand_customer:
+    resource: "@B2bBundle/Resources/config/routing/brand/customer.yml"
+    prefix:   /customer
+
+brand_shop:
+    resource: "@B2bBundle/Resources/config/routing/brand/shop.yml"
+    prefix:   /shop
+
+b2b_backoffice_allowedcolor:
+    resource: "@B2bBundle/Resources/config/routing/brand/allowedcolor.yml"
+    prefix:   /allowedColor

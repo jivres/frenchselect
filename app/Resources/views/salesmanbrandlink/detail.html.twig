@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_salesman_index') }}">Commerciaux</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_salesman_show', {'id': salesman.id}) }}">{{ salesman }}</a></li>
+        <li class="breadcrumb-item active">Lien avec la marque {{ brand }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_salesman_show', { 'id': salesman.id }) }}" class="btn btn-primary">Retour au commercial {{ salesman.lastName }}</a>
+        <a href="{{ path('backoffice_salesman_edit_brand',{'id': salesmanbrandlink.id, 'salesman': salesman.id}) }}" class="btn btn-primary">Modifier le lien</a>
+    </div>
+
+    <h1 class="text-center">Lien entre le commercial {{ salesman.lastName }} et la marque {{ brand.brandName }}</h1>
+
+    <div class="row">
+        <dl class="row col-md-12">
+            <dt class="col-sm-3">Départements</dt>
+            <dd class="col-sm-9">{% for dep in salesmanbrandlink.departments %} {{ dep }}
+                {% if not loop.last %} <br> {% endif %}{% endfor %}</dd>
+        </dl>
+    </div>
+    <div class="row">
+        <dl class="row col-md-12">
+            <dt class="col-sm-3">Boutiques</dt>
+            <dd class="col-sm-9">{% for shop in salesmanshop %} {{ shop.shop }}
+                    {% if not loop.last %} <br> {% endif %}{% endfor %}</dd>
+        </dl>
+    </div>
+
+
+
+{% endblock %}

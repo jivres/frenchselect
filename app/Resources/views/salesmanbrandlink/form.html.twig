@@ -1,0 +1,12 @@
+{% if departementsOnly is not defined or departementsOnly == false %}
+<h2>Sélectionner la marque</h2>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        {{ form_label(form.brand, null, {'label_attr': {'class': 'col-form-label'}}) }}
+        {{ form_widget(form.brand) }}
+    </div>
+</div>
+{% endif %}
+
+<h2>Sélectionner les départements</h2>
+{{ form_widget(form.departments) }}

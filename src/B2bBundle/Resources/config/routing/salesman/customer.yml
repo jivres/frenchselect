@@ -1,0 +1,35 @@
+backoffice_customer_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Customer:index" }
+    methods:  GET
+
+backoffice_customer_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Customer:show" }
+    methods:  [GET, POST]
+
+backoffice_customer_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Customer:new" }
+    methods:  [GET, POST]
+
+backoffice_customer_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Customer:edit" }
+    methods:  [GET, POST]
+
+backoffice_customer_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Customer:delete" }
+    methods:  DELETE
+
+
+salesman_select_customer:
+    path:     /select_customer
+    defaults: { _controller: "B2bBundle:Salesman:selectCustomer" }
+    methods:  GET
+
+salesman_search_shop:
+    path:     /search_shop
+    defaults: { _controller: "B2bBundle:Salesman:searchShop" }
+    methods:   POST

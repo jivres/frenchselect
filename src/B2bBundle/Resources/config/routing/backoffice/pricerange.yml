@@ -1,0 +1,24 @@
+backoffice_pricerange_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:PriceRange:index" }
+    methods:  GET
+
+backoffice_pricerange_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:PriceRange:show" }
+    methods:  GET
+
+backoffice_pricerange_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:PriceRange:new" }
+    methods:  [GET, POST]
+
+backoffice_pricerange_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:PriceRange:edit" }
+    methods:  [GET, POST]
+
+backoffice_pricerange_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:PriceRange:delete" }
+    methods:  DELETE

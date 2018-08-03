@@ -1,0 +1,57 @@
+<script>
+    function format(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '€' + x[1] : ' €';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        }
+        return x1 + x2;
+    }
+    $(document).ready(function() {
+        $(".price").each(function () {
+            if ($(this).text().indexOf('€') === -1) {
+                $(this).text(format($(this).text()));
+            }
+        });
+    });
+</script>
+
+<table class="table table-stripped bg-white border">
+    <thead>
+    <tr>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Commande</th>
+        <th>Marque</th>
+        <th>Boutique</th>
+        <th>Ville</th>
+        <th>Montant H.T</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for report in reports %}
+        <tr>
+            <td>
+                {% if report.status == 'waiting' %}
+                    Demande en cours
+                {% elseif report.status == 'returning' %}
+                    Retour des produits en cours
+                {% elseif report.status == 'handled' %}
+                    Demande traitée
+                {% endif %}
+            </td>
+            <td>{{ report.date|date('d/m/Y') }}</td>
+            <td>{{ report.command.id }}</td>
+            <td>{{ report.command.cartCollection.brand }}</td>
+            <td>{{ report.command.shop }}</td>
+            <td>{{ report.command.deliveryTown }}</td>
+            <td class="price">{{ report.command.totalHT }}</td>
+            <td><a href="{{ path('report_show', { 'id': report.id }) }}" class="btn btn-outline-dark">Accéder au signalement</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

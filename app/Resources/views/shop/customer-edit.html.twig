@@ -1,0 +1,46 @@
+{% set active = 'account' %}
+{% extends "layout.html.twig" %}
+
+{% block title %}Mon B2B - Mes Boutiques{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="row">
+            <h1>Modification de la boutique - {{ shop.name }}</h1>
+        </div>
+
+        <div class="col-lg-6" style="margin:auto;">
+            {{ form_start(edit_form) }}
+
+            {% include 'shop/form.html.twig' with {'form': edit_form} %}
+            <input class="btn btn-primary" type="submit" value="Modifier la boutique" />
+            {{ form_widget(edit_form._token) }}
+            {{ form_end(edit_form, { 'render_rest': false }) }}
+        </div>
+
+        <a href="{{ path('b2b_customer_shops') }}" class="btn btn-primary">Retour à la liste</a>
+        {% if canDelete %}
+            {{ form_start(delete_form, {'attr': {'class': 'd-inline-block'}}) }}
+            <input class="btn btn-primary" type="submit" value="Supprimer la boutique">
+            {{ form_end(delete_form) }}
+        {% else %}
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top" title="{{ deleteMessage }}">
+                <button class="btn btn-primary btn-orange ml-2 mr-2 disabled" style="pointer-events: none;" type="button" data-toggle="tooltip" data-placement="top" title="Tooltip on top" disabled>
+                    Supprimer la boutique
+                </button>
+            </span>
+        {% endif %}
+    </section>
+{% endblock %}

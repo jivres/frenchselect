@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_secondarycategory_index') }}">Gestion des catégories
+                secondaires</a></li>
+        <li class="breadcrumb-item active">{{ secondaryCategory.label }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_secondarycategory_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_secondarycategory_show', { 'id': secondaryCategory.id }) }}"
+           class="btn btn-primary">Voir
+            la catégorie</a>
+    </div>
+
+    <h1 class="text-center">Modification - {{ secondaryCategory.label }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Modifier la catégorie"/>
+            </div>
+            {{ form_end(edit_form) }}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="m-3 text-right">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-outline-danger del" type="submit" value="Supprimer la catégorie">
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+            });
+        });
+    </script>
+{% endblock %}

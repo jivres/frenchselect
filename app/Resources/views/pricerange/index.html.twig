@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Priceranges list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Label</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for priceRange in priceRanges %}
+            <tr>
+                <td><a href="{{ path('backoffice_pricerange_show', { 'id': priceRange.id }) }}">{{ priceRange.id }}</a></td>
+                <td>{{ priceRange.label }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('backoffice_pricerange_show', { 'id': priceRange.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('backoffice_pricerange_edit', { 'id': priceRange.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('backoffice_pricerange_new') }}">Create a new priceRange</a>
+        </li>
+    </ul>
+{% endblock %}

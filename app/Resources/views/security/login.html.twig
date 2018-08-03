@@ -1,0 +1,70 @@
+{% extends 'layout_login.html.twig' %}
+
+{% block title %} {{ parent() }} - Se connecter {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid login">
+        <div class="container-button-backb m-2">
+            <a href="{{ path('index') }}" id="btn-retour">
+                    <span class="button-backbh p-2">
+                        <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour</span>
+            </a>
+        </div>
+        <div class="flash-messages">
+            <div class="empty"></div>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-6 login-form border rounded">
+                <h1>Se connecter au Showroom French Select</h1>
+                <h2>Bienvenue !</h2>
+                <form class="navbar-nav connexion" action="{{ path('account_login') }}" method="post">
+                    <div class="form-block">
+                        <label for="mail"><span>Adresse Email</span><span class="required-chip">*</span></label>
+                        <input class="form-control" type="text" id="mail" name="_username" value="{{ last_username }}"
+                               placeholder="Adresse mail"/>
+                    </div>
+
+                    <div class="form-block">
+                        <label for="password"><span>Mot de passe</span><span class="required-chip">*</span></label>
+                        <input class="form-control" type="password" id="password" name="_password"
+                               placeholder="Mot de passe"/>
+                    </div>
+                    {% if error %}
+                        <div class="alert alert-danger">L’adresse email ou le mot de passe ne correspond à aucun compte
+                        </div>
+                    {% endif %}
+                    <div class="form-block text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                    </div>
+                    <div class="text-center font-italic">
+                        <a href="{{ path('forgotten_password') }}">Mot de passe oublié ?</a>
+                    </div>
+                </form>
+
+                <div class="mt-4">Pas encore de compte ? <a href="{{ path('inscription') }}"
+                                                            class="font-weight-bold ml-1">Inscrivez-vous
+                        gratuitement</a></div>
+            </div>
+            <div class="col-lg-3">
+            </div>
+        </div>
+    </div>
+{% endblock %}

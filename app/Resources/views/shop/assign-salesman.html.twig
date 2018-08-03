@@ -1,0 +1,105 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        function search() {
+            var searchBrand = $('#brands').val();
+            var shopName = '{{ shop.getName() }}';
+            $.ajax({
+                url: "{{ path('backoffice_salesman_search') }}",
+                type: 'POST',
+                data: {search_brand: searchBrand, shopName: shopName},
+                datatype: 'json'
+            }).done(function (data) {
+                $("#salesman").html(data).show();
+            });
+        }
+
+        function valid() {
+            var brand = $('#brands').val();
+            var salesman = $('#salesman_select').val();
+            var shop = {{ shop.getId() }};
+            $.ajax({
+                url: "{{ path('assign_salesman_shop') }}",
+                type: 'POST',
+                data: {brand: brand, salesman: salesman, shop: shop},
+                datatype: 'json'
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        {% if is_granted('ROLE_ADMIN') %}
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('backoffice_customer_index') }}">Clients</a></li>
+                <li class="breadcrumb-item"><a
+                            href="{{ path('backoffice_customer_show', { 'id': shop.customer.id }) }}">Client {{ shop.customer }}</a>
+                </li>
+                <li class="breadcrumb-item active">Assigner un commercial</li>
+            </ol>
+        {% else %}
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('brand_customer_index') }}">Mes Clients</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('brand_customer_show', { 'id': shop.customer.id }) }}">Client {{ shop.customer }}</a>
+                </li>
+                <li class="breadcrumb-item active">Assigner un commercial</li>
+            </ol>
+        {% endif %}
+
+        <h2>Assigner un commercial à la boutique {{ shop }} du client {{ shop.customer }}</h2>
+
+        <div class="col-lg-8" style="margin:auto;">
+            {% if is_granted('ROLE_ADMIN') %}
+                <form>
+                    <div class="form-group">
+                        <label for="brands">Marque</label>
+                        {% if brands|length >0 %}
+                        <select class="form-control" id="brands">
+                            {% for brand in brands %}
+                                <option>{{ brand }}</option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                            <p>Aucune marque disponible</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        <button id="search-button" type="button" class="btn btn-primary" onclick="search();"><img
+                                    src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14">
+                            Rechercher
+                        </button>
+                    </div>
+                </form>
+
+                <div id="salesman" class="d-flex justify-content-center">
+
+                </div>
+
+           {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('brand_customer_show', { 'id': shop.customer.id }) }}"
+               class="btn btn-primary btn-orange ml-2 mr-2">Retour au client</a>
+        </div>
+    </div>
+{% endblock %}

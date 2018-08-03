@@ -1,0 +1,64 @@
+
+backoffice_brand_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Brand:index" }
+    methods:  GET
+
+backoffice_brand_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Brand:show" }
+    methods:  GET
+
+backoffice_brand_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Brand:new" }
+    methods:  [GET, POST]
+
+backoffice_brand_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Brand:edit" }
+    methods:  [GET, POST]
+
+backoffice_brand_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Brand:delete" }
+    methods:  DELETE
+
+backoffice_brand_add_collection:
+    path:     /addToBrand/{brand}
+    defaults: { _controller: "B2bBundle:Brand:addCollection" }
+    methods:  [GET, POST]
+
+
+backoffice_select_salesmen:
+    path:     /{id}/selectSalesmen
+    defaults: { _controller: "B2bBundle:Brand:selectSalesmen" }
+    methods:  GET
+
+brand_search_salesmen:
+    path:     /{id}/searchSalesmen
+    defaults: { _controller: "B2bBundle:Brand:searchSalesmen" }
+    methods:   POST
+
+brand_assign_salesmen:
+    path:     /{id}/assignSalesmen
+    defaults: { _controller: "B2bBundle:Brand:assignSalesmen" }
+    methods:  GET
+
+brand_deassign_salesmen:
+    path:     /{id}/deassignSalesman
+    defaults: { _controller: "B2bBundle:Brand:deassignSalesmen" }
+    methods:  GET
+
+backoffice_brand_export_cmds:
+    path:     /{brand}/export/commands/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Brand:exportCommands, _format: xlsx }
+    methods:  [GET]
+
+backoffice_brand_customer:
+    path:     /assign
+    defaults: { _controller: "B2bBundle:Brand:assignCustomer"}
+
+backoffice_brand_descustomer:
+    path:     /{b}/{c}/deassign
+    defaults: { _controller: "B2bBundle:Brand:deassignCustomer"}

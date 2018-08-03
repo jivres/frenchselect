@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showModal(command) {
+            var res = "";
+            var success = false;
+            $.ajax({
+                url: "{{ path('command_modal') }}",
+                type: 'GET',
+                data: {id: command, viewer: 'brand'},
+                datatype: 'json',
+                success: function(response){
+                    res=response;
+                    success=true;
+                },
+                error:function(){
+                    //handle error
+                }
+            }).done(function(data) {
+                if (success)
+                    $("#command-modal").html(data).modal("show");
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Liste des commandes</li>
+    </ol>
+
+    <div class="modal fade bd-example-modal-lg" id="command-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+    <div class="border rounded p-3 m-3 bg-white">
+    <h2 class="text-center">Commandes en attente de validation <span class="badge badge-primary badge-pill">{{ waitingCommands|length }}</span></h2>
+    {% include 'command/list.html.twig' with { 'commands': waitingCommands, 'showModal': true, 'viewer': 'admin' } %}
+    </div>
+
+    <div class="border rounded p-3 m-3 bg-white">
+    <h2 class="text-center">Toutes les commandes <span class="badge badge-primary badge-pill">{{ commands|length }}</span></h2>
+    {% include 'command/list.html.twig' with { 'commands': commands, 'showModal': true, 'viewer': 'admin' } %}
+    </div>
+{% endblock %}

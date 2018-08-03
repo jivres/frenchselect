@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_customer_index') }}">Clients</a></li>
+        <li class="breadcrumb-item"><a
+                    href={{ path('backoffice_customer_show', {'id': shop.customer.id}) }}>{{ shop.customer }}</a></li>
+        <li class="breadcrumb-item active">{{ shop }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_customer_show', {'id': shop.customer.id}) }}" class="btn btn-primary">Retour au
+            client</a>
+        <a href="{{ path('backoffice_shop_show', { 'id': shop.id }) }}" class="btn btn-primary">Voir la boutique</a>
+        {% if is_granted('ROLE_ADMIN') and not shop.isActive %}
+            <a href="{{ path('backoffice_shop_activate', { 'id': shop.id }) }}" class="btn btn-outline-success">Activer la boutique</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') and shop.isActive %}
+            <a href="{{ path('backoffice_shop_desactivate', { 'id': shop.id }) }}" class="btn btn-outline-danger">Désactiver la boutique</a>
+        {% endif %}
+    </div>
+
+        <h1 class="text-center">{{ shop.customer }} - {{ shop }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+
+            {% include 'shop/form.html.twig' with {'form': edit_form} %}
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Modifier la boutique"/>
+            </div>
+            {{ form_widget(edit_form._token) }}
+            {{ form_end(edit_form, { 'render_rest': false }) }}
+        </div>
+
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    {% if canDelete %}
+        <div class="m-3 text-right">
+            {{ form_start(delete_form) }}
+            <input class="btn btn-outline-danger del" type="submit" value="Supprimer la boutique">
+            {{ form_end(delete_form) }}
+        </div>
+    {% else %}
+        <div class="m-3 text-right">
+        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="top"
+              title="{{ deleteMessage }}">
+                <button class="btn btn-primary btn-orange ml-2 mr-2 disabled" style="pointer-events: none;"
+                        type="button" data-toggle="tooltip" data-placement="top" title="Tooltip on top" disabled>
+                    Supprimer la boutique
+                </button>
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+            });
+        });
+    </script>
+{% endblock %}

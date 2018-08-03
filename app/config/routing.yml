@@ -1,0 +1,6 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+b2b:
+    resource: "@B2bBundle/Resources/config/routing.yml"
+    prefix:   /

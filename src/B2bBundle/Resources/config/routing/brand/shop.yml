@@ -1,0 +1,9 @@
+shop_assign_salesman:
+    path:     /{id}/assign_salesman
+    defaults: { _controller: "B2bBundle:Shop:assignSalesman" }
+    methods:  [GET,POST]
+
+shop_deassign_salesman:
+    path:     /{id}/deassign_salesman
+    defaults: { _controller: "B2bBundle:Shop:deassignSalesman" }
+    methods:  GET

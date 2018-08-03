@@ -1,0 +1,38 @@
+{% set active = 'account' %}
+{% extends "layout.html.twig" %}
+
+{% block title %}B2bBundle:Admin:index{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="row">
+            <h1>Mes boutiques</h1>
+        </div>
+        <h1 class="text-center">Modification de la boutique- {{ shop.name }}</h1>
+
+        <div class="col-lg-6" style="margin:auto;">
+            {{ form_start(edit_form) }}
+                {% include 'shop/' %}
+                {{ form_widget(edit_form) }}
+                <input class="btn btn-primary" type="submit" value="Modifier" />
+            {{ form_end(edit_form) }}
+        </div>
+
+        <a href="{{ path('b2b_customer_shops') }}" class="btn btn-primary">Retour à la liste</a>
+        {{ form_start(delete_form) }}
+        <input class="btn btn-primary" type="submit" value="Supprimer">
+        {{ form_end(delete_form) }}
+    </section>
+{% endblock %}

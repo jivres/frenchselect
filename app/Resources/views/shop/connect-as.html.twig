@@ -1,0 +1,111 @@
+<script>
+    function uncheckAll() {
+        $(".shop-check").each(function () {
+            $(this).prop("checked", false);
+        });
+    }
+
+    function selectShop(id, customerName, shopName, customerId) {
+        var shop_ids = $("#shop-ids");
+        var shop_check = $("#shop-" + id);
+        var connectedShop = $("#connectedShop");
+        var connectedCustomer = $("#connectedCustomer");
+        var customer_id = $("#customer-id");
+
+        // Checkbox déjà checked : il faut retirer les infos de la boutique
+        if ($(shop_check).prop("checked")) {
+            $(shop_check).prop("checked", false);
+            $(shop_ids).val($(shop_ids).val().replace(id + " ", ""));
+            $(connectedShop).val($(connectedShop).val().replace(", " + shopName, "").replace(shopName, ""));
+
+            // Il était le seul sélectionné
+            if (!$(shop_ids).val().trim()) {
+                $(customer_id).val("");
+                $(connectedCustomer).val("");
+                $(connectedShop).val("");
+                $("#connect-as").hide();
+            } else {
+                var ids = $(shop_ids).val().trim().split(' '); // on transforme la liste en tableau
+                if (ids.length === 1) { // pour savoir s'il ne reste qu'un seul id : une boutique
+                    $("#forShop").text(" pour la boutique ");
+                }
+            }
+        } else { // On sélectionne la boutique : on l'ajoute à la liste des boutiques sélectionnées
+            // On sélectionne une boutique avec un client différent d'une sélection précédente
+            if ($(customer_id).val() !== customerId) {
+                $(shop_ids).val(id + " ");
+                $(connectedCustomer).val(customerName);
+                $(connectedShop).val(shopName);
+                uncheckAll();
+                $(customer_id).val(customerId);
+                $("#forShop").text(" pour la boutique ");
+            } else {
+                $(shop_ids).val($(shop_ids).val() + id + " ");
+                $(connectedShop).val($(connectedShop).val() + ", " + shopName);
+                $("#forShop").text(" pour les boutiques ");
+            }
+            $(shop_check).prop("checked", true);
+            $("#connect-as").show();
+        }
+    }
+
+    function connect() {
+        var ids = JSON.stringify($("#shop-ids").val().trim().split(' '));
+
+        window.location = "{{ path('connect_for_shop', {'ids': ''})|escape('js') }}" + ids;
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('b2b_homepage') }}">Accueil</a></li>
+    <li class="breadcrumb-item active">Nouvelle commande</li>
+</ol>
+
+<h1 class="text-center">Choix du client</h1>
+
+<div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8 login-form border rounded">
+        <form>
+            <label class="form-control-plaintext">Recherchez un client</label>
+            <input type="text" class="form-control col-md-12" id="shop" placeholder="Numéro, nom, société...">
+            <div class="text-center">
+                <button id="search-button" type="button" class="btn btn-primary" onclick="search();"><img
+                            src="{{ asset('bundles/b2b/img/search-white.png') }}" width="14" height="14"> Rechercher
+                </button>
+            </div>
+        </form>
+
+        <div id="shops">
+
+        </div>
+
+        <form id="connect-as" style="display:none;">
+            <label class="form-control-plaintext">Se connecter en tant que </label>
+            <input type="text" readonly class="form-control col-md-12" id="connectedCustomer" value="Super">
+            <label class="form-control-plaintext" id="forShop"> pour la boutique </label>
+            <input type="text" readonly class="form-control col-md-12" id="connectedShop" value="Boutique">
+            <input type="text" id="shop-ids" style="display:none;">
+            <input type="text" id="customer-id" style="display:none;">
+            <div class="text-center">
+                <button type="button" id="connect-button" onclick="connect();" class="btn btn-primary">Valider
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<script>
+    // Pour pouvoir appuyer sur Entrée sans que la page se recharge
+    $(document).ready(function () {
+        $("#shop").keydown(function (event) {
+            if (event.key !== "Enter")
+                return;
+            $('#search-button').click();
+            event.preventDefault();
+        });
+    });
+</script>

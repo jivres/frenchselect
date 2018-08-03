@@ -1,0 +1,24 @@
+backoffice_target_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Target:index" }
+    methods:  GET
+
+backoffice_target_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Target:show" }
+    methods:  GET
+
+backoffice_target_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Target:new" }
+    methods:  [GET, POST]
+
+backoffice_target_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Target:edit" }
+    methods:  [GET, POST]
+
+backoffice_target_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Target:delete" }
+    methods:  DELETE

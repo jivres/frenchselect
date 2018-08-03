@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: frenchsewmonb2b.mysql.db
+    database_port: 3306
+    database_name: frenchsewmonb2b
+    database_user: frenchsewmonb2b
+    database_password: t854qKHqLqF9
+    mailer_transport: gmail
+    mailer_host: smtp.gmail.com
+    mailer_user: monb2bmail@gmail.com
+    mailer_password: MotDePasse
+    secret: f8dd7d088a3e80251b820dc495961a5a4e489cbd

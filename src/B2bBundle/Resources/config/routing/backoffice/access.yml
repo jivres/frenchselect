@@ -1,0 +1,14 @@
+backoffice_access_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Access:index" }
+    methods:  [GET, POST]
+
+backoffice_access_accept:
+    path:     /accept
+    defaults: { _controller: "B2bBundle:Access:accept" }
+    methods:   POST
+
+backoffice_access_refuse:
+    path:     /refuse
+    defaults: { _controller: "B2bBundle:Access:refuse" }
+    methods:   POST

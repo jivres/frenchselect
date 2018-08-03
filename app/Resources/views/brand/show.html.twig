@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item active">{{ brand.brandName }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_brand_index') }}" class="btn btn-primary">Retour aux marques</a>
+        <a href="{{ path('backoffice_brand_edit', { 'id': brand.id }) }}" class="btn btn-primary">Modifier</a>
+        {% if is_granted('ROLE_ADMIN') and brand.isEnabled %}
+            <a href="{{ path('backoffice_user_desactivate', { 'id': brand.id }) }}" class="btn btn-outline-danger">Désactiver le compte</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') and not brand.isEnabled %}
+            <a href="{{ path('backoffice_user_activate', { 'id': brand.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+        {% endif %}
+    </div>
+
+
+    <h1 class="text-center">Marque - {{ brand.brandName }}</h1>
+    <div class="container login-form border rounded">
+        {% include 'brand/detail.html.twig' with {'brand': brand, 'brandRecommande' : brandRecommande} %}</div>
+
+    <nav class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-all-tab" data-toggle="tab" href="#nav-products" role="tab"
+           aria-controls="nav-products" aria-selected="true">
+            <h2>Collections</h2>
+        </a>
+        <a class="nav-item nav-link" id="nav-not-validated-tab" data-toggle="tab" href="#nav-commands" role="tab"
+           aria-controls="nav-commands" aria-selected="false">
+            <h2>Commandes</h2>
+        </a>
+        <a class="nav-item nav-link" id="nav-validated-tab" data-toggle="tab" href="#nav-customers" role="tab"
+           aria-controls="nav-customers" aria-selected="false">
+            <h2>Clients</h2>
+        </a>
+        <a class="nav-item nav-link" id="nav-validated-tab" data-toggle="tab" href="#nav-salesmen" role="tab"
+           aria-controls="nav-salesmen" aria-selected="false">
+            <h2>Commerciaux</h2>
+        </a>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+
+        <!-- COLLECTIONS -->
+        <div class="tab-pane border-right border-bottom border-left bg-white p-2 fade show active" id="nav-products"
+             role="tabpanel" aria-labelledby="nav-products-tab">
+            <div class="row mb-3">
+                <div class="col text-center mt-3">
+                    <a class="btn btn-primary"
+                       href="{{ path('backoffice_brand_add_collection', {'brand' : brand.id}) }}">Ajouter une
+                        collection</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Statut</th>
+                            <th>Nom</th>
+                            <th>Année</th>
+                            <th>Saison</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for c in brand.collections %}
+                            <tr>
+                                <td>{% if c.isActive() %}Actif{% else %}Non actif{% endif %}</td>
+                                <td> {{ c.name }}  </td>
+                                <td>{{ c.year }}</td>
+                                <td>{{ c.season }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('collection_show', { 'id' : c.id }) }}">Voir</a>
+                                    <a class="btn btn-primary"
+                                       href="{{ path('backoffice_collection_edit', { 'id' : c.id }) }}">Modifier</a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMANDES -->
+        <div class="tab-pane border-right border-bottom border-left bg-white p-2 fade" id="nav-commands" role="tabpanel"
+             aria-labelledby="nav-commands-tab">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Boutique</th>
+                            <th>Total H.T</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for c in commands %}
+                            <tr>
+                                <td>
+                                    {% if c.status == 'not-validated' %}
+                                        NON VALIDÉE
+                                    {% elseif c.status == 'validated' %}
+                                        VALIDÉE
+                                    {% elseif c.status == 'canceled' %}
+                                        ANNULÉ
+                                    {% endif %}
+                                </td>
+                                <td>{{ c.date|date("d/m/Y") }}</td>
+                                <td>{{ c.societyName }}</td>
+                                <td>{{ c.shop }}</td>
+                                <td>{{ c.totalHT }}</td>
+                                <td>
+                                    <a class="btn btn-primary"
+                                       href="{{ path('backoffice_command_show', {'id' : c.id}) }}">Voir</a>
+                                    <a class="btn btn-primary" href="{{ path('command_export', {
+                                        'id' : c.id,
+                                        '_filename' : 'commande[' ~ c.date|date("d-m-Y") ~ ']',
+                                        '_format' : 'xlsx',
+
+                                    }) }}.xlsx">Exporter Excel</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CLIENTS -->
+        <div class="tab-pane border-right border-bottom border-left bg-white p-2 fade" id="nav-customers"
+             role="tabpanel" aria-labelledby="nav-customers-tab">
+            {% include 'shop/brand-shoplist.html.twig' with { 'rows': brand.customer } %}
+        </div>
+
+        <!-- COMMERCIAUX -->
+        <div class="tab-pane border-right border-bottom border-left bg-white p-2 fade" id="nav-salesmen" role="tabpanel"
+             aria-labelledby="nav-salesmen-tab">
+            <div class="row mb-3">
+                <div class="col text-center">
+                    <a class="btn btn-primary" href="{{ path('backoffice_select_salesmen', {'id': brand.id}) }}">Assigner
+                        un Commercial</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <table class="table table-stripped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Statut</th>
+                            <th>N° Commercial</th>
+                            <th>Secteur</th>
+                            <th>Commercial</th>
+                            <th>Société</th>
+                            <th>Code Postal</th>
+                            <th>Ville</th>
+                            <th>Pays</th>
+                            <th>Téléphone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for salesmanLink in brand.salesmen %}
+                            {% set salesman = salesmanLink.salesman %}
+                            <tr>
+                                <td>
+                                    {% if salesman.isActive %}
+                                        Actif
+                                    {% else %}
+                                        En cours de vérification
+                                    {% endif %}
+                                </td>
+                                <td>{{ salesman.id }}</td>
+                                <td>
+                                    {% if salesmanLink.departments|length == 0 %}
+                                        <i>Aucun département assigné</i>
+                                    {% else %}
+                                        <h5>
+                                            {% for dep in salesmanLink.departments %}
+                                                <span class="badge badge-secondary">{{ dep }}</span>
+                                            {% endfor %}
+                                        </h5>
+                                    {% endif %}
+                                </td>
+                                <td>{{ salesman.lastName }} {{ salesman.firstName }}</td>
+                                <td>{{ salesman.companyName }}</td>
+                                <td>{{ salesman.billingZP }}</td>
+                                <td>{{ salesman.billingTown }}</td>
+                                <td>{{ salesman.country }}</td>
+                                <td>{{ salesman.phone }}</td>
+                                <td>{{ salesman.mail }}</td>
+                                <td>
+                                    <a href="{{ path('salesman_show', { 'id': salesman.id }) }}"
+                                       class="btn btn-primary">Voir</a>
+                                    <a href="{{ path('brand_deassign_salesmen', { 'id': salesmanLink.id }) }}"
+                                       class="btn btn-primary">Désassigner</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

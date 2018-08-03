@@ -1,0 +1,55 @@
+{% set active = 'salons_boutiques' %}
+{% extends "B2bBundle::Vitrine/layout.html.twig" %}
+
+{% block title %}
+    French Select - Les showrooms de mode
+{% endblock %}
+
+{% block body %}
+
+
+    <section class="container-fluid salonsbg" id="section-start">
+        <div class="container">
+            <h1>Les prochains salons</br>
+                <span style="color:#FE5F55;">French Select</span></h1>
+            <p class="text-center">Venez découvrir les <strong>marques</strong> dans les <strong>showrooms</strong> que
+                nous organisons près de chez vous !
+
+                <div class="row my-4 px-4">
+                    {% for salon in salons %}
+                    <div class="col-lg-4 px-2 py-2 filter-card afficher">
+                        <div class="slide-salons my-1 p-2">
+                            <a href="{{ path('details_salons', {'ville': salon.getVille(), 'id': salon.getId()} ) }}">
+                                {% if salon.getPicture() != null %}
+                                    <img class="img-fluid shadow-sm"
+                                         src="{{ asset('uploads/' ~ salon.getPicture().url() ) }}">
+                                {% else %}
+                                    <img class="img-fluid shadow-sm"
+                                           src="{{asset('bundles/b2b/img/salons/picture.png') }}">
+                                {% endif %}
+                                <div class="p-3">
+                                    <h6 class="card-title">{{ salon.getName() }}</h6>
+                                    {% if salon.getDateDebut() == salon.getDateFin() %}
+            <p class="slide-salons-date">
+                Le {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                /{{ salon.getDateFin()|date("Y") }}
+            </p>
+            {% else %}
+                <p class="slide-salons-date">
+                    Du {{ salon.getDateDebut()|date("d") }}
+                    au {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                    /{{ salon.getDateFin()|date("Y") }}
+                </p>
+            {% endif %}
+            <p class="slide-salons-place">{{ salon.getLieu() }} - {{ salon.getVille() }}
+                <br>{{ salon.getPays().getName() }}</p>
+        </div>
+        </a>
+        </div>
+
+        </div>
+        {% endfor %}
+        </div>
+        </div>
+    </section>
+{% endblock %}

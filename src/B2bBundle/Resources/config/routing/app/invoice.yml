@@ -1,0 +1,26 @@
+invoice_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Invoice:index" }
+    methods:  GET
+
+invoice_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Invoice:new" }
+    methods:  GET
+
+invoice_create_header:
+    path:     /createHeader
+    defaults: { _controller: "B2bBundle:Invoice:createHeader" }
+    methods:  POST
+
+invoice_create:
+    path:     /create
+    defaults: { _controller: "B2bBundle:Invoice:create" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+invoice_remind:
+    path:     /{id}/remind
+    defaults: { _controller: "B2bBundle:Invoice:remind" }
+    methods: GET

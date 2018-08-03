@@ -1,0 +1,9 @@
+backoffice_customer_import:
+    path:     /import
+    defaults: { _controller: "B2bBundle:Customer:import" }
+    methods:  [GET, POST]
+
+backoffice_customer_import_fixing:
+    path:     /import/fixing
+    defaults: { _controller: "B2bBundle:Customer:importFixing" }
+    methods:  POST

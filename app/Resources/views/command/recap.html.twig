@@ -1,0 +1,30 @@
+{% extends 'command/layout.html.twig' %}
+
+{% block command %}
+    <div class="col-md-8 mt-4" style="margin: auto;">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Commande envoyée</h4>
+            <p>Votre commande passée avec la marque {{ command.cartCollection.brand }} a bien été envoyée.</p>
+            <hr>
+            <p class="mb-0">Elle sera validée dans les plus brefs délais, avant la date limite de validation.</p>
+        </div>
+
+        {% for c in commands %}
+            <h3>Commande {{ c.id }} - Collection {{ c.cartCollection.collection }}</h3>
+            <div class="d-flex justify-content-center mb-5">
+                <a href="#" class="btn btn-primary btn-orange mr-2">Télécharger la commande au format PDF</a>
+                <a href="{{ path('command_export', {
+                    'id' : c.id,
+                    '_filename' : 'commande[' ~ c.date|date("d-m-Y") ~ ']',
+                    '_format' : 'xlsx'
+
+                }) }}.xlsx" class="btn btn-primary btn-orange mr-2">Télécharger la commande au format Excel</a>
+                <a href="#" class="btn btn-primary btn-orange ml-2">Imprimer la commande</a>
+            </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-end mt-5">
+            <a href="{{ path('brands_index') }}" class="btn btn-primary btn-orange ml-2">Retour à Mes Marques</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+salesman_shops:
+    resource: "@B2bBundle/Resources/config/routing/salesman/shops.yml"
+    prefix:   /shops
+
+b2b_backoffice_customer:
+    resource: "@B2bBundle/Resources/config/routing/salesman/customer.yml"
+    prefix:   /customer
+
+salesman_salesmen:
+    resource: "@B2bBundle/Resources/config/routing/salesman/salesman.yml"
+    prefix:   /salesman
+
+statistics:
+    resource: "@B2bBundle/Resources/config/routing/salesman/statistics.yml"
+    prefix:   /statistics

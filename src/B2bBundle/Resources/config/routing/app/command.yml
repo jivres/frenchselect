@@ -1,0 +1,78 @@
+command_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Command:index" }
+    methods:  GET
+
+command_modal:
+    path:     /modal
+    defaults: { _controller: "B2bBundle:Command:modal" }
+    methods:  [GET, POST]
+
+command_new:
+    path:     /{id}/new
+    defaults: { _controller: "B2bBundle:Command:validate1" }
+    methods:  [GET, POST]
+
+command_continue:
+    path:     /{id}/continue
+    defaults: { _controller: "B2bBundle:Command:continue" }
+    methods:  [GET, POST]
+
+command_select_customer:
+    path:     /select_customer
+    defaults: { _controller: "B2bBundle:Command:selectCustomer" }
+    methods:  GET
+
+command_search_shop:
+    path:     /search_shop
+    defaults: { _controller: "B2bBundle:Command:searchShop" }
+    methods:   POST
+
+command_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Command:edit" }
+    methods:  [GET, POST]
+
+command_validate:
+    path:     /{id}/validate
+    defaults: { _controller: "B2bBundle:Command:validate" }
+    methods:  [GET, POST]
+
+command_cancel:
+    path:     /{id}/cancel
+    defaults: { _controller: "B2bBundle:Command:cancel" }
+    methods:  [GET, POST]
+
+command_validate0:
+    path:     /{id}/validate0
+    defaults: { _controller: "B2bBundle:Command:validate0" }
+    methods:  [GET, POST]
+
+command_validate1:
+    path:     /{id}/validate1
+    defaults: { _controller: "B2bBundle:Command:validate1" }
+    methods:  [GET, POST]
+
+command_validate2:
+    path:     /{id}/validate2
+    defaults: { _controller: "B2bBundle:Command:validate2" }
+    methods:  [GET, POST]
+
+command_validate3:
+    path:     /{id}/validate3
+    defaults: { _controller: "B2bBundle:Command:validate3" }
+    methods:  [GET, POST]
+
+command_export:
+    path:     /{id}/export/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Command:export, _format: xlsx }
+
+brand_export_cmds_date:
+    path:     /export/all/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Brand:exportCommandsBetween, _format: xlsx }
+    methods:  [POST]
+
+command_search_command:
+    path:     /search_command
+    defaults: { _controller: "B2bBundle:Command:searchCommand" }
+    methods:  POST

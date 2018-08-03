@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_target_index') }}">Gestion des cibles</a></li>
+        <li class="breadcrumb-item active">{{ target.label }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_target_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_target_edit', { 'id': target.id }) }}" class="btn btn-primary">Modifier</a>
+    </div>
+
+    <h1 class="text-center">Cible - {{ target.label }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            <dt class="col-sm-3">Identifiant</dt>
+            <dd class="col-sm-9">{{ target.id }}</dd>
+
+            <dt class="col-sm-3">Cible</dt>
+            <dd class="col-sm-9">{{ target.label }}</dd>
+
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+{% endblock %}

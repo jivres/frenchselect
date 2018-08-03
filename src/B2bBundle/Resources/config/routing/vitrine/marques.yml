@@ -1,0 +1,39 @@
+offres_marques:
+   path:    /services-marque-mode
+   defaults:
+       _controller: B2bBundle:VitrineDefault:offresMarques
+
+showroom:
+    path:    /marketplace-b2b-mode
+    defaults:
+        _controller: B2bBundle:VitrineDefault:showroom
+
+agence_commerciale:
+    path:    /agent-commercial-mode
+    defaults:
+        _controller: B2bBundle:VitrineDefault:agenceCommerciale
+
+salons_marques:
+    path:    /organisation-salons-mode
+    defaults:
+        _controller: B2bBundle:VitrineDefault:salonsMarques
+
+tarifs_marques:
+    path:    /b2b-marque-tarifs
+    defaults:
+        _controller: B2bBundle:VitrineDefault:tarifsMarques
+
+details_marques:
+    path:    /marque/{marque}
+    defaults:
+        _controller: B2bBundle:VitrineBrandDetails:getOneBrand
+
+crm:
+    path:    /gestion-clients-marque
+    defaults:
+            _controller: B2bBundle:VitrineDefault:crm
+
+vitrine_brands_search:
+    path:     /search
+    defaults: { _controller: "B2bBundle:VitrineBrand:search" }
+    methods:  POST

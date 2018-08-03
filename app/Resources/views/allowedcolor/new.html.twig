@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_product_show', {'id' : product.id}) }}">{{ product.name }}</a>
+        </li>
+        <li class="breadcrumb-item active">Nouvelle couleur</li>
+    </ol>
+    <div class="d-flex justify-content-center">
+        <a  href="{{ path('backoffice_product_show', {'id' : product.id}) }}" class="btn btn-primary">Retour au produit</a>
+    </div>
+
+    <h1 class="text-center">{{ product.name }} - Nouvelle couleur</h1>
+
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(form) }}
+            {% include 'allowedcolor/form.html.twig' with {'form': form} %}
+
+            <div class="form-block text-center mt-4">
+                <button type="submit" class="btn btn-primary">Créer le produit</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+{% endblock %}

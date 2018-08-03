@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_customer_index') }}">Clients</a></li>
+        <li class="breadcrumb-item"><a href={{ path('backoffice_customer_show', {'id': customer.id}) }}>{{ customer }}</a></li>
+        <li class="breadcrumb-item active">Nouvelle boutique</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_customer_show', {'id': customer.id}) }}" class="btn btn-primary">Retour au
+            client</a>
+    </div>
+
+    <div class="text-center">
+        <h1>{{ customer }} - Nouvelle boutique</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+
+            {{ form_start(form) }}
+
+            {% include 'shop/form.html.twig' with {'form': form} %}
+
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Créer la boutique"/>
+            </div>
+            {{ form_widget(form._token) }}
+            {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+
+        <div class="col-lg-2">
+        </div>
+    </div>
+{% endblock %}

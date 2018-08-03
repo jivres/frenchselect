@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_customer_index') }}">Clients</a></li>
+        <li class="breadcrumb-item"><a
+                    href={{ path('backoffice_customer_show', {'id': shop.customer.id}) }}>{{ shop.customer }}</a></li>
+        <li class="breadcrumb-item active">{{ shop }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_customer_show', {'id': shop.customer.id}) }}" class="btn btn-primary">Retour au
+            client</a>
+        <a href="{{ path('b2b_customer_shop_edit', { 'id': shop.id }) }}" class="btn btn-primary">Modifier la
+            boutique</a>
+    </div>
+
+    <h1 class="text-center">{{ shop.customer }} - {{ shop }}</h1>
+
+
+    <div class="container login-form border rounded">
+        <div class="col-lg-12">
+            <dl class="row">
+
+                <dt class="col-sm-3">Nom</dt>
+                <dd class="col-sm-9">{{ shop.name }}</dd>
+
+                <dt class="col-sm-3">Adresse</dt>
+                <dd class="col-sm-9">{{ shop.address }}</dd>
+
+                <dt class="col-sm-3">Code ZIP</dt>
+                <dd class="col-sm-9">{{ shop.zipCode }}</dd>
+
+                <dt class="col-sm-3">Ville</dt>
+                <dd class="col-sm-9">{{ shop.town }}</dd>
+
+
+                <dt class="col-sm-3">Photo</dt>
+                <dd class="col-sm-9">{% if shop.pic == null %}<i>Aucune photo</i>{% else %}  <img src="{{ asset('uploads/' ~ shop.pic.url) }}">{% endif %}</dd>
+
+
+                <dt class="col-sm-3">Client</dt>
+                <dd class="col-sm-9">{{ shop.customer }}</dd>
+
+                <dt class="col-sm-3">Pays</dt>
+                <dd class="col-sm-9">{{ shop.country }}</dd>
+
+                <dt class="col-sm-3">Téléphone</dt>
+                <dd class="col-sm-9">{{ shop.phone }}</dd>
+
+                <dt class="col-sm-3">Profil Facebook</dt>
+                <dd class="col-sm-9">{% if shop.urlFacebook == '' %}<i>Aucun profil</i>{% else %}<a
+                        href="{{ shop.urlFacebook }}">{{ shop.urlFacebook }}</a>{% endif %}</dd>
+
+                <dt class="col-sm-3">Profil Instagram</dt>
+                <dd class="col-sm-9">{% if shop.urlInstagram == '' %}<i>Aucun profil</i>{% else %}<a
+                        href="{{ shop.urlInstagram }}">{{ shop.urlInstagram }}</a>{% endif %}</dd>
+
+
+                <dt class="col-sm-3">Site internet</dt>
+                <dd class="col-sm-9">{% if shop.urlWebsite == '' %}<i>Aucun site</i>{% else %}<a
+                        href="{{ shop.urlWebsite }}">{{ shop.urlWebsite }}</a>{% endif %}</dd>
+
+                <dt class="col-sm-3">Livraison</dt>
+                <dd class="col-sm-9">{{ shop.deliveryAddress }}</dd>
+
+                <dt class="col-sm-3">Code postal livraison</dt>
+                <dd class="col-sm-9">{{ shop.deliveryZP }}</dd>
+
+                <dt class="col-sm-3">Cibles</dt>
+                <dd class="col-sm-9">
+                    {% for target in shop.targets %}
+                        <span class="badge badge-secondary">{{ target }}</span>
+                    {% endfor %}
+                </dd>
+
+                <dt class="col-sm-3">Styles</dt>
+                <dd class="col-sm-9">
+                    {% for style in shop.styles %}
+                        <span class="badge badge-secondary">{{ style }}</span>
+                    {% endfor %}
+                </dd>
+
+                <dt class="col-sm-3">Categories</dt>
+                <dd class="col-sm-9">
+                    {% for cat in shop.categories %}
+                        <span class="badge badge-secondary">{{ cat }}</span>
+                    {% endfor %}
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+
+{% endblock %}

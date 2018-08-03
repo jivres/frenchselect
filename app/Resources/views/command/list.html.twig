@@ -1,0 +1,89 @@
+{% if showDateLimit is not defined %}
+    {% set showDateLimit = true %}
+{% endif %}
+
+{% if showModal is not defined %}
+    {% set showModal = false %}
+{% endif %}
+
+<script>
+    function format(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '€' + x[1] : ' €';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        }
+        return x1 + x2;
+    }
+    $(document).ready(function() {
+        $(".price").each(function () {
+            if ($(this).text().indexOf('€') === -1) {
+                $(this).text(format($(this).text()));
+            }
+        });
+    });
+</script>
+
+<table class="table table-striped mt-3 bg-white">
+    <thead>
+    <tr>
+        <th>Statut</th>
+        <th>Date</th>
+        {% if showDateLimit %}
+        <th>Date limite de validation</th>
+        {% endif %}
+        <th>Commande</th>
+        {% if viewer == 'admin' %}
+            <th>Client</th>
+            <th>Marque</th>
+        {% elseif viewer == 'brand' %}
+            <th>Client</th>
+        {% else %}
+            <th>Marque</th>
+        {% endif %}
+        <th>Collection</th>
+        <th>Boutique</th>
+        <th>Ville</th>
+        <th>Montant H.T</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for command in commands %}
+        <tr {% if command.status == 'created' %} onclick="location.href = '{{ path('command_continue', {'id': command.id}) }}';"{% elseif showModal %} onclick="showModal({{ command.id }})" {% endif %}
+                class="{% if command.status == 'created' %}table-warning{% endif %}">
+            <td>
+                {% if command.status == 'created' %}
+                    EN CRÉATION
+                {% elseif command.status == 'not-validated' %}
+                    NON VALIDÉE
+                {% elseif command.status == 'validated' %}
+                    VALIDÉE
+                {% elseif command.status == 'canceled' %}
+                    ANNULÉ
+                {% endif %}
+            </td>
+            <td>{{ command.date|date('d/m/Y') }}</td>
+            {% if showDateLimit %}
+                <td>Limite</td>
+            {% endif %}
+            <td>{{ command.id }}</td>
+
+            {% if viewer == 'admin' %}
+                <td>{{ command.societyName }}</td>
+                <td>{{ command.cartCollection.brand }}</td>
+            {% elseif viewer == 'brand' %}
+                <td>{{ command.societyName }}</td>
+            {% else %}
+                <td>{{ command.cartCollection.brand }}</td>
+            {% endif %}
+            <td>{{ command.cartCollection.collection }}</td>
+            <td>{{ command.shop }}</td>
+            <td>{{ command.deliveryTown }}</td>
+            <td class="price">{{ command.totalHT }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

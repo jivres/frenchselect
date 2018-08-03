@@ -1,0 +1,19 @@
+backoffice_collection_add_product:
+    path:     /addToCollection/{collection}
+    defaults: { _controller: "B2bBundle:Product:addToCollection" }
+    methods:  [GET, POST]
+
+backoffice_product_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Product:edit" }
+    methods:  [GET, POST]
+
+backoffice_product_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Product:delete" }
+    methods:  DELETE
+
+backoffice_product_add_color:
+    path:     /{id}/addColor
+    defaults: { _controller: "B2bBundle:AllowedColor:new" }
+    methods:  [GET, POST]

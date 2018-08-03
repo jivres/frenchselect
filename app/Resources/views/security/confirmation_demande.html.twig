@@ -1,0 +1,37 @@
+{% extends 'layout_login.html.twig' %}
+
+{% block title %} {{ parent() }} - Demande envoyée {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid login">
+        <div class="container">
+            <div class="container-button-backb m-2">
+                <a href="{{ path('index') }}" id="btn-retour">
+                    <span class="button-backbh p-2">
+                        <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour</span>
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-6 login-form border rounded">
+                    <h1>Votre demande a bien été envoyée</h1>
+                    <p>Un administrateur de notre équipe la traitera dans les plus bref délais.</p>
+                    <p>En vous remerciant de votre confiance, </p>
+                    <p class="text-right">Le Showroom French Select</p>
+                </div>
+                <div class="col-lg-3">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

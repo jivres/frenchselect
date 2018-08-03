@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function updateQuantity(tr) {
+            var total = 0;
+            $(tr).find("td.quantity input").each(function() {
+                if ($(this).val()) {
+                    total += parseInt($(this).val());
+                }
+            });
+            $(tr).find("td.qt-total").text(total);
+            var price = Number($(tr).find("td.unitary-price").text().replace(/[^0-9\.-]+/g,""));
+            $(tr).find("td.price-total").text((total * price) + " €");
+            return total * price;
+        }
+
+        function quantityChanged(id) {
+            updateQuantity($(".cart-row-" + id));
+        }
+
+        $(document).ready(function () {
+            var total = 0;
+            $("tr.cart-row").each(function() {
+                total += updateQuantity($(this));
+            });
+            $("#cart-total").text(total + " €");
+        });
+
+        function totalAmount(){
+            let totalAmount = document.getElementById("cart-total");
+            let total = 0;
+            let amounts = document.getElementsByClassName("price-total");
+            for(var i = 0; i < amounts.length; i++){
+                let str =  amounts[i].innerHTML.split(" ");
+                let valeur = Number(str[0]);
+                total = total + valeur;
+            }
+            totalAmount.innerHTML = total + " €";
+        }
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .collection {
+            text-align: center;
+        }
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table th {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('products_index', { 'id': form.vars.value.brand.id}) }}" id="btn-retour">
+                <span class="button-backbh p-2">
+                    <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Continuer la commande
+                </span>
+    </a>
+    <h1>Panier de la marque {{ form.vars.value.brand }}</h1>
+
+    {% if form.cartCollections|length == 0 %}
+        <h2><i>Aucun produit dans votre panier pour l'instant</i></h2>
+    {% else %}
+        {{ form_start(form) }}
+
+        {% for collection in form.cartCollections %}
+
+            <h2 class="collection">Collection {{ collection.vars.value.collection }}</h2>
+
+            {% include 'cart/cart-collection-form.html.twig' with { 'collection' : collection } %}
+
+        {% endfor %}
+
+        <h2>Montant total du panier : <span id="cart-total"></span></h2>
+        <hr>
+        <h4>Montant minimum de commande : <span>{{ form.vars.value.brand.commandMin }} €</span></h4>
+        {{ form_widget(form._token) }}
+        <input class="btn btn-primary" type="submit" value="Modifier le panier" />
+        {{ form_end(form, { 'render_rest': false }) }}
+
+        {% if canValidate %}
+            <a href="{{ path('command_new', { 'id' : form.vars.value.id }) }}" class="btn btn-primary btn-orange">Je valide mon panier {{ form.vars.value.brand }}</a>
+        {% else %}
+            <div class="alert alert-danger">{% autoescape false %}{{ validateMessage }}{% endautoescape %}</div>
+        {% endif %}
+    {% endif %}
+
+    <div class="m-3 text-right">
+        <a  class="btn btn-outline-danger del" href="{{ path('cart_delete', {'id' : c.id }) }}">Supprimer ce panier</a>
+    </div>
+{% endblock %}

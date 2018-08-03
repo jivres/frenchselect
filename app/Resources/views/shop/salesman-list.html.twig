@@ -1,0 +1,13 @@
+<div class="row flex-justify-center">
+    <form>
+        <div class="form-group">
+            <label for="salesman">Agent commercial</label>
+            <select class="form-control" id="salesman_select">
+                {% for salesman in salesmen %}
+                    <option>{{ salesman }}</option>
+                {% endfor %}
+            </select>
+            <button style="display:block; margin:5px auto;" onclick="valid();" class="btn btn-outline-success" type="submit">Valider</button>
+        </div>
+    </form>
+</div>

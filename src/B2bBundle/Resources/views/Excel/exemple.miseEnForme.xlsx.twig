@@ -1,0 +1,27 @@
+{% xlsdocument %}
+    {% xlssheet 'Test' %}
+        {% xlsrow %}
+            {% xlscell %}4{% endxlscell %}
+            {% xlscell 2 %}5{% endxlscell %}
+            {% xlscell 2 %}6{% endxlscell %}
+            {% xlscell %}7{% endxlscell %}
+            {% xlscell 1 %}8{% endxlscell %}
+            {% xlscell 4 %}9{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell 1 {
+                'merge': 2
+            } %}14{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell {
+                'merge': 'C3'
+            } %}19{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell {
+                'merge': 'B6'
+            } %}24{% endxlscell %}
+        {% endxlsrow %}
+    {% endxlssheet %}
+{% endxlsdocument %}

@@ -1,0 +1,47 @@
+b2b_homepage:
+    defaults: { _controller: B2bBundle:Security:login }
+    path:     /
+
+b2b_backoffice:
+    resource: "@B2bBundle/Resources/config/routing/backoffice.yml"
+    prefix:   /backoffice
+
+b2b_app:
+    resource: "@B2bBundle/Resources/config/routing/app.yml"
+    prefix:   /app
+
+b2b_brand:
+    resource: "@B2bBundle/Resources/config/routing/brand.yml"
+    prefix:   /brand
+
+b2b_salesman:
+    resource: "@B2bBundle/Resources/config/routing/salesman.yml"
+    prefix:   /salesman
+
+vitrine:
+    resource: "@B2bBundle/Resources/config/routing/vitrine.yml"
+
+account_login:
+    defaults: { _controller: "B2bBundle:Security:login" }
+    path:     /login
+
+account_new:
+    defaults: { _controller: "B2bBundle:Security:new" }
+    path:     /new_account
+
+change_password:
+    defaults: { _controller: "B2bBundle:Security:changePassword"}
+    path:    /{lambda}/newpassword
+
+forgotten_password:
+    defaults: { _controller: "B2bBundle:Security:forgottenPassword"}
+    path:    /forgottenpassword
+
+inscription:
+    defaults: { _controller: "B2bBundle:Security:accountCreation"}
+    path:    /inscription
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+

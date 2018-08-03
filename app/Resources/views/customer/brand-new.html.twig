@@ -1,0 +1,35 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('brand_customer_index') }}">Mes Clients</a></li>
+            <li class="breadcrumb-item active">Nouveau Client</li>
+        </ol>
+
+        <div class="col-lg-8" style="margin:auto;">
+            {{ form_start(form) }}
+
+            {% include 'customer/form.html.twig' with {'form': form} %}
+
+            {{ form_widget(form._token) }}
+            <input class="btn btn-primary" type="submit" value="Créer le client" />
+            {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+
+        <a href="{{ path('brand_customer_index') }}" class="btn btn-primary">Retour à la liste</a>
+    </div>
+{% endblock %}

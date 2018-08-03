@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Gestion des styles et univers</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="d-flex justify-content-center">
+                <a href="{{ path('backoffice_style_new') }}" class="btn btn-primary">Créer un nouveau style</a>
+            </div>
+
+            <h1 class="text-center">Gestion des styles</h1>
+
+            <table class="table table-striped mt-3 bg-white border">
+                <thead>
+                <tr>
+                    <th scope="col">Style</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for style in styles %}
+                    <tr>
+                        <td>{{ style.label }}</td>
+                        <td>
+                            <a href="{{ path('backoffice_style_show', { 'id': style.id }) }}" class="btn btn-primary">Voir</a>
+                            <a href="{{ path('backoffice_style_edit', { 'id': style.id }) }}" class="btn btn-primary">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="d-flex justify-content-center">
+                <a href="{{ path('backoffice_univers_new') }}" class="btn btn-primary">Créer un nouveau univers</a>
+            </div>
+
+            <h1 class="text-center">Gestion des univers</h1>
+            <table class="table table-striped mt-3 bg-white border">
+                <thead>
+                <tr>
+                    <th scope="col">Style</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for univ in univers %}
+                    <tr>
+                        <td>{{ univ.label }}</td>
+                        <td>
+                                    <a href="{{ path('backoffice_univers_show', { 'id': univ.id }) }}" class="btn btn-primary">Voir</a>
+                                    <a href="{{ path('backoffice_univers_edit', { 'id': univ.id }) }}" class="btn btn-primary">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Mes Clients {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        function search() {
+            var searchText = $('#shop').val();
+
+            $.ajax({
+                url: "{{ path('salesman_search_shop') }}",
+                type: 'POST',
+                data: {search_text: searchText},
+                datatype: 'json'
+            }).done(function(data) {
+                $("#shops").html(data).show();
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="content">
+        {% include 'shop/connect-as.html.twig' %}
+    </div>
+
+{% endblock %}

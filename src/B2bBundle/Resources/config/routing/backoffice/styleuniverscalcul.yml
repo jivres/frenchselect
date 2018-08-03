@@ -1,0 +1,8 @@
+backoffice_styleuniverscalcul_new:
+  path:     /{id}/new
+  defaults: { _controller: "B2bBundle:StyleUniversCalcul:new" }
+  methods:  [GET, POST]
+
+backoffice_styleuniverscalcul_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:StyleUniversCalcul:delete" }

@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Importation</li>
+    </ol>
+
+    <h1 class="text-center">Correction des erreurs d'importation</h1>
+    <form class="" action="{{path('backoffice_product_import_fixing')}}" method="post">
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Ref Modèle</th>
+                    <th>Ref Unique</th>
+                    <th>Champs</th>
+                    <th>Valeur importée</th>
+                    <th>Valeurs possibles</th>
+                    <th>Choix</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% dump(errors) %}
+                {% for refModel in errors|keys %}
+                    <tr>
+                        {% set nbRowRefUnique = 0 %}
+                        {% if errors[refModel].color is defined %}
+                            {% for refUnique in errors[refModel].color %}
+                                {% for colorField in refUnique.data %}
+                                    {% if colorField.type == "array" %}
+                                        {% set nbRowRefUnique = nbRowRefUnique + colorField.data|length %}
+                                    {% else %}
+                                        {% set nbRowRefUnique = nbRowRefUnique + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% set nbRowRefModel = 0 %}
+                        {% if errors[refModel].data is defined %}
+                            {% for modelField in errors[refModel].data %}
+                                {% if modelField.type == "array" %}
+                                    {% set nbRowRefModel = nbRowRefModel + modelField.data|length %}
+                                {% else %}
+                                    {% set nbRowRefModel = nbRowRefModel + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% set nbRow = nbRowRefModel + nbRowRefUnique %}
+                            <td rowspan="{{ nbRow+1}}" class="table-secondary">{{refModel}}</td>
+                            <td rowspan="{{ nbRowRefModel+1}}"  class="table-secondary"></td>
+                            {%dump(errors)%}
+                            {% for field in errors[refModel].data|keys %}
+                                {% if errors[refModel].data[field].type == "array" %}
+                                    {% for i in errors[refModel].data[field].data|keys %}
+                                        <tr class="table-secondary">
+                                            <td>{{field}}</td>
+                                            <input type="hidden" name="correction[{{refModel}}][data][{{field}}][{{i}}][entity]" value="{{errors[refModel].data[field].data[i].entity}}">
+                                            <td>{{errors[refModel].data[field].data[i].val}}</td>
+                                            <input type="hidden" name="correction[{{refModel}}][data][{{field}}][{{i}}][val]" value="{{errors[refModel].data[field].data[i].val}}">
+                                            <td>
+                                                <select name="correction[{{refModel}}][data][{{field}}][{{i}}][existingValue]">
+                                                    {% for obj in entityList[errors[refModel].data[field].data[i].entity].list %}
+                                                        <option value="{{obj.id}}">{{obj}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    Ajouter nouvelle valeur :
+                                                    <input required checked type="radio" name="correction[{{refModel}}][data][{{field}}][{{i}}][choice]" value="create">
+                                                </div>
+                                                <div class="row">
+                                                    Remplacer par une valeur existante :
+                                                    <input type="radio" name="correction[{{refModel}}][data][{{field}}][{{i}}][choice]" value="change">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr class="table-secondary">
+                                        <td>{{field}}</td>
+                                        <input type="hidden" name="correction[{{refModel}}][data][{{field}}][entity]" value="{{errors[refModel].data[field].data.entity}}">
+                                        <td>{{errors[refModel].data[field].data.val}}</td>
+                                        <input type="hidden" name="correction[{{refModel}}][data][{{field}}][val]" value="{{errors[refModel].data[field].data.val}}">
+                                        <td>
+                                            <select name="correction[{{refModel}}][data][{{field}}][existingValue]">
+                                                {% for obj in entityList[errors[refModel].data[field].data.entity].list %}
+                                                    <option value="{{obj.id}}">{{obj}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                Ajouter nouvelle valeur :
+                                                <input required checked type="radio" name="correction[{{refModel}}][data][{{field}}][choice]" value="create">
+                                            </div>
+                                            <div class="row">
+                                                Remplacer par une valeur existante :
+                                                <input type="radio" name="correction[{{refModel}}][data][{{field}}][choice]" value="change">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if errors[refModel].color is defined %}
+                            {% for refUnique in errors[refModel].color|keys %}
+                                {% for field in errors[refModel].color[refUnique].data|keys %}
+                                    {% if errors[refModel].color[refUnique].data[field].type == "array" %}
+                                        {% for i in errors[refModel].color[refUnique].data[field].data|keys %}
+                                            <tr>
+                                                {% if nbRowRefModel == 0 %}<td>{{refModel}}</td>{% endif %}
+                                                <td>{{refUnique}}</td>
+                                                <td>{{field}}</td>
+                                                <input type="hidden" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][{{i}}][entity]" value="{{errors[refModel].color[refUnique].data[field].data[i].entity}}">
+                                                <td>{{errors[refModel].color[refUnique].data[field].data[i].val}}</td>
+                                                <input type="hidden" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][{{i}}][val]" value="{{errors[refModel].color[refUnique].data[field].data[i].val}}">
+                                                <td>
+                                                    <select name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][{{i}}][existingValue]">
+                                                        {% for obj in entityList[errors[refModel].color[refUnique].data[field].data[i].entity].list %}
+                                                            <option value="{{obj.id}}">{{obj}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        Ajouter nouvelle valeur :
+                                                        <input required checked type="radio" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][{{i}}][choice]" value="create">
+                                                    </div>
+                                                    <div class="row">
+                                                        Remplacer par une valeur existante :
+                                                        <input type="radio" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][{{i}}][choice]" value="change">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            {% if nbRowRefModel == 0 %}<td>{{refModel}}</td>{% endif %}
+                                            <td>{{refUnique}}</td>
+                                            <td>{{field}}</td>
+                                            <input type="hidden" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][entity]" value="{{errors[refModel].color[refUnique].data[field].data.entity}}">
+                                            <td>{{errors[refModel].color[refUnique].data[field].data.val}}</td>
+                                            <input type="hidden" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][val]" value="{{errors[refModel].color[refUnique].data[field].data.val}}">
+                                            <td>
+                                                <select name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][existingValue]">
+                                                    {% for obj in entityList[errors[refModel].color[refUnique].data[field].data.entity].list %}
+                                                        <option value="{{obj.id}}">{{obj}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    Ajouter nouvelle valeur :
+                                                    <input required checked type="radio" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][choice]" value="create">
+                                                </div>
+                                                <div class="row">
+                                                    Remplacer par une valeur existante :
+                                                    <input type="radio" name="correction[{{refModel}}][color][{{refUnique}}][data][{{field}}][choice]" value="change">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" name="" value="Valider">
+    </form>
+
+
+{% endblock %}

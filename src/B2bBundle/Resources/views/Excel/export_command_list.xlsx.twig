@@ -1,0 +1,35 @@
+{% xlsdocument { 'format': 'xlsx' }%}
+    {% xlssheet 'Worksheet' %}
+        {% xlsrow %}
+            {% xlscell %} Status {% endxlscell %}        {# A - Status #}
+            {% xlscell %} Date {% endxlscell %}              {# B - Date #}
+            {% xlscell %} Numéro {% endxlscell %}         {# C - Numéro #}
+            {% xlscell %} Marque {% endxlscell %}        {# D - Marque #}
+            {% xlscell %} Collection {% endxlscell %}     {# E - Collection #}
+            {% xlscell %} Boutique {% endxlscell %}          {# F - Boutique #}
+            {% xlscell %} Ville {% endxlscell %}           {# G - Ville #}
+            {% xlscell %} Montant H.T. {% endxlscell %}     {# H - Montant H.T. #}
+
+        {% endxlsrow %}
+        {% for cmd in cmds %}
+            {% xlsrow %}
+                {# A - Status #}
+                {% xlscell {dataType: 's'} %}{{cmd.status}}{% endxlscell %}
+                {# B - Date #}
+                {% xlscell {dataType: 's'} %}{{cmd.date|date('Y-m-d')}}{% endxlscell %}
+                {# C - Numéro #}
+                {% xlscell {dataType: 's'} %}{{cmd.id}}{% endxlscell %}
+                {# D - Marque #}
+                {% xlscell {dataType: 's'} %}{{cmd.cartCollection.brand.name}}{% endxlscell %}
+                {# E - Collection #}
+                {% xlscell {dataType: 's'} %}{{cmd.cartCollection.collection.name}}{% endxlscell %}
+                {# F - Boutique #}
+                {% xlscell {dataType: 's'} %}{{cmd.shop}}{% endxlscell %}
+                {# G - Ville #}
+                {% xlscell {dataType: 's'} %}{{ cmd.shop.zipCode}}, {{ cmd.shop.town}}{% endxlscell %}
+                {# H - Montant H.T. #}
+                {% xlscell {dataType: 'n'} %}{{ cmd.totalHT }} {% endxlscell %}
+            {% endxlsrow %}
+        {% endfor %}
+    {% endxlssheet %}
+{% endxlsdocument %}

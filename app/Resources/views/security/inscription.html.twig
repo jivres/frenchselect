@@ -1,0 +1,259 @@
+{% extends 'layout_login.html.twig' %}
+
+{% block title %} {{ parent() }} - Se connecter {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+
+    <script>
+        $(document).ready(function () {
+            let marque = document.getElementById("form-marque");
+            marque.value = "Marque";
+
+            let commercial = document.getElementById("form-commercial");
+            commercial.value = "Commercial";
+
+            let autre = document.getElementById("form-autre");
+            autre.value = "Autre";
+        });
+    </script>
+
+    <div class="container-fluid">
+        <div class="container-button-backb m-2">
+            <a href="{{ path('index') }}" id="btn-retour">
+                <span class="button-backbh p-2">
+                    <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour
+                </span>
+            </a>
+        </div>
+        <h1 class="text-center">Vous êtes ... ?</h1>
+        <ul class="nav nav-justified nav-form-login" id="myTab" role="tablist" aria-labelledby="dropdownMenu1">
+            <li class="nav-item">
+                <a class="nav-link active" id="boutique-tab" data-toggle="tab" href="#boutique" role="tab"
+                   aria-controls="boutique" aria-selected="true">Une boutique</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="marque-tab" data-toggle="tab" href="#marque" role="tab"
+                   aria-controls="marque" aria-selected="false">Une marque</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="commercial-tab" data-toggle="tab" href="#commercial" role="tab"
+                   aria-controls="commercial" aria-selected="false">Un commercial</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" id="autre-tab" data-toggle="tab" href="#autre" role="tab" aria-controls="autre"
+                   aria-selected="false">Autre</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="boutique" role="tabpanel" aria-labelledby="boutique-tab">
+                <div class="row">
+                    <div class="col-lg-3">
+                    </div>
+                    <div class="col-lg-6 login-form border rounded">
+                        <h1>Découvrez de nouvelles marques</h1>
+                        <h2>Inscription gratuite !</h2>
+                        {{ form_start(new_form) }}
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label>Société</label>
+                                {{ form_widget(new_form.societyName) }}
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Nom de la boutique</label>
+                                {{ form_widget(new_form.shopName) }}
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Nom</label>
+                                {{ form_widget(new_form.name) }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Prénom</label>
+                                {{ form_widget(new_form.firstname) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Adresse mail</label>
+                            {{ form_widget(new_form.mail) }}
+                        </div>
+                        <div class="form-group">
+                            <label>Téléphone</label>
+                            {{ form_widget(new_form.phone) }}
+                        </div>
+                        <div class="form-group">
+                            <label>Adresse</label>
+                            {{ form_widget(new_form.billingAddress) }}
+                        </div>
+                        <div class="form-group">
+                            <label>Code postal</label>
+                            {{ form_widget(new_form.billingZP) }}
+                        </div>
+                        <div class="form-group">
+                            <label>Ville</label>
+                            {{ form_widget(new_form.billingTown) }}
+                        </div>
+                        <div class="form-group">
+                            <label>Pays</label>
+                            {{ form_widget(new_form.billingCountry) }}
+                        </div>
+                        <div class="form-block text-center mt-4">
+                            <button type="submit" class="btn btn-primary">S'inscrire</button>
+                        </div>
+                        {{ form_end(new_form) }}
+                    </div>
+                    <div class="col-lg-3">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="marque" role="tabpanel" aria-labelledby="marque-tab">
+                <div class="row">
+                    <div class="col-lg-3">
+                    </div>
+                    <div class="col-lg-6 login-form border rounded">
+                        <h1>Contactez-nous</h1>
+                        {{ form_start(formDemandeMarque) }}
+                        <div class="form-group d-none">
+                            <label for="mail">Demandeur</label>
+                            {{ form_widget(formDemandeMarque.type, {'id': 'form-marque'}) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="mail">Marque</label>
+                            {{ form_widget(formDemandeMarque.brand) }}
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Nom</label>
+                                {{ form_widget(formDemandeMarque.name) }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="firstname">Prénom</label>
+                                {{ form_widget(formDemandeMarque.firstname) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail">Adresse mail</label>
+                            {{ form_widget(formDemandeMarque.mail) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            {{ form_widget(formDemandeMarque.phone) }}
+                        </div>
+
+                        <div class="from-group">
+                            <label for="text">Votre message</label>
+                            {{ form_widget(formDemandeMarque.text) }}
+                        </div>
+
+                        <div class="form-block text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>
+                        {{ form_end(formDemandeMarque) }}
+                    </div>
+                    <div class="col-lg-3">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="commercial" role="tabpanel" aria-labelledby="commercial-tab">
+                <div class="row">
+                    <div class="col-lg-3">
+                    </div>
+                    <div class="col-lg-6 login-form border rounded">
+                        <h1>Contactez-nous</h1>
+                        {{ form_start(formDemandeCommercial) }}
+                        <div class="form-group d-none">
+                            <label for="mail">Demandeur</label>
+                            {{ form_widget(formDemandeCommercial.type,{'id': 'form-commercial'}) }}
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Nom</label>
+                                {{ form_widget(formDemandeCommercial.name) }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="firstname">Prénom</label>
+                                {{ form_widget(formDemandeCommercial.firstname) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail">Adresse mail</label>
+                            {{ form_widget(formDemandeCommercial.mail) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            {{ form_widget(formDemandeCommercial.phone) }}
+                        </div>
+
+                        <div class="from-group">
+                            <label for="text">Votre message</label>
+                            {{ form_widget(formDemandeCommercial.text) }}
+                        </div>
+
+                        <div class="form-block text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>
+                        {{ form_end(formDemandeCommercial) }}
+                    </div>
+                    <div class="col-lg-3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="autre" role="tabpanel" aria-labelledby="autre-tab">
+                <div class="row">
+                    <div class="col-lg-3">
+                    </div>
+                    <div class="col-lg-6 login-form border rounded">
+                        <h1>Contactez-nous</h1>
+                        {{ form_start(formDemandeAutre) }}
+                        <div class="form-group d-none">
+                            <label for="mail">Demandeur</label>
+                            {{ form_widget(formDemandeAutre.type, {'id': 'form-autre'}) }}
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Nom</label>
+                                {{ form_widget(formDemandeAutre.name) }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="firstname">Prénom</label>
+                                {{ form_widget(formDemandeAutre.firstname) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail">Adresse mail</label>
+                            {{ form_widget(formDemandeAutre.mail) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            {{ form_widget(formDemandeAutre.phone) }}
+                        </div>
+
+                        <div class="from-group">
+                            <label for="text">Votre message</label>
+                            {{ form_widget(formDemandeAutre.text) }}
+                        </div>
+
+                        <div class="form-block text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>
+                        {{ form_end(formDemandeAutre) }}
+                    </div>
+                    <div class="col-lg-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

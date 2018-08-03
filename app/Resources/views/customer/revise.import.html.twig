@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Importation</li>
+    </ol>
+
+    <h1>Correction des erreurs d'importation</h1>
+    <form class="" action="{{path('backoffice_customer_import_fixing')}}" method="post">
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Nom d'utilisateur</th>
+                    <th>Entité</th>
+                    <th>Valeur importée</th>
+                    <th>Valeurs possibles</th>
+                    <th>Choix</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{dump(errors)}}
+                {% for username in errors|keys %}
+                    <tr>
+                        {% set nbRow = 0 %}
+                        {% for tmp in errors[username] %}
+                            {% if tmp.type == "array" %}
+                                {% set nbRow = nbRow + tmp.data|length %}
+                            {% else %}
+                                {% set nbRow = nbRow + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        <td rowspan="{{ nbRow+1}}">{{username}}</td>
+                        {% for field in errors[username]|keys %}
+                            {% if errors[username][field].type == "array" %}
+                                {% for i in errors[username][field].data|keys %}
+                                    <tr>
+                                        <td>{{errors[username][field].data[i].entity}}</td>
+                                        <input type="hidden" name="correction[{{username}}][{{field}}][{{i}}][entity]" value="{{errors[username][field].data[i].entity}}">
+                                        <td>{{errors[username][field].data[i].val}}</td>
+                                        <input type="hidden" name="correction[{{username}}][{{field}}][{{i}}][val]" value="{{errors[username][field].data[i].val}}">
+                                        <td>
+                                            <select name="correction[{{username}}][{{field}}][{{i}}][existingValue]">
+                                                {% for obj in entityList[errors[username][field].data[i].entity] %}
+                                                <option value="{{obj.id}}">{{obj}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                Ajouter nouvelle valeur :
+                                                <input required type="radio" name="correction[{{username}}][{{field}}][{{i}}][choice]" value="create">
+                                            </div>
+                                            <div class="row">
+                                                Remplacer par une valeur existante :
+                                                <input type="radio" name="correction[{{username}}][{{field}}][{{i}}][choice]" value="change">
+                                            </div>
+                                            <div class="row">
+                                                Ne pas importer ce compte :
+                                                <input type="radio" checked class="ignore" name="correction[{{username}}][{{field}}][{{i}}][choice]" value="ignore">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td>{{errors[username][field].data.entity}}</td>
+                                    <input type="hidden" name="correction[{{username}}][{{field}}][entity]" value="{{errors[username][field].data.entity}}">
+                                    <td>{{errors[username][field].data.val}}</td>
+                                    <input type="hidden" name="correction[{{username}}][{{field}}][val]" value="{{errors[username][field].data.val}}">
+                                    <td>
+                                        <select name="correction[{{username}}][{{field}}][existingValue]">
+                                            {% for obj in entityList[errors[username][field].data.entity] %}
+                                            <option value="{{obj.id}}">{{obj}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            Ajouter nouvelle valeur :
+                                            <input required type="radio" name="correction[{{username}}][{{field}}][choice]" value="create">
+                                        </div>
+                                        <div class="row">
+                                            Remplacer par une valeur existante :
+                                            <input type="radio" name="correction[{{username}}][{{field}}][choice]" value="change">
+                                        </div>
+                                        <div class="row">
+                                            Ne pas importer ce compte :
+                                            <input type="radio" checked class="ignore" name="correction[{{username}}][{{field}}][choice]" value="ignore">
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" name="" value="Valider">
+    </form>
+
+
+{% endblock %}

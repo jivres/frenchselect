@@ -1,0 +1,35 @@
+b2b_account:
+    resource: "@B2bBundle/Resources/config/routing/app/security.yml"
+    prefix:   /account
+
+b2b_brands:
+    resource: "@B2bBundle/Resources/config/routing/app/brands.yml"
+    prefix:   /brands
+
+b2b_cart:
+    resource: "@B2bBundle/Resources/config/routing/app/cart.yml"
+    prefix:   /cart
+
+b2b_collection:
+    resource: "@B2bBundle/Resources/config/routing/app/collection.yml"
+    prefix:   /collection
+
+b2b_command:
+    resource: "@B2bBundle/Resources/config/routing/app/command.yml"
+    prefix:   /command
+
+b2b_customer:
+    resource: "@B2bBundle/Resources/config/routing/app/customer.yml"
+    prefix:   /customer
+
+b2b_invoice:
+    resource: "@B2bBundle/Resources/config/routing/app/invoice.yml"
+    prefix:   /invoice
+
+b2b_products:
+    resource: "@B2bBundle/Resources/config/routing/app/products.yml"
+    prefix:   /products
+
+b2b_report:
+    resource: "@B2bBundle/Resources/config/routing/app/report.yml"
+    prefix:   /report

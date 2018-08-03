@@ -1,0 +1,25 @@
+backoffice_command_show:
+    path:     /{id}
+    defaults: { _controller: "B2bBundle:Command:show" }
+    methods:  GET
+
+backoffice_command_status_edit:
+    path:     /{id}/editStatus
+    defaults: { _controller: "B2bBundle:Command:statusEdit" }
+    methods:  POST
+
+# command_new:
+#     path:     /{id}/new
+#     defaults: { _controller: "B2bBundle:Command:new" }
+#     methods:  [GET, POST]
+#
+# command_validate1:
+#     path:     /{id}/validate1
+#     defaults: { _controller: "B2bBundle:Command:validate1" }
+#     methods:  [GET, POST]
+#
+# command_validate2:
+#     path:     /{id}/validate2
+#     defaults: { _controller: "B2bBundle:Command:validate2" }
+#     methods:  [GET, POST]
+#

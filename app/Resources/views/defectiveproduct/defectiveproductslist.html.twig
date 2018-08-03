@@ -1,0 +1,34 @@
+<table class="table table-stripped">
+    <tr>
+        <!--<th scope="col">Sélection</th>-->
+        <th scope="col">Ref</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Couleur</th>
+        <th scope="col">Taille</th>
+        <th scope="col">Prix HT</th>
+        <th scope="col">Quantité</th>
+        <th scope="col">Photos</th>
+        <th scope="col">Commentaire</th>
+    </tr>
+    {% for defectiveproduct in defectiveproducts %}
+        <tr>
+            <!--<td></td>-->
+            <td>{{ defectiveproduct.product.ref }}</td>
+            <td>{{ defectiveproduct.product.name }}</td>
+            <td>{{ defectiveproduct.color }}</td>
+            <td>{{ defectiveproduct.size }}</td>
+            <td>{{ defectiveproduct.product.priceHT }} €</td>
+            <td>{{ defectiveproduct.quantity }}</td>
+            <td>
+                {% if defectiveproduct.pictures|length == 0 %}
+                    <i>Aucune photo</i>
+                {% else %}
+                    {% for picture in defectiveproduct.pictures %}
+                        <img src="{{ asset('uploads/' ~ shop.picture.url) }}"/>
+                    {% endfor %}
+                {% endif %}
+            </td>
+            <td>{{ defectiveproduct.comment }}</td>
+        </tr>
+    {% endfor %}
+</table>

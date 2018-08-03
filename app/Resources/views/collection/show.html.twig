@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+            <li class="breadcrumb-item"><a
+                        href="{{ path('backoffice_brand_show',{'id': collection.brand.id}) }}">{{ collection.brand.brandName }}</a>
+            </li>
+            <li class="breadcrumb-item active">Collection {{ collection.name }}</li>
+        </ol>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('backoffice_brand_show',{ 'id': collection.brand.id }) }}"
+               class="btn btn-primary">Retour à la marque</a>
+            <a href="{{ path('backoffice_collection_edit', { 'id': collection.id }) }}"
+               class="btn btn-primary">Modifier la collection</a>
+
+            {% if is_granted('ROLE_ADMIN') and collection.isActive %}
+                <a href="{{ path('backoffice_collection_desactivate', { 'id': collection.id }) }}"
+                   class="btn btn-outline-danger">Désactiver la collection</a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') and not collection.isActive %}
+                <a href="{{ path('backoffice_collection_activate', { 'id': collection.id }) }}"
+                   class="btn btn-outline-success">Activer
+                    la collection </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <h1 class="text-center">Collection {{ collection.name }}</h1>
+
+    <div class="container login-form border rounded">
+        <dl class="row col-md-12">
+            <dt class="col-sm-3">Statut</dt>
+            <dd class="col-sm-9">
+                {% if collection.isActive %}
+                    Active
+                {% else %}
+                   Inactive
+                {% endif %}
+            </dd>
+
+            <dt class="col-sm-3">Année</dt>
+            <dd class="col-sm-9">{{ collection.year }}</dd>
+
+            <dt class="col-sm-3">Saison</dt>
+            <dd class="col-sm-9">{{ collection.season }}</dd>
+
+            <dt class="col-sm-3">Date fin de livraison</dt>
+            <dd class="col-sm-9">{{ collection.endDate|date("m/d/Y") }}</dd>
+
+            <dt class="col-sm-3">Lifestyle</dt>
+            <dd class="col-sm-9">
+                {% if collection.lifestyle is not null %}
+                    <img src="{{ asset('uploads/' ~ collection.lifestyle.url) }}" class="img-fluid">
+                {% else %}
+                    <i>Aucune photo</i>
+                {% endif %}
+            </dd>
+
+            <dt class="col-sm-3">Lookbook</dt>
+            <dd class="col-sm-9">
+                {% if collection.lookbook is null %}
+                    <i>Aucun fichier</i>
+                {% else %}
+                    <a href="{{ asset('uploads/' ~ collection.lookbook.url) }}">Fichier PDF</a>
+                {% endif %}
+            </dd>
+
+        </dl>
+    </div>
+
+    <div class="text-center">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-primary"
+               href="{{ path('backoffice_collection_add_product', { 'collection' : collection.id }) }}">Ajouter
+                un produit</a>
+            <a class="btn btn-primary" href="{{ path('backoffice_product_import', { 'collection' : collection.id }) }}">Importer
+                des produits</a>
+        {% endif %}
+    </div>
+
+
+    <table class="table table-striped bg-white">
+        <thead>
+        <tr>
+            <th>Statut</th>
+            <th>Catégorie</th>
+            <th>Ref</th>
+            <th>Prix H.T.</th>
+            <th>Couleurs</th>
+            <th>Tailles</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in collection.products %}
+            <tr>
+                <td>{% if p.isActive() %}Actif {% else %} Non actif {% endif %}</td>
+                <td>{{ p.primaryCat.label }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.priceHT }}</td>
+                <td>
+                    {% for c in p.allowedColors %}
+                        {{ c.color.label }},
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in p.allowedSizes %}
+                        {{ s.size.val }},
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary"
+                           href="{{ path('backoffice_product_show', { 'id' : p.id }) }}">Voir</a>
+                        <a class="btn btn-primary"
+                           href="{{ path('backoffice_product_edit', { 'id' : p.id }) }}">Modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+   <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backoffice_color_index') }}">Gestion des couleurs</a></li>
+    <li class="breadcrumb-item active">Couleur {{ color.label }}</li>
+</ol>
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_color_index') }}" class="btn btn-primary">Retour à la liste</a>
+    <a href="{{ path('backoffice_color_edit', { 'id': color.id }) }}" class="btn btn-primary">Modifier</a>
+</div>
+
+
+    <h1 class="text-center">Couleur - {{ color.label }}</h1>
+
+<div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8 login-form border rounded">
+        <dt class="col-sm-3">Couleur</dt>
+        <dd class="col-sm-9">{{ color.label }}</dd>
+
+
+        <dt class="col-sm-3">Code Hexa</dt>
+        <dd class="col-sm-9">{{ color.hexTriplet }}</dd>
+
+        <dt class="col-sm-3">Image</dt>
+        <dd class="col-sm-9" style="background:#{{ color.hexTriplet }};height: 50px; width: 50px"></dd>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+{% endblock %}

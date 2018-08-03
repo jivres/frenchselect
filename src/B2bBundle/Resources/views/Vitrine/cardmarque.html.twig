@@ -1,0 +1,66 @@
+<div class="row px-4 justify-content-around">
+
+    {% for brand in brands %}
+        {% if brand is not null %}
+            {% set targets = brand.getTargets.toArray() %}
+            {% set categories = brand.getCategories().toArray() %}
+            {% set univers = brand.getUnivers().toArray() %}
+            {% set features = brand.getFeature().toArray() %}
+            <div class="col-md-3 px-2 py-2">
+
+                <div class="card-marques shadow-sm">
+                    {% set var = brand.getPrimarytarget().getLabel() %}
+                    {% if var == "Homme" %}
+                        <img class="img-fluid card-img"
+                             src="{{ asset('uploads/' ~ brand.getPictureHomme().url ) }}">
+                    {% elseif var == "Femme" %}
+                        <img class="img-fluid card-img"
+                             src="{{ asset('uploads/' ~ brand.getPictureFemme().url ) }}">
+                    {% else %}
+                        <img class="img-fluid card-img"
+                             src="{{ asset('uploads/' ~ brand.getPictureEnfant().url ) }}">
+                    {% endif %}
+                    <div class="container-img-brand">
+                        <img src="{{ asset('uploads/' ~ brand.getLogo().url) }}" class="img-fluid">
+                    </div>
+                    <div class="container-hover-info">
+
+                        <h5 class="card-title"> {{ brand.getBrandName() }} </h5>
+                        {{ brand.getSlogan() }}
+                        <ul>
+                            <li>PAYS<br>
+                                <strong>{{ brand.getCountry().getName() }}</strong></li>
+                            <li>CATÉGORIE<br>
+                                <strong> {% for categorie in categories %}
+                                        {{ categorie.getLabel() }}{% if not loop.last %},{% endif %}
+                                    {% endfor %}</strong>
+                            </li>
+                            <li>UNIVERS<br>
+                                <strong>  {% for univ in univers %}
+                                        {{ univ.getLabel() }}{% if not loop.last %},{% endif %}
+                                    {% endfor %}</strong>
+                            </li>
+                            <li>CIBLE<br>
+                                <strong> {{ brand.getPrimarytarget().getLabel() }}{% for target in targets %}{% if loop.first %},{% endif %}
+                                        {{ target.getLabel() }}{% if not loop.last %},{% endif %}
+                                    {% endfor %}</strong>
+                            </li>
+                            <li> {% if features is not empty %}LABEL<br>{% endif %}
+                                <strong> {% for feature in features %}
+                                        {{ feature.getLabel() }}{% if not loop.last %},{% endif %}
+                                    {% endfor %}</strong>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="button-slide-brands"><a
+                                href="{{ path('details_marques', {'marque': brand.getBrandName()} ) }}"
+                                class="button-sb p-1">
+                            Découvrir la marque </a>
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

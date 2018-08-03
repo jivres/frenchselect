@@ -1,0 +1,109 @@
+<script>
+    function updateQuantity(tr) {
+        var total = 0;
+        $(tr).find("td.quantity input").each(function () {
+            if ($(this).val()) {
+                total += parseInt($(this).val());
+            }
+        });
+        $(tr).find("td.qt-total").text(total);
+        var price = Number($(tr).find("td.unitary-price").text().replace(/[^0-9\.-]+/g, ""));
+        total = (Math.round(total * price * 100) / 100).toFixed(2);
+        $(tr).find("td.price-total").text(total + " €");
+        return total;
+    }
+
+    function quantityChanged(id) {
+        updateQuantity($(".cart-row-" + id));
+        totalAmount();
+    }
+
+    $(document).ready(function () {
+        var total = 0;
+        $("tr.cart-row").each(function () {
+            total += 1 * updateQuantity($(this));
+        });
+        $("#cart-total").text((Math.round(total * 100) / 100).toFixed(2) + " €");
+    });
+</script>
+
+{% for category in collection.cartCategories %}
+    <h3> Catégorie {{ category.vars.value.category }}</h3>
+
+    <table class="table table-stripped">
+        <tr>
+            <th scope="col">Référence</th>
+            <th scope="col">Couleur</th>
+            {% for size in category.vars.value.sizes %}
+                <th scope="col">{{ size }}</th>
+            {% endfor %}
+            <th scope="col">Quantité Totale</th>
+            <th scope="col">Prix Unitaire HT</th>
+            <th scope="col">Montant Total HT</th>
+            <th scope="col">Date de disponibilité</th>
+        </tr>
+        {% for cartRow in category.cartRows if cartRow.vars.value.hasQuantity() %}
+            <tr class="cart-row cart-row-{{ cartRow.vars.value.id }}">
+                <th>{{ cartRow.vars.value.product.ref }}</th>
+                <td><span class="color-box"
+                          style="background-color:#{{ cartRow.vars.value.color.color.hexTriplet }};"></span> {{ cartRow.vars.value.color }}
+                </td>
+                {% for size in category.vars.value.sizes %}
+                    <td scope="col" class="quantity" onchange="quantityChanged('{{ cartRow.vars.value.id }}')">
+                        {% set available = false %}
+                        {% for availability in cartRow.vars.value.product.availabilities %}
+                            {% if (availability.color == cartRow.vars.value.color) %}
+                                {% for sizeQuantity in availability.sizeQuantities %}
+                                    {% if (sizeQuantity.size == size) and (sizeQuantity.amount > 0) %}
+                                        {% set available = true %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if not available %}
+                            <div class="form-group">
+                                <input type="number" class="form-control" value="0" disabled>
+                            </div>
+                        {% else %}
+                            {% for sizeQuantity in cartRow.sizeQuantities %}
+                                <!-- class="form-control quantity qt- sizeQuantity.size -->
+                                {% if size == sizeQuantity.vars.value.size %}
+                                    {{ form_widget(sizeQuantity) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                <td class="qt-total">0</td>
+                <td class="unitary-price">{{ cartRow.vars.value.product.priceHT }} €</td>
+                <td class="price-total">0 €</td>
+                <td>{{ cartRow.vars.value.allowedColor.deliveryStart|date('d/m/Y') }}</td>
+            </tr>
+        {% endfor %}
+        {% if 1 == 2 %}
+            {% for cartRow in category.cartRows %}
+                <tr class="cart-{{ form.vars.value.id }}-row-{{ cartRow.vars.value.id }}">
+                    <th><a href="#">{{ cartRow.vars.value.product }}</a></th>
+                    <td class="color"
+                        onchange="row_change('{{ path('cart_edit_product', { 'id': form.vars.value.id }) }}', {{ form.vars.value.id }}, {{ cartRow.vars.value.id }});">
+                        {{ form_widget(cartRow.color, {'attr': {'class': 'custom-select'}}) }}
+                    </td>
+                    <td class="size"
+                        onchange="row_change('{{ path('cart_edit_product', { 'id': form.vars.value.id }) }}', {{ form.vars.value.id }}, {{ cartRow.vars.value.id }});">
+                        {{ form_row(cartRow.size, {'attr': {'class': 'custom-select'}}) }}
+                    </td>
+                    <td>{{ cartRow.vars.value.priceHT }}</td>
+                    <td class="quantity"
+                        onchange="row_change('{{ path('cart_edit_product', { 'id': form.vars.value.id }) }}', {{ form.vars.value.id }}, {{ cartRow.vars.value.id }});">{{ form_row(cartRow.quantity) }}</td>
+                    <td>
+                        <button type="button"
+                                onclick="removeFromCart('{{ path('cart_remove_product', { 'id': form.vars.value.id }) }}', {{ form.vars.value.id }}, {{ cartRow.vars.value.id }})"
+                                class="btn btn-orange">Retirer du panier
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+{% endfor %}
+

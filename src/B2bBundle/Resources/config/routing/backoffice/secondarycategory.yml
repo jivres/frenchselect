@@ -1,0 +1,24 @@
+backoffice_secondarycategory_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:SecondaryCategory:index" }
+    methods:  GET
+
+backoffice_secondarycategory_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:SecondaryCategory:show" }
+    methods:  GET
+
+backoffice_secondarycategory_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:SecondaryCategory:new" }
+    methods:  [GET, POST]
+
+backoffice_secondarycategory_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:SecondaryCategory:edit" }
+    methods:  [GET, POST]
+
+backoffice_secondarycategory_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:SecondaryCategory:delete" }
+    methods:  DELETE

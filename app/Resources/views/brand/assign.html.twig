@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Assigner un client à une marque</li>
+    </ol>
+
+
+    <h1 class="text-center">Assigner un client à une marque</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Assigner le client" />
+            </div>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+{% endblock %}

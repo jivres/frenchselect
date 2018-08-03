@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', { 'id': product.getBrand().id }) }}">{{ product.getBrand().getBrandName() }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('collection_show', { 'id': product.collection.id }) }}">Collection {{ product.collection.name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_product_show', { 'id' : product.Id() }) }}">{{ product.name }}</a></li>
+        <li class="breadcrumb-item active">Gestion du stock</li>
+    </ol>
+
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_product_show', { 'id' : product.Id() }) }}" class="btn btn-primary">Retour au produit</a>
+</div>
+
+    <h1 class="text-center">Gestion du stock - {{ product.name }}</h1>
+
+    <div class="container login-form border rounded">
+        {{ form_start(form) }}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 200px" class="text-center">Couleur</th>
+                    {% for size in product.allowedSizes %}
+                        <th scope="col" class="text-center">{{ size.size }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for availability in form.availabilities %}
+                    <tr>
+                        <th scope="row" class="align-middle">
+                            <span class="color-box" style="background-color:#{{ availability.vars.value.color.color.hexTriplet }};"></span>
+                            {{ availability.vars.value.color }}
+                        </th>
+                        {% for qt in availability.sizeQuantities %}
+                            <td>{{ form_widget(qt) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="Valider" />
+        </div>
+        {{ form_widget(form._token) }}
+        {{ form_end(form, { 'render_rest': true }) }}
+    </div>
+{% endblock %}

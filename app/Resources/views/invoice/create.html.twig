@@ -1,0 +1,164 @@
+{% set active = 'commands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Nouvelle Facture {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+
+        .h-20 {
+            height: 20px;
+            position: absolute;
+            left: -40px;
+            bottom: 7px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            initCollection($('ul.payments'));
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+
+        function initCollection($collectionHolder) {
+            // setup an "add a tag" link
+            var $addLink = $('<a href="#" class="add">Ajouter un paiement</a>');
+            var $newLinkLi = $('<li></li>').append($addLink);
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        }
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '$$name$$' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+
+            // also add a remove button, just for this example
+            $newFormLi.append('<a href="#" class="remove">Supprimer</a>');
+            $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+            $newLinkLi.before($newFormLi);
+
+            // handle the removal, just for this example
+            $('.remove-tag').click(function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+                return false;
+            });
+
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('command_index') }}">Mes Commandes</a></li>
+            <li class="breadcrumb-item active">Nouvelle Facture</li>
+        </ol>
+
+        <h1 class="text-center">Nouvelle Facture</h1>
+
+        {% include 'invoice/new-header.html.twig' with {'customer': invoice.customer} %}
+
+        <dl class="row">
+            <dt class="col-sm-3">Commande</dt>
+            <dd class="col-sm-9">{{ invoice.command.id }}</dd>
+        </dl>
+
+        <div class="col-lg-8" style="margin:auto;">
+
+            {{ form_start(form) }}
+
+            <div class="form-group row" id="datimepicker">
+                {{ form_label(form.date, null, { 'label_attr': {'class': 'col-sm-4 col-form-label control-label'} }) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.date, {'attr': {'class': 'input-inline js-datepicker'}}) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.num, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                <div class="col-sm-8">
+                    <span class="badge badge-pill badge-dark h-20" data-toggle="tooltip" title="Laisser vide si automatique"> ? </span>
+                    {{ form_widget(form.num) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.reduction, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.reduction) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.shippingCosts, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.shippingCosts) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.paymentMethods, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.paymentMethods) }}
+                </div>
+            </div>
+            <div class="form-group row" id="datimepicker">
+                {{ form_label(form.dueDate, null, { 'label_attr': {'class': 'col-sm-4 col-form-label control-label'} }) }}
+                <div class="col-sm-8">
+                    {{ form_widget(form.dueDate, {'attr': {'class': 'input-inline js-datepicker'}}) }}
+                </div>
+            </div>
+            <h3>Paiements</h3>
+            <ul class="payments" data-prototype="{{ form_widget(form.payments.vars.prototype)|e('html_attr') }}">
+                {% for payment in form.payments %}
+                    <li>{{ form_widget(payment) }}</li>
+                {% endfor %}
+            </ul>
+
+            {{ form_widget(form._token) }}
+            <input class="btn btn-primary" type="submit" value="Créer la Facture" />
+            {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+
+        <a href="{{ path('command_index') }}" class="btn btn-primary">Retour à Mes Commandes</a>
+    </div>
+{% endblock %}

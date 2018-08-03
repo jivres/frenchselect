@@ -1,0 +1,313 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+{% block title %} {{ parent() }}- Les marques pour votre boutique {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            $('#target-2').tab('show');
+            initSuggestion();
+        });
+
+        function reinit() {
+
+            var cb = $("input:checkbox");
+            $.each(cb, function () {
+                this.checked = false;
+            });
+            $('#brand-search-input').val("");
+            filter("");
+        }
+
+        function changeTarget(event, id) {
+            event.preventDefault();
+            $('#target-' + id).tab('show');
+            filter($('#brand-search-input').val(), id);
+        }
+
+        function filter(searchText, id) {
+            searchText = searchText || $('#brand-search-input').val();
+            id = id || document.getElementsByClassName('target active')[0].id.split('-')[1];
+            var tab = [];
+            var cb = $("input:checkbox");
+            $.each(cb, function () {
+                if (this.checked == true) {
+                    tab.push(this.value);
+                }
+            });
+
+            loadBrands(searchText, id, tab);
+
+
+
+        }
+
+        function loadBrands(searchText, target, filters) {
+            filters = filters || null;
+            $.ajax({
+                url: "{{ path('brands_search') }}",
+                type: 'POST',
+                data: {search_text: searchText, target: target, filters: filters},
+                datatype: 'json'
+            }).done(function (data) {
+                $('#brands').html(data).show();
+                initSuggestion();
+            });
+        }
+
+        function initSuggestion() {
+
+            var brandsArray = [];
+            var x = document.getElementsByClassName("card-marques");
+            for (var i = 0; i < x.length; i++) {
+                var temp = x[i].getElementsByClassName("card-title")[0].innerHTML;
+                temp = temp.substring(1);
+                temp = temp.substring(0, temp.length - 1);
+                brandsArray.push(temp);
+            }
+            autocomplete(document.getElementById("brand-search-input"), brandsArray);
+
+        }
+        function autocomplete(inp, arrBrands) {
+
+            inp.removeEventListener("input", eventInput);
+            inp.removeEventListener("keydown", eventKeydown);
+            document.removeEventListener("click", eventCloseLists);
+
+
+            var currentFocus;
+            inp.addEventListener("input", eventInput);
+            inp.addEventListener("keydown", eventKeydown);
+
+            document.addEventListener("click", eventCloseLists);
+
+            function eventCloseLists(e) {
+                closeAllLists(e.target);
+            }
+
+            function eventInput(e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arrBrands.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arrBrands[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + arrBrands[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arrBrands[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arrBrands[i] + "'>";
+                        b.addEventListener("click", function (e) {
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+
+            }
+
+            function eventKeydown(e) {
+
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                } else if (e.keyCode == 8) {
+
+                }
+            }
+
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+        } // FIN AUTOCOMPLETE
+
+    </script>
+
+{% endblock %}
+    {% block content %}
+        <h1 class="text-center">Découvrez de nouvelles marques</br>
+            <span style="color:#FE5F55;">pour votre boutique</span></h1>
+        <ul class="nav nav-tabs justify-content-center nav-filter-brands" id="myTab" role="tablist">
+            {% for target in targets %}
+                <li class="nav-item">
+                    <a class="nav-link target" id="target-{{ target.id }}" href="#" onclick="changeTarget(event,{{ target.id }})"
+                    >{{ target.label }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="row bg-searchbar">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <form autocomplete="off">
+                    <div class="form text-center" id="searchbar">
+                        <input type='text' id='brand-search-input' name='target'
+                               placeholder="Nom d'une marque" align="center"
+                               onkeyup="filter(this.value)" onfocus="this.placeholder=''"
+                               onblur="this.placeholder='Nom d\'une marque'"
+                               class="shadow-sm rounded">
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-3 ctn-button-filter">
+                <button id="btn-filter" class="btn button-filter" type="button" data-toggle="collapse"
+                        data-target="#filterbarContent" aria-controls="filterbarContent" aria-expanded="false"
+                        aria-label="Filters navigation">Ajouter des filtres
+                </button>
+            </div>
+        </div>
+        <div class="container-list-brand">
+            <div class="row tab-content" id="myTabContent">
+                <div class="col-3 column-filters p-4 shadow-sm collapse  bg-white" id="filterbarContent">
+                    <div class="container-btn-filters text-center"><a onclick="reinit()" class="button-fb p-2">Réinitialiser</a>
+                    </div>
+                    <div class="container-filters">
+                        <div id="categorie">
+                            <h2>Catégories</h2>
+                            {% for categorie in categories %}
+                                {% set marques = [] %}
+                                {% for b in categorie.getBrand.toArray() %}
+                                    {% if b.isActive %}
+                                        {% set marques = marques|merge([ b ]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if marques is not empty %}
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               id="cb{{ categorie.getLabel() }}"
+                                               onchange="filter()"
+                                               value="categorie:{{ categorie.id }}">
+                                        <label class="form-check-label"
+                                               for="cb{{ categorie.getLabel() }}">{{ categorie.getLabel() }}</label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div id="univers">
+                            <h2>Univers</h2>
+                            {% for univ in univers %}
+                                {% set marques = [] %}
+                                {% for b in univ.getBrand.toArray() %}
+                                    {% if b.isActive %}
+                                        {% set marques = marques|merge([ b ]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if marques is not empty %}
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               id="cb{{ univ.getLabel() }}"
+                                               onchange="filter()"
+                                               value="univers:{{ univ.id }}">
+                                        <label class="form-check-label"
+                                               for="cb{{ univ.getLabel() }}">{{ univ.getLabel() }}</label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div id="feature">
+                            <h2>Labels</h2>
+                            {% for feature in features %}
+                                {% set marques = [] %}
+                                {% for b in feature.getBrand.toArray() %}
+                                    {% if b.isActive %}
+                                        {% set marques = marques|merge([ b ]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if marques is not empty %}
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               id="cb{{ feature.getLabel() }}"
+                                               onchange="filter()"
+                                               value="feature:{{ feature.id }}">
+                                        <label class="form-check-label"
+                                               for="cb{{ feature.getLabel() }}">{{ feature.getLabel() }}</label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div id="price">
+                            <h2>Gamme de prix</h2>
+                            {% for price in prices %}
+                                {% set bool = false %}
+                                {% for brand in brands %}
+                                    {% if brand.isActive and brand.getPriceRange() == price %} {% set bool = true %} {% endif %}
+                                {% endfor %}
+                                {% if bool %}
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               id="cb{{ price.getLabel() }}"
+                                               onchange="filter()"
+                                               value="priceRange:{{ price.id }}">
+                                        <label class="form-check-label"
+                                               for="cb{{ price.getLabel() }}">{{ price.getLabel() }}</label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col" id="brands">
+                    {% include 'brands/brandlist.html.twig' with { 'brands' : brands, 'cible' : cible } %}
+                </div>
+            </div>{# FIN TABCONTENT #}
+        </div>
+        </section> {# FIN CONTAINER FLUID #}
+    {% endblock %}
+

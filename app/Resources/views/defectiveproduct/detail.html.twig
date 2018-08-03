@@ -1,0 +1,35 @@
+<h2>Signalement de produits défectueux</h2>
+
+<p>Signalement déclaré le {{ report.date|date("d/m/Y") }} pour la commande n°{{ report.command.id }}</p>
+<div class="alert
+    {% if report.status == 'waiting' %}
+        alert-warning"><b>Statut de la requête : </b>Demande en cours
+    {% elseif report.status == 'ongoing' %}
+        alert-secondary"><b>Statut de la requête : </b>En cours de traitement
+    {% elseif report.status == 'returning' %}
+        alert-primary"><b>Statut de la requête : </b>Retour des produits en cours
+    {% elseif report.status == 'handled' %}
+        alert-success"><b>Statut de la requête : </b>Demande traitée
+    {% elseif report.status == 'refused' %}
+        alert-danger"><b>Statut de la requête : </b>Demande refusée
+    {% endif %}
+</div>
+    {% if is_granted('ROLE_BRAND') %}
+        {% if report.status == 'waiting' %}
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'ongoing'}) }}" class="btn btn-outline-secondary">Marquer comme en cours de traitement</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'handled'}) }}" class="btn btn-outline-primary">Marquer comme en cours de retour</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'handled'}) }}" class="btn btn-outline-success">Marquer comme traité</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'refused'}) }}" class="btn btn-outline-danger">Marquer comme refusé</a>
+        {% elseif report.status == 'ongoing' %}
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'returning'}) }}" class="btn btn-outline-primary">Marquer comme en cours de retour</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'handled'}) }}" class="btn btn-outline-success">Marquer comme traité</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'refused'}) }}" class="btn btn-outline-danger">Marquer comme refusé</a>
+        {% elseif report.status == 'returning' %}
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'handled'}) }}" class="btn btn-outline-success">Marquer comme traité</a>
+            <a href="{{ path("report_set_status", {'id': report.id, 'status': 'refused'}) }}" class="btn btn-outline-danger">Marquer comme refusé</a>
+        {% endif %}
+    {% endif %}
+</p>
+
+<h3>Liste des produits défectueux</h3>
+{% include 'defectiveproduct/defectiveproductslist.html.twig' with {'defectiveproducts': report.defectiveproducts} %}

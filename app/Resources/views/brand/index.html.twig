@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Marques</li>
+    </ol>
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_brand_new') }}" class="btn btn-primary">Créer une nouvelle marque</a>
+        <a href="{{ path('b2b_backoffice_brand_recommande') }}" class="btn btn-primary">Calcul Marques Recommandées</a>
+    </div>
+
+
+    <table class="table table-striped mt-3 bg-white border">
+        <thead>
+            <tr>
+                <th scope="col">Statut</th>
+                <th scope="col">Identifiant</th>
+                <th scope="col">Société</th>
+                <th scope="col">Marque</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for brand in brands %}
+            <tr>
+                <td>{% if brand.isEnabled %}Actif{% else %}Non actif{% endif %}</td>
+                <td>{{ brand.username }}</td>
+                <td>{{ brand.name }}</td>
+                <td>{{ brand.brandName }}</td>
+                <td>
+                    <a href="{{ path('backoffice_brand_show', { 'id': brand.id }) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('backoffice_brand_edit', { 'id': brand.id }) }}" class="btn btn-primary">Modifier</a>
+                    {% if is_granted('ROLE_ADMIN') and not brand.isEnabled %}
+                        <a href="{{ path('backoffice_user_activate', { 'id': brand.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

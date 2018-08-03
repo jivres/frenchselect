@@ -1,0 +1,34 @@
+customers_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Customers:index" }
+    methods:  GET
+
+b2b_customer_shops:
+    path:     /shops
+    defaults: { _controller: "B2bBundle:Customer:shops" }
+    methods:  GET
+
+b2b_customer_shop_edit:
+    path:     /shop/{id}/edit
+    defaults: { _controller: "B2bBundle:Customer:shopEdit" }
+    methods:  [GET, POST]
+
+b2b_customer_shop_add:
+    path:     /{id}/shop/add
+    defaults: { _controller: "B2bBundle:Customer:shopAdd" }
+    methods:  [GET, POST]
+
+b2b_customer_shop_delete:
+    path:     /shop/{id}/delete
+    defaults: { _controller: "B2bBundle:Customer:shopDelete" }
+    methods:  DELETE
+
+customer_search_customer:
+    path:     /search
+    defaults: { _controller: "B2bBundle:Customer:search" }
+    methods:  POST
+
+b2b_customer_mailing:
+    path:     /mail_campaign
+    defaults: { _controller: "B2bBundle:Customer:mailCampaign" }
+    methods:  [GET, POST]

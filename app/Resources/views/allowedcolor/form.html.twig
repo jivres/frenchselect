@@ -1,0 +1,50 @@
+<div class="form-row">
+    <div class="form-group col-md-6">
+        {{ form_label(form.refUnique) }}<span class="required-chip">*</span>
+        {{ form_widget(form.refUnique) }}
+    </div>
+
+    <div class="form-group col-md-6">
+        {{ form_label(form.eanCode) }}
+        {{ form_widget(form.eanCode) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-12">
+    {{ form_widget(form.color) }}
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-group col-md-12">
+        {{ form_label(form.colorCode) }}
+        {{ form_widget(form.colorCode) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        {{ form_label(form.deliveryStart) }}<span class="required-chip">*</span>
+        {{ form_widget(form.deliveryStart) }}
+    </div>
+    <div class="form-group col-md-6">
+        {{ form_label(form.reduction) }}
+        {{ form_widget(form.reduction) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-12">
+        {{ form_label(form.additionalInformation) }}
+        {{ form_widget(form.additionalInformation) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        {{ form_label(form.favourite) }}
+        {{ form_widget(form.favourite) }}
+    </div>
+</div>
+

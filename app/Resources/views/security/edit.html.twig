@@ -1,0 +1,40 @@
+{% set active = 'account' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Informations personnelles {% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Mes informations personnelles</h1>
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+
+            {% if is_granted('ROLE_ADMIN') %}
+                {{ form_row(edit_form) }}
+            {% elseif is_granted('ROLE_BRAND') %}
+                {% include 'brand/editFormForBrand.html.twig' with {'form': edit_form, 'password': true} %}
+            {% elseif is_granted('ROLE_CUSTOMER') %}
+                {% include 'customer/form.html.twig' with {'form': edit_form, 'password': true} %}
+            {% elseif is_granted('ROLE_SALESMAN') %}
+                {% include 'salesman/form.html.twig' with {'form': edit_form, 'password': true} %}
+            {% else %}
+                {{ form_row(edit_form) }}
+            {% endif %}
+
+            {% if not canValidate %}
+                <div class="alert alert-danger">{% autoescape false %}{{ validateMessage }}{% endautoescape %}</div>
+            {% endif %}
+            <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Modifier mes informations personnelles"/>
+            </div>
+            {{ form_widget(edit_form._token) }}
+            {{ form_end(edit_form, { 'render_rest': false }) }}
+        </div>
+    </div>
+
+    <div class="col-lg-2">
+    </div>
+    </div>
+{% endblock %}

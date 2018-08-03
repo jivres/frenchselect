@@ -1,0 +1,112 @@
+{% extends 'command/layout.html.twig' %}
+
+{% set next_path = 'command_validate2' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        function format(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '€' + x[1] : ' €';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+            }
+            return x1 + x2;
+        }
+        $(document).ready(function() {
+            $(".price").each(function () {
+                $(this).text(format($(this).text()));
+            });
+
+            $('.js-datepicker').each(function () {
+                var startDate = $(this).parent().find('.startDate').val();
+                $(this).datepicker({
+                    format: 'yyyy-mm-dd',
+                    startDate: `'${startDate}'`
+                });
+            });
+
+            let totalAmount = document.getElementsByClassName("price total");
+            let total = 0;
+            let amounts = document.getElementsByClassName("price total modal-price");
+            for(var i = 0; i < amounts.length; i++){
+                let str =  amounts[i].innerHTML.split(" ");
+                let valeur = Number(str[0]);
+                total = total + valeur;
+            }
+            totalAmount.innerHTML = total + " €";
+
+        });
+
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <style>
+        .total {
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+
+{% block command %}
+    <h2 class="mb-5" style="text-align:center;">Récapitulatif de la commande</h2>
+    <div class="col-md-9" style="margin: auto;">
+
+        {{ form_start(edit_form) }}
+            {% set i = 0 %}
+            {% for cartCollection in edit_form.cartCollections %}
+                {% include 'cart/cart-collection-details.html.twig' with { 'form' : cartCollection, 'cartCategories' : cartCollection.vars.value.cartCategories } %}
+
+                <div class="form-group row d-flex justify-content-end">
+                    <div class='input-group date col-sm-6' id='datetimepicker'>
+                        <input type="text" class="startDate" style="display:none;" value="{{ minDeliveryDates[i]|date('Y-m-d') }}">
+                        {{ form_label(cartCollection.deliveryDate, null, { 'label_attr': { 'class': 'col-sm-4 col-form-label control-label' } }) }}
+                        {{ form_widget(cartCollection.deliveryDate, { 'attr': { 'class': 'form-control col-sm-8 input-inline js-datepicker' }}) }}
+                        <!--<span class="input-group-addon">
+                            <span class="oi oi-calendar" title="calendar"></span>
+                        </span>-->
+                    </div>
+                </div>
+                {% set i = i + 1 %}
+
+            {% endfor %}
+        <hr>
+
+        <h4>Montant total de la commande : <span class="price total">{{ command.totalHT }}</span></h4>
+
+        <h3 class="mt-5">Détails de la commande</h3>
+
+        <div class="form-group row">
+            {{ form_label(edit_form.command.paymentTerms, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+            <div class="col-sm-9">
+                {{ form_widget(edit_form.command.paymentTerms, {'attr': {'class': 'custom-select'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ form_label(edit_form.command.paymentMethod, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+            <div class="col-sm-9">
+                {{ form_widget(edit_form.command.paymentMethod, {'attr': {'class': 'custom-select'}}) }}
+            </div>
+        </div>
+
+        {% if command.cartCollection.brand.CGV is not null %}
+            <p>Lien vers les <a href="{{ asset('uploads/'~command.cartCollection.brand.CGV.url) }}" target="_blank">Conditions Générales de Vente</a></p>
+        {% else %}
+            <p><i>Aucunes Conditions Générales de Vente</i></p>
+        {% endif %}
+
+        {{ form_widget(edit_form._token) }}
+        <div class="row d-flex justify-content-end">
+            <input class="btn btn-orange" type="submit" value="Je finalise ma commande" />
+        </div>
+        {{ form_end(edit_form, {'render_rest': false}) }}
+    </div>
+{% endblock %}

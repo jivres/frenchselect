@@ -1,0 +1,27 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commerciaux{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('salesman_new') }}" class="btn btn-primary btn-orange ml-2 mr-2">Créer un nouveau Commercial</a>
+            <a href="#" class="btn btn-primary btn-orange ml-2 mr-2">Carte des Commerciaux</a>
+        </div>
+
+        <h1 class="text-center">Mes Commerciaux</h1>
+
+        {% include 'salesmanbrandlink/salesmenlist.html.twig' with { 'salesmen' : salesmen } %}
+
+    </div>
+{% endblock %}

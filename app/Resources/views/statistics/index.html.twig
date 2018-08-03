@@ -1,0 +1,164 @@
+{% set active = 'statistics' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Statistiques{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+
+            $('#brand-form').on('submit', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            $('#for-brand-button').on('click', function(e) {
+                e.preventDefault();
+
+                data = $("#brand-form").serialize();
+
+                $.ajax({
+                    url: "{{ path('statistics_sales_for_brand') }}",
+                    type: 'POST',
+                    data: data,
+                    datatype: 'json'
+                }).done(function(data) {
+                    $("#brandResults").html(data).show();
+                });
+
+            });
+
+            $('#bestsellers-form').on('submit', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            $('#for-bestsellers-button').on('click', function(e) {
+                e.preventDefault();
+
+                data = $("#bestsellers-form").serialize();
+
+                $.ajax({
+                    url: "{{ path('statistics_bestsellers') }}",
+                    type: 'POST',
+                    data: data,
+                    datatype: 'json'
+                }).done(function(data) {
+                    $("#bestSellersResults").html(data).show();
+                });
+
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h1>Statistiques</h1>
+
+        <!-- STATISTIQUES GÉNÉRALES -->
+        <div class="card bg-light">
+            <div class="card-header">
+                <h4>Statistiques depuis le début de la plateforme</h4>
+            </div>
+            <div class="card-body horizontal-list">
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalBrandsActifs }}</span> marques actives
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalCustomersActifs }}</span> clients actifs
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalSalesmanActifs }}</span> commerciaux actifs
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalCommands }}</span> commandes passées
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalProductsSold }}</span> produits vendus
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ totalSold }} €</span> de chiffre d'affaires HT
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h4>Ventes pour la période</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(formForBrand, {'attr': {'id': 'brand-form'}}) }}
+                <div class="row">
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext">Ventes effectuées par la marque </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-3">
+                        {{ form_widget(formForBrand.brand, {'attr': {'class': 'custom-select col-md-12'}}) }}
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext" id="forShop"> durant la période du </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-2">
+                        {{ form_widget(formForBrand.from, {'attr': {'class': 'js-datepicker'}}) }}
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-control-plaintext" id="forShop"> au </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-2">
+                        {{ form_widget(formForBrand.to, {'attr': {'class': 'js-datepicker'}}) }}
+                    </div>
+                    <input type="submit" id="for-brand-button" class="btn btn-orange mb-2" value="Valider">
+                    {{ form_widget(formForBrand) }}
+                </div>
+                {{ form_end(formForBrand) }}
+                <div class="row" id="brandResults"></div>
+            </div>
+        </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h4>Produits les plus vendus</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(formBestSellers, {'attr': {'id': 'bestsellers-form'}}) }}
+                <div class="row">
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext">Produits les plus vendus de la marque </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-3">
+                        {{ form_widget(formBestSellers.brand, {'attr': {'class': 'custom-select col-md-12'}}) }}
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-control-plaintext" id="forShop"> durant la période du </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-2">
+                        {{ form_widget(formBestSellers.from, {'attr': {'class': 'js-datepicker'}}) }}
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-control-plaintext" id="forShop"> au </label>
+                    </div>
+                    <div class="form-group mb-2 col-md-2">
+                        {{ form_widget(formBestSellers.to, {'attr': {'class': 'js-datepicker'}}) }}
+                    </div>
+                    <input type="submit" id="for-bestsellers-button" class="btn btn-orange mb-2" value="Valider">
+                    {{ form_widget(formBestSellers) }}
+                </div>
+                {{ form_end(formBestSellers) }}
+                <div class="row" id="bestSellersResults"></div>
+            </div>
+        </div>
+    {% endif %}
+
+    </div>
+{% endblock %}

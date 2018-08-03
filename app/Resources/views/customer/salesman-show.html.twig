@@ -1,0 +1,66 @@
+{% set active = 'customers' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('salesman_shops_index') }}">Mes Clients</a></li>
+            {% if brand is not null %}
+                <li class="breadcrumb-item">Marque {{ brand }}</li>
+            {% endif %}
+            <li class="breadcrumb-item active">Détail</li>
+        </ol>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('salesman_shops_index') }}" class="btn btn-primary btn-orange ml-2 mr-2">Retour à la liste</a>
+            <a href="{{ path('backoffice_customer_edit', { 'id': customer.id }) }}" class="btn btn-primary btn-orange ml-2 mr-2">Modifier</a>
+            {{ form_start(delete_form) }}
+            <input class="btn btn-primary btn-orange ml-2 mr-2" type="submit" value="Supprimer">
+            {{ form_end(delete_form) }}
+        </div>
+
+        {% if app.user.subordinates|length > 0 %}
+            {% include 'customer/show.html.twig' with {'customer': customer, 'hideshops': true} %}
+
+            <hr class="mt-2 mb-2">
+
+            {% for shop in customer.shops %}
+                <h2 style="text-align:center;" class="mt-3">Boutique - {{ shop }}, {{ shop.town }} ({{ shop.country }})</h2>
+                <div class="col text-center">
+                    <a class="btn btn-outline-success btn-xl" href="{{ path('salesman_shop_select_subordinate', {'id': shop.id, 'brand': brand.id}) }}">Assigner un sous-commercial</a>
+                </div>
+                <!-- On cherche les sous-commerciaux assignés à cette boutique -->
+                {% set salesmen = [] %}
+                {% for subordinate in app.user.subordinates %}
+                    {% if subordinate.brand == brand %}
+                        {% for salesmanshop in shop.salesmen %}
+                            {% if subordinate.subordinate == salesmanshop.salesman and salesmanshop.brand == brand %}
+                                {% set salesmen = salesmen|merge([salesmanshop.salesman]) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {% if salesmen|length == 0 %}
+                    <i>Aucun sous-commercial assigné à cette boutique</i>
+                {% else %}
+                    <h3>Sous-commerciaux assignés</h3>
+                    {% include 'shop/subordinateslist.html.twig' with { 'shop': shop, 'brand': brand, 'salesmen': salesmen } %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% include 'customer/show.html.twig' with {'customer': customer} %}
+        {% endif %}
+    </div>
+{% endblock %}

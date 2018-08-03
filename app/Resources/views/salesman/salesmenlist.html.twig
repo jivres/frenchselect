@@ -1,0 +1,36 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped table-hover bg-white border">
+        <thead>
+        <tr>
+            {% if (checkbox is defined) and (checkbox == true) %}
+                <th></th>
+            {% endif %}
+            <th>N° Commercial</th>
+            <th>Commercial</th>
+            <th>Société</th>
+            <th>Ville</th>
+            <th>Pays</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for salesman in salesmen %}
+            <tr onclick="selectSalesman('{{ salesman.id }}', '{{ salesman.contact }}')">
+                {% if (checkbox is defined) and (checkbox == true) %}
+                    <td>
+                        <div class="form-check">
+                            <input type="checkbox" id="salesman-{{ salesman.id }}" name="radioShop" class="salesman-check form-check-input ml-5">
+                            <label class="form-check-label" for="salesman-{{ salesman.id }}"></label>
+                        </div>
+                    </td>
+                {% endif %}
+                <td>{{ salesman.id }}</td>
+                <td>{{ salesman.contact }}</td>
+                <td>{{ salesman.companyName }}</td>
+                <td>{{ salesman.billingTown }}</td>
+                <td>{{ salesman.country }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p>{{ salesmen|length }} {% if salesmen|length > 1 %}commerciaux trouvés{% else %}commercial trouvé{% endif %}</p>

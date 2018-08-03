@@ -1,0 +1,31 @@
+{% extends 'layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Erreur lors de la suppression de l'entité</h4>
+            <p>Impossible de supprimer l'entitée désirée, celle-ci doit être utilisée par d'autres entités complémentaires.</p>
+            <hr>
+            <p>
+                <a class="btn btn-outline-dark" data-toggle="collapse" href="#errorMessage" role="button" aria-expanded="false" aria-controls="errorMessage">
+                    Détails de l'erreur
+                </a>
+            </p>
+            <div class="collapse" id="errorMessage">
+                <div class="card card-body">
+                    {{ error }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

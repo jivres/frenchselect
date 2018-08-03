@@ -1,0 +1,33 @@
+<div class="row flex-justify-center">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>N° Commercial</th>
+            <!--<th>Secteur</th>-->
+            <th>Commercial</th>
+            <th>Société</th>
+            <th>Ville</th>
+            <th>Pays</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for salesman in salesmen %}
+            <tr>
+                <td>{{ salesman.id }}</td>
+
+                <td>{{ salesman.contact }}</td>
+                <td>{{ salesman.companyName }}</td>
+                <td>{{ salesman.billingTown }}</td>
+                <td>{{ salesman.country }}</td>
+                <td>
+                    <a class="btn btn-outline-danger" href="{{ path('salesman_shop_deassign_subordinate', {'id': shop.id, 'brand': brand.id, 'salesman': salesman.id}) }}">
+                        Désassigner
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p>{{ salesmen|length }} {% if salesmen|length > 1 %}commerciaux assignés{% else %}commercial assigné{% endif %}</p>

@@ -1,0 +1,39 @@
+{% extends 'layout_login.html.twig' %}
+
+{% block title %} {{ parent() }} - Demande d'inscription envoyée {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid login">
+        <div class="container">
+            <div class="container-button-backb m-2">
+                <a href="{{ path('index') }}" id="btn-retour">
+                    <span class="button-backbh p-2">
+                        <img src=" {{ asset('bundles/b2b/img/angle-left.svg') }}" height="20px"/>Retour</span>
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-6 login-form border rounded">
+                <h1>Demande d'inscription envoyée</h1>
+                    <p>Votre demande d'inscription a bien été envoyée à notre équipe. Elle sera traitée dans les plus brefs délais.</p>
+                    <p>Après validation de la création de votre compte, vous recevrez un email d'activation.</p>
+                    <p>En attendant nous vous invitons à découvrir l'ensemble de nos marques.</p>
+                    <p>Merci</p>
+                    <p class="text-right">Le Showroom French Select</p>
+                </div>
+                <div class="col-lg-3">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

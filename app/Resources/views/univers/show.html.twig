@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_style_index') }}">Gestion des styles et univers</a>
+        </li>
+        <li class="breadcrumb-item active">{{ univers.label }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_style_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_univers_edit', { 'id': univers.id }) }}" class="btn btn-primary">Modifier</a>
+    </div>
+
+    <h1 class="text-center">Univers - {{ univers.label }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            <dt class="col-sm-3">Univers</dt>
+            <dd class="col-sm-9">{{ univers.label }}</dd>
+            <h3>Styles associés à cet univers</h3>
+            <a href="{{ path('backoffice_styleuniverscalcul_new',{'id':univers.id}) }}" class="btn btn-primary">Ajouter
+                un style</a>
+            <table class="table table-striped mt-3 bg-white border">
+                <thead>
+                <tr>
+                    <th scope="col">Style</th>
+                    <th scope="col">Poids de la relation</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for a in univers.styles %}
+                    <tr>
+                        <td>{{ a.style }}</td>
+                        <td>{{ a.poids }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+{% endblock %}

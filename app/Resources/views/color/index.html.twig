@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Gestion des couleurs principales</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_color_new') }}" class="btn btn-primary">Créer une nouvelle couleur</a>
+    </div>
+
+    <h1 class="text-center">Gestion des couleurs principales</h1>
+
+    <div class="container">
+        <table class="table table-striped mt-3 bg-white border">
+            <thead>
+            <tr>
+                <th scope="col">Couleur</th>
+                <th scope="col">Code Hexa</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for color in colors %}
+                <tr>
+                    <td>{{ color.label }}</td>
+                    <td>{{ color.hexTriplet }}</td>
+                    <td style="background:#{{ color.hexTriplet }}"></td>
+                    <td>
+                                <a href="{{ path('backoffice_color_show', { 'id': color.id }) }}"
+                                   class="btn btn-primary">Voir</a>
+                                <a href="{{ path('backoffice_color_edit', { 'id': color.id }) }}"
+                                   class="btn btn-primary">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

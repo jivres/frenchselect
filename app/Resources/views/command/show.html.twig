@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        function format(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '€' + x[1] : ' €';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        $(document).ready(function() {
+            $(".modal-price").each(function () {
+                $(this).text(format($(this).text()));
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_index') }}">Marques</a></li>
+        <!-- TODO id -->
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', { 'id' : cmd.cartCollection.brand.id }) }}">Marque</a></li>
+        <li class="breadcrumb-item active">Commande</li>
+    </ol>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <dl class="row">
+                <dt class="col-sm-3">Id</dt>
+                <dd class="col-sm-9">{{ cmd.id }}</dd>
+                <dt class="col-sm-3">Date</dt>
+                <dd class="col-sm-9">{{ cmd.date|date("d/m/Y") }}</dd>
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9" id="div_status">{{ cmd.status }} <a href="" id="edit_status" class="btn btn-primary">Modifier</a>
+                </dd>
+                <dd class="col-sm-9" id="div_edit">
+                    <div class="col">
+                        <form class="" action="{{ path('backoffice_command_status_edit', { 'id' : cmd.id }) }}" method="post">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input class="form-control" name="new_status" type="text" value="{{ cmd.status }}" required data-validation-required-message="Vous devez saisir un status"/>
+                                </div>
+                                <div class="col-3">
+                                        <a href="" id="cancel_status" class="btn btn-primary">Annuler</a>
+                                        <input class="btn btn-primary" type="submit" value="Valider"/>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </dd>
+                <dt class="col-sm-3">Nom de la société</dt>
+                <dd class="col-sm-9">{{ cmd.societyName }}</dd>
+                <dt class="col-sm-3">Numéro de T.V.A.</dt>
+                <dd class="col-sm-9">{{ cmd.numTVA }}</dd>
+                <dt class="col-sm-3">Adresse de facturation</dt>
+                <dd class="col-sm-9">
+                    {{ cmd.billingAddress }}<br />
+                    {{ cmd.billingZP }}, {{ cmd.billingTown }}
+                </dd>
+                <dt class="col-sm-3">Boutique</dt>
+                <dd class="col-sm-9">{{ cmd.shop.name }}</dd>
+                <dt class="col-sm-3">Adresse de livraison</dt>
+                <dd class="col-sm-9">
+                    {{ cmd.deliveryAddress }} <br>
+                    {{ cmd.deliveryZP }}, {{ cmd.deliveryTown }}</dd>
+                <dt class="col-sm-3">Téléphone</dt>
+                <dd class="col-sm-9">{{ cmd.phone }}</dd>
+                <dt class="col-sm-3">Commentaire</dt>
+                <dd class="col-sm-9">{{ cmd.comment }}</dd>
+                <dt class="col-sm-3">Mode de paiement</dt>
+                <dd class="col-sm-9">{{ cmd.paymentMethod }}</dd>
+
+                <dt class="col-sm-3">Conditions de paiement</dt>
+                <dd class="col-sm-9">{{ cmd.paymentTerms }}</dd>
+            </dl>
+            <dt class="col-sm-3"></dt>
+            <dd class="col-sm-9"></dd>
+        </div>
+
+    </div>
+    <div class="row">
+        <a href="{{ path('backoffice_brand_show', { 'id' : cmd.cartCollection.brand.id }) }}" class="btn btn-primary">Retour</a>
+        <a href="#" class="btn btn-primary">Modifier</a>
+        {#{ form_start(delete_form) }#}
+        <input class="btn btn-primary" type="submit" value="Supprimer">
+        {#{ form_end(delete_form) }#}
+    </div>
+    <div class="row text-center" style="margin : 2%;">
+        <div class="col">
+            {% include 'cart/cart-collection-details.html.twig' with { 'cartCollection' : cmd.cartCollection, 'cartCategories' : cmd.cartCollection.cartCategories } %}
+            <h4>Montant total de la commande : <span class="price total modal-price">{{ cmd.totalHT }}</span></h4>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+    $(function() {
+        $("#div_edit").hide(0);
+        $( "#edit_status" ).click(function() {
+            $("#div_status").fadeOut("fast", function() {
+                $("#div_edit").fadeIn("fast");
+                // TODO faire l'action valider la modif
+            });
+            return false;
+        });
+        $( "#cancel_status" ).click(function() {
+            $("#div_edit").fadeOut("fast", function() {
+                $("#div_status").fadeIn("fast");
+            });
+            return false;
+        });
+    });
+</script>
+{% endblock %}

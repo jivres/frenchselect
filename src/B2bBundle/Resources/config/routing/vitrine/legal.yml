@@ -1,0 +1,19 @@
+cgu:
+   path:    /cgu
+   defaults:
+       _controller: B2bBundle:VitrineDefault:cgu
+
+confidentialite:
+   path:    /politique-confidentialite
+   defaults:
+       _controller: B2bBundle:VitrineDefault:confidentialite
+
+cookies:
+   path:    /charte-cookies
+   defaults:
+       _controller: B2bBundle:VitrineDefault:cookies
+
+mentions_legales:
+   path:    /mentions-legales
+   defaults:
+       _controller: B2bBundle:VitrineDefault:mentionsLegales

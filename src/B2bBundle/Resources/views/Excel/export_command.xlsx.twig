@@ -1,0 +1,76 @@
+{% xlsdocument { 'format': 'xlsx' }%}
+    {% xlssheet 'Worksheet' %}
+        {% xlsrow %}
+            {% xlscell %} Référence {% endxlscell %}
+            {% xlscell %} Nom {% endxlscell %}
+            {% xlscell %} Code EAN {% endxlscell %}
+            {% xlscell %} Catégorie {% endxlscell %}
+            {% xlscell %} Code Couleur {% endxlscell %}
+            {% xlscell %} Couleur {% endxlscell %}
+            {% xlscell %} Prix d'achat {% endxlscell %}
+            {% xlscell %} Réduction {% endxlscell %}
+            {% xlscell %} Prix de vente {% endxlscell %}
+            {% xlscell %} Taille {% endxlscell %}
+            {% xlscell %} Quantité {% endxlscell %}
+            {% xlscell %} Total HT {% endxlscell %}
+
+        {% endxlsrow %}
+        {% set i = 1 %}
+        {% for cc in cmd.cartCollection.cartCategories %}
+
+            {% for l in cc.cartRows %}
+                {% set first = i + 1 %}
+            {% for s in l.sizeQuantities %}
+                {% xlsrow %}
+
+                    {% set i = i + 1 %}
+                    {# A #}
+                    {# Référence #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.product.ref}}{% endif %}{% endxlscell %}
+                    {# B #}
+                    {# Nom #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.product.name}}{% endif %}{% endxlscell %}
+                    {# C #}
+                    {# Code EAN #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.allowedColor.eanCode}}{% endif %}{% endxlscell %}
+                    {# D #}
+                    {# Catégorie #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.product.primaryCat}} - {{l.product.secondaryCat}} - {{l.product.tertiaryCategory}}{% endif %}{% endxlscell %}
+                    {# E #}
+                    {# Code Couleur #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.allowedColor.colorCode}}{% endif %}{% endxlscell %}
+                    {# F #}
+                    {# Couleur #}
+                    {% xlscell {dataType: 's'} %}{% if first == i %}{{l.color}}{% endif %}{% endxlscell %}
+                    {# G #}
+                    {# Prix d'achat #}
+                    {% xlscell {dataType: 'n'} %}{% if first == i %}{{ l.product.priceHT }}{% endif %}{% endxlscell %}
+                    {# H #}
+                    {# Réduction #}
+                    {% xlscell {dataType: 'n'} %}{% if first == i %}{{ l.allowedColor.reduction }}{% endif %}{% endxlscell %}
+                    {# I #}
+                    {# Prix de vente #}
+                    {% xlscell {dataType: 'n'} %}{% if first == i %}{{ l.product.recommendedPriceTTC }}{% endif %}{% endxlscell %}
+
+                    {# J #}
+                    {# Taille #}
+                    {% xlscell {dataType: 's'} %}
+                    {{s.size}}
+                    {% endxlscell %}
+                    {# K #}
+                    {# Quantité #}
+                    {% xlscell {dataType: 'n'} %}{{s.amount}}{% endxlscell %}
+                    {# L #}
+                    {# Total HT #}
+                    {% xlscell {dataType: 'f'} %}=K{{i}}*G{{first}}*(1-H{{first}}){% endxlscell %} {# TODO *1-reduction #}
+                                                                {# {'style' : { 'numberformat' : 'FORMAT_CURRENCY_EUR_SIMPLE' }} #}
+                {% endxlsrow %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        {% xlsrow %}
+            {% xlscell 10 %}Total : {% endxlscell %}
+            {% xlscell %}=SUM(L2:L{{i}}){% endxlscell %}
+        {% endxlsrow %}
+    {% endxlssheet %}
+{% endxlsdocument %}

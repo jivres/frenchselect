@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_brand_show', { 'id': product.getBrand().id }) }}">{{ product.getBrand().getBrandName() }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_product_show', { 'id': product.id }) }}">Produit {{ product.name }}</a></li>
+        <li class="breadcrumb-item active">Modifier les photos</li>
+    </ol>
+
+    <h1 class="text-center">Gestion des photos pour {{ product.name }} : {{ color.color.label }}</h1>
+    {% if pictures|length > 0 %}
+        <h2>Photos actuelles :</h2>
+        <div class="row">
+            {% for picture in pictures %}
+                <div class="col-sm-12 col-md-6	col-lg-4	col-xl-2">
+                    <img src="{{ asset('uploads/' ~ picture.picture.url) }}" alt=""
+                         class="img-thumbnail embed-responsive embed-responsive-16by9">
+                    {{ form_start(picture.deleteForm) }}
+                    <input class="btn btn-danger btn-block remove-picture" type="submit" value="Supprimer"
+                           style="margin:1%;">
+                    {{ form_end(picture.deleteForm) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h2>Ajouter des photos :</h2>
+    <div class="row">
+        <div id="DZ" class="col-lg-6 border border-primary" style="min-height: 150px; margin:auto;">
+            <div class="row" class="files" id="previews">
+                <div id="template" class="col-3">
+                    <!-- Template utilisé pour afficher les images dans la dropbox  -->
+                    <div class="row">
+                        <span class="preview"><img data-dz-thumbnail/></span>
+                    </div>
+                    <div class="row">
+                        <p class="size" data-dz-size></p>
+                    </div>
+                    <div class="row">
+                        <div id="total-progress" class="progress progress-striped active" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <div class="progress-bar progress-bar-success" style="width:0%;"
+                                 data-dz-uploadprogress></div>
+                        </div>
+                    </div>
+                    <div id="actions" class="row" style="margin:1%;">
+                        <button data-dz-remove class="btn btn-block btn-danger delete">
+                            <span class="	glyphicon glyphicon-remove"></span>
+                            <span>Retirer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6" style="margin:auto; margin-top:1%;">
+            <button class="btn btn-success btn-block" disabled id="valid">Valider</button>
+        </div>
+    </div>
+    <script src="{{ asset('bundles/b2b/js/dropzone.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.remove-picture').click(function () {
+                if (confirm("Etes-vous sûr de vouloir supprimer cette image?")) {
+                    return true;
+                }
+                return false;
+            });
+        });
+
+        // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+        var previewNode = document.querySelector("#template");
+        previewNode.id = "";
+        var previewTemplate = previewNode.parentNode.innerHTML;
+        previewNode.parentNode.removeChild(previewNode);
+
+        var myDropzone = new Dropzone("div#DZ", { // Make the whole body a dropzone
+            url: "{{ path('backoffice_pictures_upload', { 'allowedColor' : color.id}) }}", // Set the url
+            thumbnailWidth: 80,
+            thumbnailHeight: 80,
+            parallelUploads: 20,
+            previewTemplate: previewTemplate,
+            autoQueue: true, // Make sure the files aren't queued until manually added
+            autoProcessQueue: false,
+
+            init: function () {
+                var submitButton = document.querySelector("#valid")
+
+                myDropzone = this; // closure
+
+                submitButton.addEventListener("click", function () {
+                    myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+                });
+
+                this.on("queuecomplete", function () {
+                    location.reload();
+                })
+
+                // You might want to show the submit button only when
+                // files are dropped here:
+                this.on("addedfile", function () {
+                    $('#valid').attr('disabled', false);
+                });
+            },
+            previewsContainer: "#previews", // Define the container to display the previews
+            clickable: "#DZ,#previews" // Define the element that should be used as click trigger to select files.
+        });
+
+
+    </script>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+{% endblock %}

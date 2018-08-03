@@ -1,0 +1,38 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}Showroom French Select - Mes Commerciaux{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('salesman_index') }}">Mes Commerciaux</a></li>
+            <li class="breadcrumb-item active">Nouveau commercial</li>
+        </ol>
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('salesman_index') }}" class="btn btn-primary">Retour à la liste</a>
+        </div>
+
+        <h1 class="text-center">Nouveau commercial</h1>
+
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8 login-form border rounded">
+            {{ form_start(form) }}
+
+            {% include 'salesman/form.html.twig' with {'form': form} %}
+
+            {{ form_widget(form._token) }}
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Créer le commercial" />
+            </div>
+            {{ form_end(form, { 'render_rest': false }) }}
+            </div>
+            <div class="col-lg-2">
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

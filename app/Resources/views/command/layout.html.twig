@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% set val = step*33.3 %}
+    <h1>Validation de mon panier {{ command.cartCollection.brand }}</h1>
+    <div class="progress mt-5">
+        <div class="progress-bar" role="progressbar" style="width: {{ val }}%;" aria-valuenow="{{ val }}"
+             aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    {% if step !=3 %}
+        <nav class="nav nav-fill">
+            <a class="btn nav-item nav-link {% if step == 1 %} active {% elseif step < 1 %} disabled {% endif %}"
+               href="{{ path('command_validate1', { 'id' : command.id }) }}">Informations sur la livraison</a>
+            <a class="btn nav-item nav-link {% if step == 2 %} active {% elseif step < 2 %} disabled {% endif %}"
+               href="{{ path('command_validate2', { 'id' : command.id }) }}">Informations sur la commande</a>
+            <a class="btn nav-item nav-link {% if step == 3 %} active {% elseif step < 3 %} disabled {% endif %}"
+               href="{{ path('command_validate3', { 'id' : command.id }) }}">Envoi de la commande</a>
+        </nav>
+    {% else %}
+        <nav class="nav nav-fill">
+            <p class="btn nav-item nav-link {% if step == 1 %} active {% elseif step < 1 %} disabled {% endif %}"
+               >Informations sur la livraison</p>
+            <p class="btn nav-item nav-link {% if step == 2 %} active {% elseif step < 2 %} disabled {% endif %}"
+              >Informations sur la commande</p>
+            <p class="btn nav-item nav-link {% if step == 3 %} active {% elseif step < 3 %} disabled {% endif %}"
+               >Envoi de la commande</p>
+        </nav>
+    {% endif %}
+
+    <div class="content mt-4">
+        <div>
+            {% block command %}
+            {% endblock %}
+        </div>
+        {% if (canValidate is defined) and not canValidate %}
+            <div class="alert alert-danger">{% autoescape false %}{{ validateMessage }}{% endautoescape %}</div>
+        {% elseif step < 2 %}
+            <a href="{{ path(next_path, { 'id' : command.id }) }}" class="btn btn-primary btn-orange">Suivant</a>
+        {% endif %}
+    </div>
+
+{% endblock %}

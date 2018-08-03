@@ -1,0 +1,43 @@
+{% set active = 'commands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showModal(command) {
+            var res = "";
+            var success = false;
+            $.ajax({
+                url: "{{ path('command_modal') }}",
+                type: 'GET',
+                data: {id: command, viewer: 'customer'},
+                datatype: 'json',
+                success: function (response) {
+                    res = response;
+                    success = true;
+                },
+                error: function () {
+                    //handle error
+                }
+            }).done(function (data) {
+                if (success)
+                    $("#command-modal").html(data).modal("show");
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="modal fade bd-example-modal-lg" id="command-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <div class="container">
+        {% include 'command/list.html.twig' with { 'commands': commands, 'showModal': true, 'showDateLimit': false, 'viewer': 'customer' } %}
+    </div>
+
+{% endblock %}

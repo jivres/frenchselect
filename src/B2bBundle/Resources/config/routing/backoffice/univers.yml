@@ -1,0 +1,19 @@
+backoffice_univers_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Univers:show" }
+    methods:  GET
+
+backoffice_univers_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Univers:new" }
+    methods:  [GET, POST]
+
+backoffice_univers_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Univers:edit" }
+    methods:  [GET, POST]
+
+backoffice_univers_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Univers:delete" }
+    methods:    DELETE

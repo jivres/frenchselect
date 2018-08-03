@@ -1,0 +1,61 @@
+{% if form is defined %}
+    {% set collection = form.vars.value.collection %}
+    {% set nbProducts = form.vars.value.nbProducts %}
+{% else %}
+    {% set collection = cartCollection.collection %}
+    {% set nbProducts = cartCollection.nbProducts %}
+{% endif %}
+
+<h3 class="mt-5">Collection {{ collection }} - {{ nbProducts }} {% if nbProducts > 1 %}articles{% else %}article{% endif %}</h3>
+
+{% for cartCategory in cartCategories %}
+    <h3> Catégorie {{ cartCategory.category }}</h3>
+
+    <table class="table table-stripped">
+        <tr>
+            <th scope="col">Produit</th>
+            <th scope="col">Couleur</th>
+            {% for size in cartCategory.sizes %}
+                <th scope="col">{{ size }}</th>
+            {% endfor %}
+            <th scope="col">Quantité Totale</th>
+            <th scope="col">Prix Unitaire HT</th>
+            <th scope="col">Montant Total HT</th>
+        </tr>
+        {% set sum = 0 %}
+        {% for cartRow in cartCategory.cartRows if cartRow.hasQuantity() %}
+            <tr>
+                <th><a href="#">{{ cartRow.product }}</a></th>
+                <td>{{ cartRow.color }}</td>
+                {% set quantity = 0 %}
+                {% for size in cartCategory.sizes %}
+                    {% set present = false %}
+                    {% for sizeQuantity in cartRow.sizeQuantities %}
+                        {% if sizeQuantity.size == size %}
+                            {% set present = true %}
+                            {% set quantity = quantity + sizeQuantity.amount %}
+                            <td>{{ sizeQuantity.amount }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    {% if not present %}
+                        <td>0</td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ quantity }}</td>
+                <td>{{ cartRow.priceHT }} €</td>
+                <td class="unitary-price modal-price">{{ quantity * cartRow.priceHT }}</td>
+                {% set sum = sum + quantity*cartRow.priceHT %}
+            </tr>
+        {% endfor %}
+        <tfoot>
+        <th>Total</th>
+        <td></td>
+        {% for size in cartCategory.sizes %}
+            <td></td>
+        {% endfor %}
+        <td></td>
+        <td></td>
+        <td class="price total modal-price">{{ sum }}</td>
+        </tfoot>
+    </table>
+{% endfor %}

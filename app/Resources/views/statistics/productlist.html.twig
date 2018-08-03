@@ -1,0 +1,36 @@
+{% if products|length == 0 %}
+    <i>Aucun produit ne correspond à la recherche</i>
+{% else %}
+<div class="row flex-justify-center col-md-12">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Id</th>
+            <th>Référence</th>
+            <th>Nom</th>
+            <th>Marque</th>
+            <th>Catégorie </th>
+            <th>Prix HT</th>
+            <th>Prix Recommandé TTC</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>
+                    <img class="product-img" src="{{ asset('uploads/'~product.getMainPicture().url()) }}">
+                </td>
+                <td>{{ product.id }}</td>
+                <td>{{ product.ref }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.primaryCat }} : {{ product.tertiaryCategory }}</td>
+                <td>{{ product.priceHT }} €</td>
+                <td>{{ product.recommendedPriceTTC }} €</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}

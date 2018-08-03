@@ -1,0 +1,24 @@
+backoffice_paymentterms_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:PaymentTerms:index" }
+    methods:  GET
+
+backoffice_paymentterms_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:PaymentTerms:show" }
+    methods:  GET
+
+backoffice_paymentterms_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:PaymentTerms:new" }
+    methods:  [GET, POST]
+
+backoffice_paymentterms_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:PaymentTerms:edit" }
+    methods:  [GET, POST]
+
+backoffice_paymentterms_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:PaymentTerms:delete" }
+    methods:  DELETE

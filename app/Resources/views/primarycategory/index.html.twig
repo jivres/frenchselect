@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Gestion des catégories primaires</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_primarycategory_new') }}" class="btn btn-primary">Créer une nouvelle catégorie
+            primaire</a>
+    </div>
+
+    <h1 class="text-center">Gestion des catégories primaires</h1>
+
+    <div class="container">
+        <table class="table table-striped mt-3 bg-white border">
+            <thead>
+            <tr>
+                <th scope="col">Catégorie primaire</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for primaryCategory in primaryCategories %}
+                <tr>
+                    <td>{{ primaryCategory.label }}</td>
+                    <td>
+                        <a class="btn btn-primary"
+                           href="{{ path('backoffice_primarycategory_show', { 'id': primaryCategory.id }) }}">Voir</a>
+                        <a class="btn btn-primary"
+                           href="{{ path('backoffice_primarycategory_edit', { 'id': primaryCategory.id }) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

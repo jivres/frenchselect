@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_country_index') }}">Gestion des pays</a></li>
+        <li class="breadcrumb-item active">{{ country.name }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_country_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_country_show', { 'id': country.id }) }}" class="btn btn-primary">Voir le pays</a>
+    </div>
+
+    <h1 class="text-center">Pays - {{ country.name }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Modifier le pays"/>
+            </div>
+            {{ form_end(edit_form) }}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="m-3 text-right">
+        {{ form_start(delete_form) }}
+        <input class="btn btn-outline-danger del" type="submit" value="Supprimer le pays">
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                return confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% if brand is not defined %}
+    {% set brand = null %}
+{% else %}
+    {% set brand = brand.id %}
+{% endif %}
+<div class="row flex-justify-center">
+    <table class="table table-stripped table-hover">
+        <thead>
+        <tr>
+            {% if (checkbox is defined) and (checkbox == true) %}
+            <th></th>
+            {% endif %}
+            <th>N° Client</th>
+            <th>Société</th>
+            <th>Boutique</th>
+            <th>Ville</th>
+            <th>Pays</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for shop in shops %}
+                <tr onclick="selectShop('{{ shop.id }}', '{{ shop.customer.companyName }}', '{{ shop.name }}', '{{ shop.customer.id }}', '{{ path('backoffice_customer_show', {'id': shop.customer.id, 'brand': brand}) }}');">
+                    {% if (checkbox is defined) and (checkbox == true) %}
+                    <td>
+                        <div class="form-check">
+                            <input type="checkbox" id="shop-{{ shop.id }}" name="radioShop" class="shop-check form-check-input ml-5">
+                            <label class="form-check-label" for="shop-{{ shop.id }}"></label>
+                        </div>
+                    </td>
+                    {% endif %}
+                    <td>{{ shop.customer.id }}</td>
+                    <td>{{ shop.customer.companyName }}</td>
+                    <td>{{ shop.name }}</td>
+                    <td>{{ shop.town }}</td>
+                    <td>{{ shop.country }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p>{{ shops|length }} {% if shops|length > 1 %}boutiques trouvées{% else %}boutique trouvée{% endif %}</p>

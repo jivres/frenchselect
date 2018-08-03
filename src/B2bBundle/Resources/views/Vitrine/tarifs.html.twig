@@ -1,0 +1,376 @@
+{% set active = 'offres_marques' %}
+{% extends "B2bBundle::Vitrine/layout.html.twig" %}
+
+{% block title %}French Select - Nos tarifs professionnels
+{% endblock %}
+
+{% block body %}
+    <section class="container-fluid pricebg" id="section-start">
+        <div class="container">
+            <h1>Une offre claire et transparente</h1>
+            <p class="text-center" style="font-size: 30px">Exclusivement réservée aux <span style="color:#FE5F55"><strong>marques</strong></span> !</p>
+            <p class="text-center">Prix affichés en hors taxes (HT). Engagement sur 12 mois.</p>
+            <div class="card-deck">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center card-price"> <img class="card-img-price" src="{{ asset('bundles/b2b/img/picto-first.svg') }}">
+                        <h2 class="card-title offer-first">Easy Start</h2>
+                        <p class="card-text">Votre première collection en ligne</p>
+                        <div class="price">
+                            <div class="price-num">50 €</div>
+                            / mois</div>
+                        <div class="sb-price">600 € / an</div>
+                        <ul class="card-price-list">
+                            <li>Catalogue 20 produits</li>
+                            <li>Paiement en ligne<span class="stick-update">À venir</span></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></div>
+                </div>
+                <div class="card scale-best shadow-lg">
+                    <div class="overlay-top p-2">Recommandé</div>
+                    <div class="card-body text-center card-price"> <img class="card-img-price" src="{{ asset('bundles/b2b/img/picto-second.svg') }}">
+                        <h2 class="card-title offer-second">Essentiel</h2>
+                        <p class="card-text">Idéal pour trouver de nouveaux revendeurs</p>
+                        <div class="price">
+                            <div class="price-num">150 €</div>
+                            / mois</div>
+                        <div class="sb-price">1 800 € / an</div>
+                        <ul class="card-price-list">
+                            <li>Catalogue 100 produits</li>
+                            <li>Paiement en ligne<span class="stick-update">À venir</span></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></div>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body text-center card-price"> <img class="card-img-price" src="{{ asset('bundles/b2b/img/picto-third.svg') }}">
+                        <h2 class="card-title offer-third">Business</h2>
+                        <p class="card-text">Parfait pour décoller</p>
+                        <div class="price">
+                            <div class="price-num">250 €</div>
+                            / mois</div>
+                        <div class="sb-price">3 000 € / an</div>
+                        <ul class="card-price-list">
+                            <li>Catalogue 200 produits</li>
+                            <li>Paiement en ligne<span class="stick-update">À venir</span></li>
+                            <li>Mise en avant de la marque sur le marketplace</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></div>
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body text-center card-price"> <img class="card-img-price" src="{{ asset('bundles/b2b/img/picto-four.svg') }}">
+                        <h2 class="card-title offer-four">Premium</h2>
+                        <div class="price">
+                            <div class="price-num">Sur devis</div>
+                        </div>
+                        <div class="sb-price"></div>
+                        <p class="card-text mt-4">Bénéficez d'une <b>offre sur mesure</b> adaptée à vos besoins d'aujourd'hui et de demain.</p>
+                    </div>
+                    <div class="card-footer text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Contactez-nous</a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid container-detail home2">
+        <div class="container">
+            <h4>Détail et options</h4>
+            <div class="table-responsive-lg">
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Visibilité de la marque</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Accès contrôlé des boutiques au catalogue des produits</td>
+                        <td><i class="fas fa-times"></i></td>
+                        <td><i class="fas fa-times"></i></td>
+                        <td>Possible</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Communication sur la marque</td>
+                        <td>En option</td>
+                        <td>En option</td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Traduction du catalogue</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Gestion des collections</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Mise en ligne des collections</td>
+                        <td>Par la marque</td>
+                        <td>Par French Select</td>
+                        <td>Par French Select</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Nombre de produits inclus</td>
+                        <td>20</td>
+                        <td>100</td>
+                        <td>200</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Pack de 20 références supplémentaires</td>
+                        <td>50 € / mois</td>
+                        <td>30 € / mois</td>
+                        <td>20 € / mois</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Modifier la disponibilité des produits</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Définition de produits Coup de coeur</td>
+                        <td><i class="fas fa-times"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Gestion des clients</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Consultation des fiches clients</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Création / Modification d'un client</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Importation / Exportation de listing clients</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Gestion des commandes</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Consultation des commandes</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Création / Modification d'une commande</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Importation / Exportation des commandes</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Suivi de la performance</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Statistiques détaillées en ligne</td>
+                        <td><i class="fas fa-times"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Mise en place d'une stratégie de développement</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Assistance French Select</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Assistance par e-mail</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Assistance par téléphone</td>
+                        <td><i class="fas fa-times"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:40%" class="table-price-title">Support technique</th>
+                        <th scope="col" style="width:20%">Easy Start</th>
+                        <th scope="col" style="width:20%">Essentiel</th>
+                        <th scope="col" style="width:20%">Business</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row" class="table-price-title">Manuel d'utilisation de la plateforme</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">FAQ</td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                        <td><i class="fas fa-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Vidéos tutoriels</td>
+                        <td>À venir</td>
+                        <td>À venir</td>
+                        <td>À venir</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title">Formation sur la plateforme</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                        <td>Sur devis</td>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="table-price-title"></td>
+                        <td><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></td>
+                        <td><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></td>
+                        <td><a href="{{ path('inscription') }}" class="button-fh p-2">Choisir ce forfait</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid container-option home2">
+        <div class="container">
+            <h4>Options et Suppléments</h4>
+            <div class="wrapper-li-opt">
+                <ul class="li-opt">
+                    <li class="opt">
+                        <div class="title">Compte commercial supplémentaire</div>
+                        <div class="dsc">150 € / compte</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Pack de produits supplémentaires</div>
+                        <div class="dsc">250 € / 20 références</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Gestion des collections</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Gestion des clients</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Gestion des commerciaux</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Gestion des commandes</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Gestion des factures</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Envoi d'une newsletter supplémentaire</div>
+                        <div class="dsc">200 € / Newsletter</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Publicité en ligne</div>
+                        <div class="dsc">Sur devis</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Stand lors d'un salon régional</div>
+                        <div class="dsc">Sur devis</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Paiement en ligne des boutiques</div>
+                        <div class="dsc">À venir</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Assistance French Select</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                    <li class="opt">
+                        <div class="title">Supports techniques</div>
+                        <div class="dsc">Inclus</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid home1">
+        <div class="container">
+            <h4>Avec French Select,<br />
+                <span style="color:#FE5F55;">augmentez votre chiffre d'affaires tout en réduisant vos coûts, développez votre marque avec nous !</span></h4>
+            <div class="container-btn text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Contactez-nous</a></div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

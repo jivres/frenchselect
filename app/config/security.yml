@@ -1,0 +1,66 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+
+    encoders:
+        B2bBundle\Entity\User:
+            algorithm: plaintext #bcrypt
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        in_memory:
+            memory: ~
+
+        our_db_provider:
+            entity:
+                class: B2bBundle:User
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        #dev:
+         #   pattern: ^/(_(profiler|wdt)|css|images|js)/
+          #  security: false
+
+        main:
+            pattern:    ^/
+            http_basic: ~
+            provider: our_db_provider
+            logout_on_user_change: true
+
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                # by default, the feature is enabled by checking a
+                # checkbox in the login form (see below), uncomment the
+                # following line to always enable it.
+                #always_remember_me: true
+
+            anonymous: ~
+            # activate different ways to authenticate
+
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                login_path: account_login
+                check_path: account_login
+
+            logout:
+                path: account_logout
+                target: account_login
+
+    role_hierarchy:
+        ROLE_CUSTOMER: ROLE_USER
+        ROLE_BRAND: ROLE_USER
+        ROLE_SALESMAN: ROLE_USER
+        ROLE_ADMIN: ROLE_USER, ROLE_BRAND, ROLE_SALESMAN
+
+    access_control:
+        # require ROLE_ADMIN for /admin*
+         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/app, roles: ROLE_USER }
+         - { path: ^/brand, roles: ROLE_BRAND }
+         - { path: ^/backoffice, roles: ROLE_ADMIN }
+         - { path: ^/salesman, roles: ROLE_SALESMAN }

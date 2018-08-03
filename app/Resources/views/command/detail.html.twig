@@ -1,0 +1,55 @@
+<script>
+    function format(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '€' + x[1] : ' €';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        }
+        return x1 + x2;
+    }
+
+    $(document).ready(function() {
+        $(".modal-price").each(function () {
+            $(this).text(format($(this).text()));
+        });
+    });
+</script>
+
+{% include 'cart/cart-collection-details.html.twig' with { 'cartCollection' : command.cartCollection, 'cartCategories' : command.cartCollection.cartCategories } %}
+<h4>Montant total de la commande : <span class="price total modal-price">{{ command.totalHT }}</span></h4>
+
+<br>
+<h4>Informations de la commande</h4>
+<dl class="row">
+    <dt class="col-sm-4">Adresse de facturation</dt>
+    <dd class="col-sm-8">{{ command.billingAddress }}, {{ command.billingZP }} {{ command.billingTown }}</dd>
+
+    <dt class="col-sm-4">Boutique</dt>
+    <dd class="col-sm-8">{{ command.shop }}</dd>
+
+    <dt class="col-sm-4">Adresse de livraison</dt>
+    <dd class="col-sm-8">{{ command.deliveryAddress }}, {{ command.deliveryZP }} {{ command.deliveryTown }}</dd>
+
+    {% if command.shop is not null %}
+    <dt class="col-sm-4">Commentaire de livraison</dt>
+    <dd class="col-sm-8">{{ command.shop.deliveryComment }}</dd>
+    {% endif %}
+
+    <dt class="col-sm-4">Date de livraison</dt>
+    <dd class="col-sm-8">{{ command.cartCollection.deliveryDate|date('d/m/Y') }}</dd>
+
+    <dt class="col-sm-4">Téléphone</dt>
+    <dd class="col-sm-8">{{ command.phone }}</dd>
+
+    <dt class="col-sm-4">Commentaire</dt>
+    <dd class="col-sm-8">{{ command.comment }}</dd>
+
+    <dt class="col-sm-4">Mode de paiement</dt>
+    <dd class="col-sm-8">{{ command.paymentMethod }}</dd>
+
+    <dt class="col-sm-4">Conditions de paiement</dt>
+    <dd class="col-sm-8">{{ command.paymentTerms }}</dd>
+</dl>

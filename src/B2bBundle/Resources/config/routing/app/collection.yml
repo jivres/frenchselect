@@ -1,0 +1,10 @@
+collection_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Collection:index" }
+    methods:  GET
+
+collection_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Collection:show" }
+    methods:  GET
+

@@ -1,0 +1,24 @@
+salesman_shops_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Shop:indexForSalesman" }
+    methods:  GET
+
+salesman_shop_select_subordinate:
+    path:     /{id}/select_subordinate
+    defaults: { _controller: "B2bBundle:Shop:selectSubordinate" }
+    methods:  GET
+
+salesman_shop_search_subordinate:
+    path:     /{id}/search_subordinate
+    defaults: { _controller: "B2bBundle:Shop:searchSubordinate" }
+    methods:   POST
+
+salesman_shop_assign_subordinate:
+    path:     /{id}/assign_subordinate
+    defaults: { _controller: "B2bBundle:Shop:assignSubordinate" }
+    methods:  GET
+
+salesman_shop_deassign_subordinate:
+    path:     /{id}/deassign_salesman
+    defaults: { _controller: "B2bBundle:Shop:deassignSubordinate" }
+    methods:  GET

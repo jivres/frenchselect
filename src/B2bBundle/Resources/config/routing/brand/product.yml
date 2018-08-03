@@ -1,0 +1,37 @@
+backoffice_product_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Product:index" }
+    methods:  GET
+
+backoffice_product_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Product:show" }
+    methods:  GET
+
+backoffice_product_availabilities:
+    path:     /{id}/availabilities
+    defaults: { _controller: "B2bBundle:Product:availabilities" }
+    methods:  [GET, POST]
+
+backoffice_product_color_picture:
+    path:     /{product}/pictures/{allowedColor}
+    defaults: { _controller: "B2bBundle:Picture:editProductPictures" }
+    methods:  [GET, POST]
+
+
+backoffice_pictures_upload:
+    path:     /ajax/upload/{allowedColor}
+    defaults: { _controller: B2bBundle:Picture:upload }
+
+backoffice_pictures_upload_valid:
+    path:     /ajax/upload/{allowedColor}/valid
+    defaults: { _controller: B2bBundle:Picture:valid }
+
+backoffice_pictures_remove:
+    path:     /color/{allowedColor}/remove/{picture}
+    # methods:  DELETE
+    defaults: { _controller: B2bBundle:Picture:remove }
+
+
+
+

@@ -1,0 +1,66 @@
+<div class="col marques-list">
+    <div class="row px-3 justify-content-around">
+        {% for brand in brands %}
+            {% set cibles = brand.getTargets.toArray() %}
+            {% set univers = brand.getUnivers().toArray() %}
+            {% set categories = brand.getCategories().toArray() %}
+            {% set features = brand.getFeature().toArray() %}
+            <div class="col-md-3 px-2 py-2">
+                <a
+                        href="{{ path('products_index', { 'id': brand.id , 'cible': cible.id}) }}"
+                >
+                    <div class="card-marques shadow-sm">
+                        {% if cible.label == "Femme" %}
+                            <img class="img-fluid card-img"
+                                 src="{{ asset('uploads/' ~ brand.getPictureFemme().url ) }}">
+                        {% elseif cible.label =="Homme" %}
+                            <img class="img-fluid card-img"
+                                 src="{{ asset('uploads/' ~ brand.getPictureHomme().url ) }}">
+                        {% elseif cible.label =="Enfant" %}
+                            <img class="img-fluid card-img"
+                                 src="{{ asset('uploads/' ~ brand.getPictureEnfant().url ) }}">
+                        {% endif %}
+                        <div class="container-img-brand">
+                            <img src="{{ asset('uploads/' ~ brand.getLogo().url) }}"
+                                 class="img-fluid">
+                        </div>
+                        <div class="container-hover-info">
+
+                            <h5 class="card-title"> {{ brand.getBrandName() }} </h5>
+                            {{ brand.getSlogan() }}
+                            <ul>
+                                <li>PAYS<br>
+                                    <strong>{{ brand.getCountry().getName() }}</strong></li>
+                                <li>CATÉGORIE<br>
+                                    <strong class="categorie"> {% for categorie in categories %}
+                                            {{ categorie.getLabel() }}{% if not loop.last %},{% endif %}
+                                        {% endfor %}</strong>
+                                </li>
+                                <li>UNIVERS<br>
+                                    <strong class="univers">  {% for univ in univers %}
+                                            {{ univ.getLabel() }}{% if not loop.last %},{% endif %}
+                                        {% endfor %}</strong>
+                                </li>
+                                <li>GAMME DE PRIX<br>
+                                    <strong class="priceRange">{{ brand.getPriceRange().getLabel() }}</strong>
+                                </li>
+
+                                <li> {% if features is not empty %}LABEL<br>{% endif %}
+                                    <strong class="feature"> {% for feature in features %}
+                                            {{ feature.getLabel() }}{% if not loop.last %},{% endif %}
+                                        {% endfor %}</strong>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="button-slide-brands"><a
+                                    href="{{ path('products_index', { 'id': brand.id , 'cible': cible.id}) }}"
+                                    class="button-sb p-1">
+                                Découvrir la marque </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,61 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Campagne d'emailing</li>
+    </ol>
+
+    <h1 style="text-align: center">Effectuer une campagne d'emailing</h1>
+
+    {{ form_start(form) }}
+
+    <div class="card mt-3">
+        <h2 class="card-header">Sélection des clients</h2>
+        <div class="card-body">
+            <div class="form-group row">
+                {{ form_label(form.brand, null, {'label_attr': {'class': 'col-form-label font-weight-bold'}}) }}
+                <div class="col-sm-9">
+                    {{ form_widget(form.brand) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.departements, null, {'label_attr': {'class': 'col-form-label font-weight-bold'}}) }}
+                {{ form_widget(form.departements) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.categories, null, {'label_attr': {'class': 'col-form-label font-weight-bold'}}) }}
+                <div>
+                    {{ form_widget(form.categories) }}
+                </div>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Modifier" />
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <h2 class="card-header">Contenu du mail</h2>
+        <div class="card-body">
+            <form class="col-md-8 centered">
+                <div class="form-group row">
+                    <div class="col-sm-2"><label for="objet" class="col-form-label">{{ form_label(form.objet) }}</label></div>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.objet) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"><label for="message" class="col-form-label">{{ form_label(form.message) }}</label></div>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.message) }}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer justify-content-center" style="display:flex;">
+            <input class="btn btn-primary btn-orange" type="submit" value="Envoyer les mails" />
+        </div>
+    </div>
+    {{ form_row(form._token) }}
+    {{ form_end(form, { 'render_rest': false }) }}
+
+{% endblock %}

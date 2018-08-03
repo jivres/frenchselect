@@ -1,0 +1,9 @@
+salesman_subordinates:
+    path:     /
+    defaults: { _controller: "B2bBundle:Salesman:indexSubordinates" }
+    methods:  GET
+
+salesman_department_edit:
+    path:     /{id}/department_edit
+    defaults: { _controller: "B2bBundle:Salesman:departmentEdit" }
+    methods:  [GET, POST]

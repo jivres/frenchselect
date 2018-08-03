@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Le salon {{ salon.getName() }}
+{% endblock %}
+
+    {% block body %}
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('backoffice_salon_index') }}">Salons</a></li>
+            <li class="breadcrumb-item active">{{ salon.getName() }}</li>
+        </ol>
+
+        <section class="container-fluid padding-start pb-4">
+
+            <div class="d-flex justify-content-center">
+                <a href="{{ path('backoffice_salon_index') }}" class="btn btn-primary">Retour aux salons</a>
+                <a href="{{ path('backoffice_salon_edit', {'id': salon.id } ) }}" class="btn btn-primary">Modifier</a>
+
+                {% if is_granted('ROLE_ADMIN') and not salon.getIsActive %}
+                    <a href="{{ path('backoffice_salon_activate', { 'id': salon.id }) }}" class="btn btn-outline-success">Activer
+                        le compte</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') and salon.getIsActive %}
+                    <a href="{{ path('backoffice_salon_desactivate', { 'id': salon.id }) }}" class="btn btn-outline-danger">Désactiver
+                        le compte</a>
+                {% endif %}
+            </div>
+            <div class="container container-brand-detail-master mt-3">
+                <div class="container-brand-detail">
+                    <div class="mask-brand">
+                        {% if salon.getLifestyle() != null %}
+                        <img class="img-fluid bandeau-marque"
+                             src="{{ asset('uploads/'~salon.getLifestyle().url) }}"></div>
+                    {% else %}
+                    <img class="img-fluid bandeau-marque"
+                         src="{{ asset('bundles/b2b/img/salons/lifestyle.jpg') }}"></div>
+                {% endif %}
+                    <div class="container-brand-detail-text">
+                        <h1>{{ salon.getName() }}</h1>
+                        {% if salon.getDateDebut() == salon.getDateFin() %}
+                            <p>
+                                Le {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                                /{{ salon.getDateFin()|date("Y") }}
+                            </p>
+                        {% else %}
+                            <p>
+                                Du {{ salon.getDateDebut()|date("d") }}
+                                au {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                                /{{ salon.getDateFin()|date("Y") }}
+                            </p>
+                        {% endif %}
+
+                        <p class="font-weight-bold p-4">{{ salon.getLieu() }} - {{ salon.getAdresse() }}
+                            , {{ salon.getVille() }}
+                            - {{ salon.getPays().getName() }}</p>
+                        <p class="p-4">{{ salon.getDescription() }}</p>
+                        <h2>Marques participantes</h2>
+                        <ul>
+                            {% for row in salon.brands %}
+                                <li><a href="{{ path('backoffice_brand_show', {'id': row.getBrand().getId()} ) }}" >{{ row.getBrand().getbrandName() }} {% if row.getStand() %} - {{ row.getStand() }} {% endif %}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}

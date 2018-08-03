@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <script>
+        $(document).ready(function() {
+            initCollection($('ul.figures'));
+
+        });
+
+        function initCollection($collectionHolder) {
+            // setup an "add a tag" link
+            var $addLink = $('<a href="#" class="add">Ajouter une photo</a>');
+            var $newLinkLi = $('<li></li>').append($addLink);
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        }
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '$$name$$' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+
+            // also add a remove button, just for this example
+            $newFormLi.append('<a href="#" class="remove-figures">Supprimer la photo</a>');
+            $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+            $newLinkLi.before($newFormLi);
+
+            // handle the removal, just for this example
+            $('.remove-figures').click(function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+                return false;
+            });
+        }
+    </script>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Importation</li>
+    </ol>
+
+    <h1>Finalisation de l'importation</h1>
+
+    {{ form_start(form) }}
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Ref Unique</th>
+            <th>Photo motif couleur</th>
+            <th>Couleur principale</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for colorProduct in form.colorProducts %}
+            <tr>
+                <td> {{ colorProduct.vars.value }}</td>
+                <td>{{ form_widget(colorProduct.picture) }}</td>
+                <td>{{ form_widget(colorProduct.color) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <input class="btn btn-primary" type="submit" value="Valider"/>
+    {{ form_end(form) }}
+
+
+{% endblock %}

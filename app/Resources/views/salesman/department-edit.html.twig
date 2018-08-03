@@ -1,0 +1,30 @@
+{% set active = 'salesmen' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}B2B - Mes sous-commerciaux{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h1>Assignations des départements</h1>
+
+        <p>Veuillez sélectionner les départements couverts par le commercial <b>{{ form.vars.value.subordinate }}</b> pour la marque <b>{{ form.vars.value.brand }}</b> :</p>
+        {{ form_start(form) }}
+
+        {{ form_widget(form.departments) }}
+
+        {{ form_widget(form._token) }}
+        <input class="btn btn-primary" type="submit" value="Valider les modifications" />
+        {{ form_end(form, { 'render_rest': false }) }}
+
+    </div>
+{% endblock %}

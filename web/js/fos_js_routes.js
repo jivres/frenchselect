@@ -1,0 +1,1 @@
+fos.Router.setData({"base_url":"","routes":{"invoice_create":{"tokens":[["text","\/app\/invoice\/create"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":["GET","POST"],"schemes":[]}},"prefix":"","host":"localhost","scheme":"http"});

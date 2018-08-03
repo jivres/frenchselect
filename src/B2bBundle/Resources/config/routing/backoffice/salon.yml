@@ -1,0 +1,29 @@
+backoffice_salon_index:
+    path:    /salon
+    defaults: {_controller: "B2bBundle:Salon:index"}
+
+backoffice_salon_new:
+    path:    /newSalon
+    defaults: {_controller: "B2bBundle:Salon:new"}
+
+backoffice_salon_edit:
+    path:    /{id}/edit
+    defaults: {_controller: "B2bBundle:Salon:edit"}
+
+backoffice_salon_details:
+    path:    /{id}/show
+    defaults: {_controller: "B2bBundle:Salon:getOneShowroom"}
+
+backoffice_salon_activate:
+    path:     /{id}/activate
+    defaults: { _controller: "B2bBundle:Salon:activate" }
+    methods:  GET
+
+backoffice_salon_desactivate:
+    path:     /{id}/desactivate
+    defaults: { _controller: "B2bBundle:Salon:desactivate" }
+    methods:  GET
+
+backoffice_salon_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Salon:delete" }

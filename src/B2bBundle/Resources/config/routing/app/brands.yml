@@ -1,0 +1,13 @@
+brands_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Brands:index" }
+    methods:  GET
+
+brands_search:
+    path:     /search
+    defaults: { _controller: "B2bBundle:Brands:search" }
+    methods:  POST
+
+brands_export_commands:
+    path:     /export/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Command:export, _format: xlsx }

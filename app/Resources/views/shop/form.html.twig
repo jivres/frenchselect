@@ -1,0 +1,170 @@
+<script>
+    $(document).ready(function() {
+        initCollection($('ul.contacts'));
+
+        setDeliveryVisibility();
+
+        $('#deliverySameAddress').change(setDeliveryVisibility);
+
+        function setDeliveryVisibility() {
+            if ($('#deliverySameAddress').is(':checked')) {
+                $('#delivery-address').hide();
+            } else {
+                $('#delivery-address').show();
+            }
+        }
+    });
+
+    function initCollection($collectionHolder) {
+        // setup an "add a tag" link
+        var $addLink = $('<a href="#" class="add">Ajouter un contact</a>');
+        var $newLinkLi = $('<li></li>').append($addLink);
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove-contact">Supprimer le contact</a>');
+        $newFormLi.append('<br>------------------------------------------------------------<br>');
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove-contact').click(function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+</script>
+
+<h2>Informations sur la boutique</h2>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.name) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.name) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.pic) }}</span></label>
+        {{ form_widget(form.pic) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.phone) }}</span></label>
+        {{ form_widget(form.phone) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.address) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.address) }}
+    </div>
+    <div class="form-group col-md-2">
+        <label><span>{{ form_label(form.zipCode) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.zipCode) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.town) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.town) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label><span>{{ form_label(form.country) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.country) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.urlWebsite) }}</span></label>
+        {{ form_widget(form.urlWebsite) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.urlInstagram) }}</span></label>
+        {{ form_widget(form.urlInstagram) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.urlFacebook) }}</span></label>
+        {{ form_widget(form.urlFacebook) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(form.targets) }}</span></label>
+        {{ form_widget(form.targets) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(form.styles) }}</span></label>
+        {{ form_widget(form.styles) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(form.categories) }}</span></label>
+        {{ form_widget(form.categories) }}
+    </div>
+</div>
+
+<h2>Livraison</h2>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(form.deliverySameAddress) }}</span></label>
+        {{ form_widget(form.deliverySameAddress, {'id': 'deliverySameAddress'}) }}
+    </div>
+</div>
+<div id="delivery-address" class="form-row">
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.deliveryAddress) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.deliveryAddress) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.deliveryZP) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.deliveryZP) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label><span>{{ form_label(form.deliveryTown) }}</span><span class="required-chip">*</span></label>
+        {{ form_widget(form.deliveryTown) }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label><span>{{ form_label(form.deliveryComment) }}</span></label>
+        {{ form_widget(form.deliveryComment) }}
+    </div>
+</div>
+
+<h2>Contacts</h2>
+<ul class="contacts" data-prototype="{{ form_widget(form.contacts.vars.prototype)|e('html_attr') }}">
+    {% for contact in form.contacts %}
+        <li>{{ form_widget(contact) }}</li>
+        {% if not loop.last %}---------------------------------{% endif %}
+    {% endfor %}
+</ul>

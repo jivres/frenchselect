@@ -1,0 +1,34 @@
+backoffice_shop_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Shop:show" }
+    methods:  GET
+
+backoffice_shop_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:Shop:new" }
+    methods:  [GET, POST]
+
+backoffice_shop_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Shop:edit" }
+    methods:  [GET, POST]
+
+backoffice_shop_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Shop:delete" }
+    methods:  DELETE
+
+backoffice_shop_activate:
+    path:     /{id}/activate
+    defaults: { _controller: "B2bBundle:Shop:activate" }
+    methods:  GET
+
+backoffice_shop_desactivate:
+    path:     /{id}/desactivate
+    defaults: { _controller: "B2bBundle:Shop:desactivate" }
+    methods:  GET
+
+assign_salesman_shop:
+    path:     /assign
+    defaults: { _controller: "B2bBundle:Shop:assign" }
+    methods:  [POST]

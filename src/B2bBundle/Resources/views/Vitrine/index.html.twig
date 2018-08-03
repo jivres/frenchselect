@@ -1,0 +1,253 @@
+{% set active = 'index' %}
+{% extends "B2bBundle::Vitrine/layout.html.twig" %}
+
+{% block title %}
+    French Select - Le showroom des marques de mode
+{% endblock %}
+
+{% block body %}
+
+    <section class="container-fluid bg2" id="section-start">
+        <div class="slide-title">
+            <h2><strong>Le showroom des professionnels <span style="color:#FE5F55">100% tendance</strong></span></h2>
+            <h1>Découvrez de <span style="color:#FE5F55"><strong>nouvelles marques</strong></span><br> pour votre
+                boutique !</h1>
+            <div class="slide-picto container">
+                <div class="row text-center align-items-end">
+                    <div class="col-lg-4 p-4"><img src="{{ asset('bundles/b2b/img/picto-bag.svg') }}"
+                                                   class="picto-img"/>
+                        <div class="picto-text">Accessoires</div>
+                    </div>
+                    <div class="col-lg-4 p-4"><img src="{{ asset('bundles/b2b/img/picto-mode.svg') }}"
+                                                   class="picto-img"/>
+                        <div class="picto-text">Mode</div>
+                    </div>
+
+                    <div class="col-lg-4 p-4"><img src="{{ asset('bundles/b2b/img/picto-deco.svg') }}"
+                                                   class="picto-img"/>
+                        <div class="picto-text">Déco</div>
+                    </div>
+                </div>
+                <div class="container-btn text-center"><a href="{{ path('inscription') }}" class="button-fh p-2">Ouvrir
+                        un compte gratuitement</a></div>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid home2">
+        <div class="container slide-home">
+            <h4>Pour les boutiques et <span style="color:#FE5F55;">les sites de vente en ligne</span></h4>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5>Inscription gratuite et sans engagement !</h5>
+                    <ul>
+                        <li>Découvrez de nouvelles <b>marques</b> pour votre <b>boutique</b></li>
+                        <li>Créez un <b>univers</b> propre à votre <b>magasin</b></li>
+                        <li>Centralisez les <b>achats de vos produits</b></li>
+                        <li>Exclusivement réservé aux <b>détaillants multi-marques</b></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    Image d'illustration
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid home1" id="section-services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>À la recherche de marques qui correspondent à vos clients !</h2>
+                    <h3>Un large catalogue de marques</h3>
+                    <p>L’objectif du <strong>showroom French Select</strong> est de vous faire bénéficier d’un choix
+                        varié de <strong>marques tendances</strong> de <strong>mode</strong>,
+                        <strong>décoration</strong> et <strong>cosmétique</strong> en fonction de vos attentes.</p>
+                    <h3>Une offre adaptée à votre clientèle</h3>
+                    <p>L‘équipe commerciale de <strong>French Select</strong> sélectionne en amont l‘ensemble des
+                        <strong>marques partenaires</strong> présentes sur le <strong>B2B</strong> en fonction de leur
+                        style, leur sérieux, leur valeur ajoutée et leur image.</p>
+                    <h3>Showroom en ligne et près de chez vous</h3>
+                    <p>Retrouvez ces <strong>marques</strong> chez vous grâce à notre <strong>marketplace</strong> mais
+                        aussi à nos <strong>commerciaux</strong>.</p>
+                </div>
+                <div class="col-lg-6 p-4 text-center">
+                    Image d'illustration
+                </div>
+            </div>
+            <div class="mt-4 mb-4"></div>
+            <div class="row">
+                <div class="col-lg-6 p-4 text-center">
+                    Image d'illustration
+                </div>
+                <div class="col-lg-6">
+                    <h2>Simplifiez-vous la vie, commandez facilement et à tout moment</h2>
+                    <h3>Centralisation des commandes</h3>
+                    <p>En ligne, entre deux clients ou chez
+                        vous, réalisez l’ensemble de vos <strong>achats</strong> sur le même site internet.</p>
+                    <h3>Conseils dans vos achats</h3>
+                    <p>Nous vous accompagnons dans vos choix en vous fournissant des conseils de <strong>sélection de
+                            produits</strong>, un suivi de vos <strong>commandes</strong> et un <strong>service
+                            après-vente</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid home2">
+        <div class="container">
+            <h4>Le site d'achat professionnel</br><span style="color:#FE5F55;">pensé pour vous</span></h4>
+            <div class="row">
+                <div class="col mx-4">
+                    <h5 class="ml-5"><img src="{{ asset('bundles/b2b/img/time.svg') }}" class="big-icon"/> Gagnez du
+                        temps</h5>
+                </div>
+            </div>
+            <div class="row px-4">
+                <div class="col-lg-4">
+                    <h3>Recherche d'articles</h3>
+                    <p>Trouvez rapidement les <strong>produits</strong> adaptés à votre <strong>clientèle</strong>.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Gestion des stocks</h3>
+                    <p>Gérez vos <strong>réassorts</strong> facilement grâce au <strong>stock</strong> disponible de
+                        chaque <strong>marque</strong>.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Plusieurs boutiques ?</h3>
+                    <p>Accéder sur le même compte à l’ensemble de vos <strong>commandes</strong>.</p>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col mx-4">
+                    <h5 class="ml-5"><img src="{{ asset('bundles/b2b/img/budget.svg') }}" class="big-icon"/> Optimisez
+                        votre budget
+                    </h5>
+                </div>
+            </div>
+            <div class="row px-4">
+                <div class="col-lg-4">
+                    <h3>Centralisation</h3>
+                    <p>Tous vos <strong>achats</strong> sur une seule <strong>plateforme</strong> afin de suivre au
+                        mieux vos <strong>livraisons</strong>.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Réductions et promotions</h3>
+                    <p>Soyez informé instantanément des <strong>réductions</strong> et <strong>offres
+                            promotionnelles</strong> des <strong>marques</strong>.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Budget</h3>
+                    <p>Suivez au jour le jour vos <strong>achats</strong> pour maitriser votre <strong>budget</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-fluid home1 container-slide-brands">
+        <h4>Quelques marques <span style="color:#FE5F55;">partenaires</span></h4>
+
+
+        <div id="carousel-brands" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item row-equal active">
+                    {{ render(controller(
+                        'B2bBundle\\Controller\\VitrineBrandController::cardsBrandsAction',
+                        { 'brands' : brands1 }
+                    )) }}
+                </div>
+                <div class="carousel-item row-equal">
+                    {{ render(controller(
+                        'B2bBundle\\Controller\\VitrineBrandController::cardsBrandsAction',
+                        { 'brands' : brands2 }
+                    )) }}
+                </div>
+            </div>
+        </div>
+        <script>$('.carousel').carousel({
+                interval: 6000
+            })</script>
+        <div class="container-btn text-center"><a href="{{ path('marques') }}" class="button-fh p-2">Découvrez toutes
+                nos marques</a></div>
+
+    </section>
+    <section class="container-fluid home2">
+        <div class="container">
+            <div class="row mx-2 my-2 py-4 px-1">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <div class="row home-box mx-2 my-2 py-4 px-4">
+                        <div class="container-wt">
+                            <h4>Comment ça marche ?</h4>
+                        </div>
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-10 container-wtx">
+                            <h3><span style="font-size:40px;padding-right:20px">01</span> Inscrivez-vous</h3>
+                            <p>Gratuitement et rapidement !</p>
+                            <h3><span style="font-size:40px;padding-right:20px">02</span> Explorez notre marketplace
+                            </h3>
+                            <p>Toute l’année, de marques en marques et découvrez celles que vous recherchez à l’aide
+                                d’outils de recherche et de filtres avancés.</p>
+                            <h3><span style="font-size:40px;padding-right:20px">03</span> Commandez</h3>
+                            <p>En 3 clics, des articles des collections actuelles et à venir. En cas de besoin, des
+                                conseils de sélection de produits et une assistance vous sera proposée.</p>
+                            <h3><span style="font-size:40px;padding-right:20px">04</span> Gérez votre back office</h3>
+                            <p>En temps réel grâce à des tableaux de bord complets, suivez vos achats et accédez à l'historique complet de vos commandes.</p>
+                            <h3><span style="font-size:40px;padding-right:20px">05</span> Faites-vous assister</h3>
+                            <p>Par l'accompagnement personnalisé de nos équipes.</p>
+                        </div>
+                        <div class="col-lg-1"></div>
+                    </div>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid home1">
+        <div class="container">
+            <h4>Les prochains showrooms</br>
+                <span style="color:#FE5F55;">French Select</span></h4>
+            <p class="text-center">Venez découvrir les <strong>marques</strong> dans les <strong>showrooms</strong> que
+                nous organisons près de chez vous !</p>
+
+            <div class="row my-4 px-4">
+                {% set cpt = 0 %}
+                {% for salon in salons if cpt<3 %}
+
+                    {% if  salon.getDateDebut > date() %}
+
+                        <div class="col-lg-4 px-2 py-2 filter-card afficher">
+                            <div class="slide-salons my-1 p-2">
+                                <a href="{{ path('details_salons', {'ville': salon.getVille(), 'id': salon.getId()} ) }}">
+                                    <img class="img-fluid shadow-sm"
+                                         src="{{ asset('uploads/' ~ salon.getPicture().url() ) }}">
+                                    <div class="p-3">
+                                        <h6 class="card-title">{{ salon.getName() }}</h6>
+                                        {% if salon.getDateDebut() == salon.getDateFin() %}
+                                            <p class="slide-salons-date">
+                                                Le {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                                                /{{ salon.getDateFin()|date("Y") }}
+                                            </p>
+                                        {% else %}
+                                            <p class="slide-salons-date">
+                                                Du {{ salon.getDateDebut()|date("d") }}
+                                                au {{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                                                /{{ salon.getDateFin()|date("Y") }}
+                                            </p>
+                                        {% endif %}
+                                        <p class="slide-salons-place">{{ salon.getLieu() }} - {{ salon.getVille() }}
+                                            <br>{{ salon.getPays().getName() }}</p>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                        {% set cpt = cpt + 1 %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="container-btn text-center"><a href="{{ path('salons_boutiques') }}" class="button-fh p-2">Voir
+                    plus de salons</a></div>
+        </div>
+    </section>
+
+{% endblock %}

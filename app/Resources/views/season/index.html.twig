@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+    <li class="breadcrumb-item active">Gestion des saisons</li>
+</ol>
+
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_season_new') }}" class="btn btn-primary">Créer une saison</a>
+</div>
+
+<h1 class="text-center">Gestion des saisons</h1>
+
+<div class="container">
+    <table class="table table-striped mt-3 bg-white border">
+        <thead>
+        <tr>
+            <th scope="col">Saison</th>
+            <th scope="col">Rang</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for season in seasons %}
+            <tr>
+                <td>{{ season.name }}</td>
+                <td>{{ season.rank }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('backoffice_season_show', { 'id': season.id }) }}">Voir</a>
+                    <a class="btn btn-primary"
+                       href="{{ path('backoffice_season_edit', { 'id': season.id }) }}">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+    {% endblock %}

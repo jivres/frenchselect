@@ -1,0 +1,126 @@
+<div class="row">
+    <h3 class="col-md-12">Identifiant</h3>
+    <dl class="row col-md-12">
+        <dt class="col-sm-3">Statut</dt>
+        <dd class="col-sm-9">
+            {% if salesman.isActive %}
+                Actif
+            {% else %}
+                En cours de vérification
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Adresse mail</dt>
+        <dd class="col-sm-9">{{ salesman.mail }}</dd>
+    </dl>
+</div>
+
+
+<div class="row">
+    <h3 class="col-md-12">Informations sur la société</h3>
+    <dl class="row col-md-12">
+        <dt class="col-sm-3">Nom de la société</dt>
+        <dd class="col-sm-9">{{ salesman.companyName }}</dd>
+
+        <dt class="col-sm-3">TVA</dt>
+        <dd class="col-sm-9">{{ salesman.numTVA }}</dd>
+
+        <dt class="col-sm-3">Adresse de facturation</dt>
+        <dd class="col-sm-9">{{ salesman.billingAddress }}, {{ salesman.billingZP }} {{ salesman.billingTown }}
+            , {{ salesman.country }}</dd>
+    </dl>
+</div>
+
+<div class="row">
+    <h3 class="col-md-12">Informations sur le commercial</h3>
+    <dl class="row col-md-12">
+        <dt class="col-sm-3">Nom</dt>
+        <dd class="col-sm-9">{{ salesman.lastName }}</dd>
+
+        <dt class="col-sm-3">Prénom</dt>
+        <dd class="col-sm-9">{{ salesman.firstName }}</dd>
+
+        <dt class="col-sm-3">Numéro de téléphone</dt>
+        <dd class="col-sm-9">{{ salesman.phone }}</dd>
+    </dl>
+</div>
+{% if is_granted('ROLE_SALESMAN') %}
+    <div class="row">
+        <h3 class="col-md-12">Marques</h3>
+        {% if salesman.brands|length == 0 %}
+            <i>Aucune marque</i>
+        {% else %}
+            <table class="table table-striped mt-3 bg-white border">
+                <thead>
+                <tr>
+                    <th>Marque</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for brand in salesman.brands %}
+                <tr>
+                    <td>{{ brand.brand.brandName }}</td>
+                    <td>
+                        <a href="{{ path('backoffice_salesman_brand_link', {'salesman': salesman.id, 'brand': brand.brand.id }) }}"
+                           class="btn btn-primary btn-orange ml-2 mr-2">Voir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if is_granted('ROLE_SALESMAN') %}
+    <div class="row">
+        <h3 class="col-md-12">Sous-commerciaux</h3>
+        <dl class="row col-md-12">
+            <dt class="col-sm-2">Supérieurs</dt>
+            <dd class="col-sm-10">
+                {% if salesman.superiors|length == 0 %}
+                    <i>Aucun supérieur</i>
+                {% else %}
+                    {% include 'salesman/innerlist.html.twig' with { 'salesmanId': salesman.id, 'salesmen': salesman.superiors, 'hierarchy': 'superior' } %}
+                    <i>{{ salesman.superiors|length }} {% if salesman.superiors|length > 1 %}supérieurs{% else %}supérieur{% endif %}</i>
+                {% endif %}
+            </dd>
+            <dt class="col-sm-2">Subordonnés</dt>
+            <dd class="col-sm-10">
+                {% if salesman.subordinates|length == 0 %}
+                    <i>Aucun subordonné</i>
+                {% else %}
+                    {% include 'salesman/innerlist.html.twig' with { 'salesmanId': salesman.id, 'salesmen': salesman.subordinates, 'hierarchy': 'subordinate' } %}
+
+                    <i>{{ salesman.subordinates|length }} {% if salesman.subordinates|length > 1 %}subordonnés{% else %}subordonné{% endif %}</i>
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+{% endif %}
+
+<div class="row">
+    <h3 class="col-md-12">Contacts</h3>
+    {% if salesman.getContacts()|length > 0 %}
+        {% for row in salesman.getContacts() %}
+            <dt class="col-sm-3">Fonction</dt>
+            <dd class="col-sm-9">{{ row.getfunction() }} </dd>
+
+            <dt class="col-sm-3">Nom</dt>
+            <dd class="col-sm-9">{{ row.getLastName() }} </dd>
+
+            <dt class="col-sm-3">Prénom</dt>
+            <dd class="col-sm-9">{{ row.getFirstName() }} </dd>
+
+            <dt class="col-sm-3">Adresse Email</dt>
+            <dd class="col-sm-9">{{ row.getMail() }} </dd>
+
+            <dt class="col-sm-3">Numéro de téléphone</dt>
+            <dd class="col-sm-9">{{ row.getPhone() }} </dd>
+        {% endfor %}
+    {% else %}
+        <dd class="col-sm-9">Aucun contact</dd>
+    {% endif %}
+
+</div>

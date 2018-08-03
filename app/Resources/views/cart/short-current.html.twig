@@ -1,0 +1,12 @@
+<p class="cart-brand">{{ cart.brand }} </p>
+{% if not cart.isEmpty() %}
+    {% for c in cart.cartCollections %}
+    <p class="cart-collection">{{ c.collection }} - {{ c.getProductsNb() }}
+        {% if c.getProductsNb() == 1 %}produit{% else %}produits{% endif %} - {{ c.getTotal() }} €</p>
+    {% endfor %}
+    <p>Montant total : {{ cart.getTotal() }} €</p>
+{% else %}
+    <p><i>Le panier de cette marque est vide.</i></p>
+{% endif %}
+
+<button class="btn btn-orange" onclick="location.href='{{ path('cart_show', {'id' : cart.id }) }}';">Accéder à ce panier</button>

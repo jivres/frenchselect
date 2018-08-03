@@ -1,0 +1,38 @@
+/* iPad Pro 10,5 pouces */
+@media only screen and (min-width : 1024px) and (max-width : 1200px) and (max-height : 1000px) {
+    .brand-info-content { font-size: 0.8rem; }
+    .brand-info-label, .brand-info-value { display: inline; word-wrap: break-word; }
+    .brand-info-value:after { content: "\A"; white-space: pre; }
+}
+
+/* iPad */
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+    /* Menu de navigation : le rendre plus lisible */
+
+    /* Elements censés prendre la hauteur restante après le menu */
+    .brand-banner, #brand-carousel .carousel-inner { height: 89.5vh; }
+
+    .brand-presentation { min-width: 450px; }
+
+    /* Hauteur du logo d'une marque au survol */
+    .brand-item:hover .brand-detail .brand-title img { max-height: 35px; }
+    .brand-item .brand-detail .brand-title { margin: 10px 0 5px 0; }
+
+    .brand-info-title { font-size: 0.9rem; }
+    .brand-info-content { font-size: 0.8rem; }
+    .brand-info-label, .brand-info-value { display: inline; word-wrap: break-word; }
+    .brand-info-value:after { content: "\A"; white-space: pre; }
+    .brand-link { font-size: 0.9rem; }
+    .brand-link p { padding: 3px 0; }
+}
+
+/* iPhone */
+@media only screen and (max-width: 768px) {
+
+    .brand-presentation { min-width: 100%; background: rgba(0, 0, 0, 0.6); }
+
+    /* Filtres */
+    .filters .filter-title { margin-top: 1rem; }
+    .filters .filter-item { justify-content: space-between; flex-direction: row-reverse; border-top: 1px solid lightgray; margin-bottom: 0; }
+    .filters .filter-item:last-child { border-bottom: 1px solid lightgray; }
+}

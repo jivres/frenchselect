@@ -1,0 +1,11 @@
+marques:
+    path:    /marketplace-marques-mode
+    defaults:
+        _controller: B2bBundle:VitrineBrand:listBrand
+
+salons_boutiques:
+    path:    /salons-marques-mode
+    defaults:
+        _controller: B2bBundle:VitrineSalon:listSalon
+
+

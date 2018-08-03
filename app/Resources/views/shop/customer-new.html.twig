@@ -1,0 +1,36 @@
+{% set active = 'account' %}
+{% extends "layout.html.twig" %}
+
+{% block title %}Mon B2B - Ajouter boutique{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .content {
+            background: white;
+            padding: 20px;
+            min-height: 70vh;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}{{ parent() }}{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="row">
+            <h1>Mes boutiques</h1>
+        </div>
+        <h1 class="text-center">Nouvelle boutique</h1>
+
+        <div class="col-lg-6" style="margin:auto;">
+            {{ form_start(form) }}
+
+            {% include 'shop/form.html.twig' with {'form': form} %}
+            <input class="btn btn-primary" type="submit" value="Créer la boutique" />
+            {{ form_widget(form._token) }}
+            {{ form_end(form, { 'render_rest': false }) }}
+        </div>
+
+        <a href="{{ path('b2b_customer_shops') }}" class="btn btn-primary">Retour à la liste</a>
+    </section>
+{% endblock %}

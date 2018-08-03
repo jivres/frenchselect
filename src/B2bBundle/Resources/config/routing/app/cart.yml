@@ -1,0 +1,43 @@
+cart_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Cart:index" }
+    methods:  [GET,POST]
+
+cart_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:Cart:show" }
+    methods:  [GET,POST]
+
+cart_add_product:
+    path:     /{id}/add
+    defaults: { _controller: "B2bBundle:Cart:add" }
+    methods:  POST
+
+cart_export:
+    path:     /{id}/export/{_filename}.{_format}
+    defaults: { _controller: B2bBundle:Cart:export, _format: xlsx }
+
+cart_copy_product:
+    path:     /{id}/copy
+    defaults: { _controller: "B2bBundle:Cart:copy" }
+    methods:  POST
+
+cart_edit_product:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:Cart:edit" }
+    methods:  POST
+
+cart_edit_quantity:
+    path:     /{id}/edit_quantity
+    defaults: { _controller: "B2bBundle:Cart:editQuantity" }
+    methods:  POST
+
+cart_remove_product:
+    path:     /{id}/remove
+    defaults: { _controller: "B2bBundle:Cart:remove" }
+    methods:  POST
+
+cart_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:Cart:delete" }
+    methods:  GET

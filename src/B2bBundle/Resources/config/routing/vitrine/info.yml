@@ -1,0 +1,24 @@
+histoire:
+    path:   /notre-histoire
+    defaults:
+        _controller: B2bBundle:VitrineDefault:histoire
+
+equipe:
+    path:    /notre-equipe
+    defaults:
+        _controller: B2bBundle:VitrineDefault:equipe
+
+contact:
+    path:    /contactez-nous
+    defaults:
+        _controller: B2bBundle:VitrineDefault:contact
+
+presse:
+    path:    /presse
+    defaults:
+        _controller: B2bBundle:VitrineDefault:presse
+
+a-propos:
+    path:    /a-propos
+    defaults:
+        _controller: B2bBundle:VitrineDefault:aPropos

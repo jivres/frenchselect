@@ -1,0 +1,75 @@
+{% xlsdocument { 'format': 'xlsx' }%}
+    {% xlssheet 'Worksheet' {
+        'columnDimension': {
+            'A': {
+                'width': 9
+            },
+            'B': {
+                'width': 19.5
+            },
+            'C': {
+                'width': 9
+            },
+            'D': {
+                'width': 6
+            },
+            'E': {
+                'width': 10
+            },
+            'F': {
+                'width': 9
+            },
+            'G': {
+                'width': 10
+            }
+        }
+    }%}
+        {% xlsrow %}
+            {% xlscell { 'merge' : 2} %}{{ cmd.cart.brand.brandName }}{% endxlscell %}
+            {% xlscell 4 { 'merge' : 6} %}{{ cmd.societyName }}{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell { 'merge' : 2} %}{{ cmd.cart.brand.billingAddress }}{% endxlscell %}
+            {% xlscell 4 { 'merge' : 6} %}{{ cmd.billingAddress }}{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell { 'merge' : 2} %}{{ cmd.cart.brand.billingZP }}, {{ cmd.cart.brand.billingTown }}{% endxlscell %}
+            {% xlscell 4 { 'merge' : 6} %}{{ cmd.billingZP }}, {{ cmd.billingTown }}{% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell { 'merge' : 6}%} {% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell { style: { font: { size: '14' } } } %} Réf. {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Nom {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Couleur {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Taille {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Quantité {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Prix H.T. {% endxlscell %}
+            {% xlscell { style: { font: { size: '14' } } } %} Total {% endxlscell %}
+        {% endxlsrow %}
+        {% set tot = 0 %}
+        {% for cr in cmd.cart.cartCollections %}
+            {% for l in cr.cartRows %}
+                {% xlsrow %}
+                    {% set subTot = l.quantity * l.priceHT %}
+                    {% set tot = tot + subTot %}
+                    {% xlscell %}{{l.product.ref}}{% endxlscell %}
+                    {% xlscell %}{{l.product.name}}{% endxlscell %}
+                    {% xlscell %}{{l.color}}{% endxlscell %}
+                    {% xlscell %}{{l.size}}{% endxlscell %}
+                    {% xlscell %}{{l.quantity}}{% endxlscell %}
+                    {% xlscell %}{{l.priceHT}}{% endxlscell %}
+                    {% xlscell %}{{ subTot }}{% endxlscell %}
+                {% endxlsrow %}
+            {% endfor %}
+        {% endfor %}
+        {% xlsrow %}
+            {% xlscell { 'merge' : 6}%} {% endxlscell %}
+        {% endxlsrow %}
+        {% xlsrow %}
+            {% xlscell 5 %}Total : {% endxlscell %}
+            {% xlscell %}{{ tot }} €{% endxlscell %}
+        {% endxlsrow %}
+    {% endxlssheet %}
+{% endxlsdocument %}

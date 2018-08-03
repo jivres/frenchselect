@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_admin_index') }}">Administrateurs</a></li>
+        <li class="breadcrumb-item active">{{ admin.name }}</li>
+    </ol>
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_admin_index') }}" class="btn btn-primary">Retour aux administrateurs</a>
+        <a href="{{ path('backoffice_admin_edit', { 'id': admin.id }) }}" class="btn btn-primary">Modifier</a>
+        {% if is_granted('ROLE_ADMIN') and admin.isEnabled %}
+            <a href="{{ path('backoffice_user_desactivate', { 'id': admin.id }) }}" class="btn btn-outline-danger">Désactiver le compte</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') and not admin.isEnabled %}
+            <a href="{{ path('backoffice_user_activate', { 'id': admin.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+        {% endif %}
+    </div>
+
+    <h1 class="text-center">Administrateur - {{ admin.name }}</h1>
+
+    <div class="container login-form border rounded">
+        <div class="row">
+            <div class="col-md-12">
+                <dl class="row">
+                    <h3 class="col-md-12">Identifiant</h3>
+                    <dt class="col-sm-3">Statut</dt>
+                    <dd class="col-sm-9">
+                        {% if admin.isActive %}
+                            Actif
+                        {% else %}
+                            En cours de vérification
+                        {% endif %}
+                    </dd>
+                    <dt class="col-sm-3">Mail</dt>
+                    <dd class="col-sm-9">{{ admin.mail }}</dd>
+                    <dt class="col-sm-3">Mot de passe</dt>
+                    <dd class="col-sm-9">{{ admin.password }}</dd>
+                    <dt class="col-sm-3">Nom</dt>
+                    <dd class="col-sm-9">{{ admin.name }}</dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}

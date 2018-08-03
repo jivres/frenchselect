@@ -1,0 +1,89 @@
+{% if showModal is not defined %}
+    {% set showModal = false %}
+{% endif %}
+
+<script>
+    function format(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '€' + x[1] : ' €';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        }
+        return x1 + x2;
+    }
+    $(document).ready(function() {
+        $(".price").each(function () {
+            if ($(this).text().indexOf('€') === -1) {
+                $(this).text(format($(this).text()));
+            }
+        });
+    });
+</script>
+
+<table class="table table-striped mt-3 bg-white">
+    <thead>
+    <tr>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Facture</th>
+        <th>Commande</th>
+        <th>Commercial</th>
+        <th>Boutique</th>
+        <th>Ville</th>
+        <th>Montant à payer</th>
+        <th>Reste à payer</th>
+        <th>Date d'échéance</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for invoice in invoices %}
+        <tr class="{% if invoice.status == 'reminder_1' %}
+                        table-info
+                   {% elseif invoice.status == 'reminder_2' %}
+                        table-warning
+                   {% elseif invoice.status == 'reminder_3' %}
+                        table-danger
+                   {% endif %}">
+            <td>
+                {% if invoice.status == 'waiting' %}
+                    EN ATTENTE DE PAIEMENT
+                {% elseif invoice.status == 'paid' %}
+                    VALIDÉE
+                {% elseif invoice.status == 'verification' %}
+                    EN COURS DE VÉRIFICATION
+                {% elseif invoice.status ==  'reminder_1' %}
+                    1ère RELANCE ENVOYÉE
+                {% elseif invoice.status ==  'reminder_2' %}
+                    2ème RELANCE ENVOYÉE
+                {% elseif invoice.status ==  'reminder_3' %}
+                    3ème RELANCE ENVOYÉE
+                {% endif %}
+            </td>
+            <td>{{ invoice.date|date('d/m/Y') }}</td>
+            <td>Pas de type</td>
+            <td>{{ invoice.num }}</td>
+            <td>{{ invoice.command.id }}</td>
+            <td>Commerciaux ?</td>
+            <td>{{ invoice.command.shop }}</td>
+            <td>{{ invoice.command.deliveryTown }}</td>
+            <td class="price">{{ invoice.command.totalHT }}</td>
+            <td>Reste à payer ?</td>
+            <td>{{ invoice.dueDate|date('d/m/Y') }}</td>
+            <td>
+                <a href="#" class="btn btn-outline-dark">Signaler le paiement</a>
+                {% if admin is defined
+                    and date("now") >= date(invoice.dueDate)
+                    and invoice.status != 'reminder_3'
+                    and date("now") >= date(invoice.remindDate|date_modify("+7 days")) %}
+                    <a href="{{ path('invoice_remind', {'id': invoice.id}) }}" class="btn btn-outline-danger">Relancer</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

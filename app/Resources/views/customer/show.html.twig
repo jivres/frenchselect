@@ -1,0 +1,127 @@
+<script>
+    $(document).ready(function() {
+        initCollection($('ul.marques'));
+
+        setDeliveryVisibility();
+
+        $('#deliverySameAddress').change(setDeliveryVisibility);
+
+        function setDeliveryVisibility() {
+            if ($('#deliverySameAddress').is(':checked')) {
+                $('#delivery-address').hide();
+            } else {
+                $('#delivery-address').show();
+            }
+        }
+    });
+
+    function initCollection($collectionHolder) {
+        // setup an "add a tag" link
+        var $addLink = $('<a href="#" class="add">Ajouter une marque</a>');
+        var $newLinkLi = $('<li></li>').append($addLink);
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        $newFormLi.append('<a href="#" class="remove-marque">Supprimer la marque</a>');
+        $newFormLi.append('<br>------------------------------------------------------------<br>');
+
+        $newLinkLi.before($newFormLi);
+
+        // handle the removal, just for this example
+        $('.remove-marque').click(function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+</script>
+
+<div class="text-center">
+    <h1>Client - {{ customer.companyName }}</h1>
+</div>
+
+<div class="container login-form border rounded">
+    <div class="row">
+        {% include 'customer/detail.html.twig' with {'customer': customer} %}
+    </div>
+
+    <div class="row">
+        <h3 class="col-md-12">Contacts</h3>
+        {% if customer.getContacts() %}
+            {% for row in customer.getContacts() %}
+                <dl class="row col-md-12">
+                    <dt class="col-sm-3">Fonction</dt>
+                    <dd class="col-sm-9">{{ row.getFunction().label }} </dd>
+
+                    <dt class="col-sm-3">Nom</dt>
+                    <dd class="col-sm-9">{{ row.getLastName() }} </dd>
+
+                    <dt class="col-sm-3">Prénom</dt>
+                    <dd class="col-sm-9">{{ row.getFirstName() }} </dd>
+
+                    <dt class="col-sm-3">Adresse Email</dt>
+                    <dd class="col-sm-9">{{ row.getMail() }} </dd>
+
+                    <dt class="col-sm-3">Numéro de téléphone</dt>
+                    <dd class="col-sm-9">{{ row.getPhone() }} </dd>
+                </dl>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+    {% if hideshops is not defined %}
+        <h3>Boutiques</h3>
+        {% include 'shop/simple-shoplist.html.twig' with {'shops': customer.shops } %}
+        <div class="row" style="padding: 1%;">
+            <a href="{{ path('b2b_customer_shop_add', {'id': customer.id}) }}" class="btn btn-primary">Ajouter une
+                boutique</a>
+        </div>
+    {% endif %}
+
+        <h3>Marques assignées</h3>
+        {{ form_start(assignForm) }}
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                {{ form_widget(assignForm.brand) }}
+            </div>
+        </div>
+        <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Valider les modifications">
+        </div>
+        {{ form_end(assignForm) }}
+    </div>
+
+</div>

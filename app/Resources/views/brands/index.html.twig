@@ -1,0 +1,44 @@
+{% set active = 'brands' %}
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ parent() }} - Marques {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+{% endblock %}
+
+{% block content %}
+
+    <section class="container">
+        <a href="{{ path('command_select_customer') }}" class="btn btn-primary btn-orange ml-2 mr-2">Nouvelle
+            commande</a>
+        <div class="container-fluid line-tools">
+            <!-- STATISTIQUES GÉNÉRALES -->
+            <div class="card bg-light">
+                <div class="card-header">
+                    <h4>Statistiques depuis le début de la plateforme</h4>
+                </div>
+                <div class="card-body horizontal-list">
+                    <div class="horizontal-item">
+                        <span class="value"></span> clients actifs
+                    </div>
+                    <div class="horizontal-item">
+                        <span class="value"></span> commerciaux actifs
+                    </div>
+                    <div class="horizontal-item">
+                        <span class="value">{{ countCommandes }}</span> commandes passées
+                    </div>
+                    <div class="horizontal-item">
+                        <span class="value"></span> produits vendus
+                    </div>
+                    <div class="horizontal-item">
+                        <span class="value"> €</span> de chiffre d'affaires HT
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

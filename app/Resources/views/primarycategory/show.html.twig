@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('backoffice_primarycategory_index') }}">Gestion des catégories
+                primaires</a></li>
+        <li class="breadcrumb-item active">{{ primaryCategory.label }}</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_primarycategory_index') }}" class="btn btn-primary">Retour à la liste</a>
+        <a href="{{ path('backoffice_primarycategory_edit', { 'id': primaryCategory.id }) }}" class="btn btn-primary">Modifier</a>
+    </div>
+
+    <h1 class="text-center">Catégorie - {{ primaryCategory.label }}</h1>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8 login-form border rounded">
+            <dt class="col-sm-3">Numéro</dt>
+            <dd class="col-sm-9">{{ primaryCategory.id }}</dd>
+
+            <dt class="col-sm-3">Mode de paiement</dt>
+            <dd class="col-sm-9">{{ primaryCategory.label }}</dd>
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+{% endblock %}

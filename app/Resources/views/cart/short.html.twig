@@ -1,0 +1,31 @@
+
+<div id="cart-short" class="dropdown-menu" aria-labelledby="cartsDropdown">
+
+    <div >
+        <div class="dropdown-item">
+            {% if cart is defined and cart is not null %}
+                {% include 'cart/short-current.html.twig' with { 'cart' : cart } %}
+                ----------------
+            {% endif %}
+        </div>
+
+        {% if carts|length > 0 %}
+
+            {% for c in carts if not c.isEmpty() %}
+                <div class="dropdown-item">
+                    <p class="cart-brand">
+                        {{ c.brand }}
+                    </p>
+                    {% for cartCollection in c.cartCollections %}
+                        <p class="cart-collection">{{ cartCollection.collection }} - {{ cartCollection.nbProducts }} produits - {{ cartCollection.getTotal() }} €</p>
+                    {% endfor %}
+                    <p>Montant total : {{ c.getTotal() }} €</p>
+                </div>
+                <button class="btn btn-orange" onclick="location.href='{{ path('cart_show', {'id' : c.id }) }}';">Accéder à ce panier</button>
+                <a href="{{ path('cart_delete', {'id' : c.id, 'redirect' : "true" }) }}">Supprimer ce panier</a>
+
+            {% endfor %}
+        {% else %}
+        {% endif %}
+    </div>
+</div>

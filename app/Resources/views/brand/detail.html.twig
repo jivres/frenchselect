@@ -1,0 +1,321 @@
+<div class="row">
+    <h3 class="col-md-12">Identifiant</h3>
+    {% if var is not defined %}
+    <dt class="col-sm-3">Statut</dt>
+    <dd class="col-sm-9">
+        {% if brand.isActive %}
+            Actif
+        {% else %}
+            Non actif
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if var is defined %}
+        <dt class="col-sm-3">Mot de passe</dt>
+        <dd class="col-sm-9">{{ brand.getPassword() }}</dd>
+    {% endif %}
+
+    <dt class="col-sm-3">Adresse email</dt>
+    <dd class="col-sm-9">{{ brand.mail }}</dd>
+
+</div>
+<div class="row">
+    <h3 class="col-md-12">Informations sur la société</h3>
+    <dt class="col-sm-3">Nom de la société</dt>
+    <dd class="col-sm-9">{{ brand.name }}</dd>
+
+    <dt class="col-sm-3">Numéro SIREN</dt>
+    <dd class="col-sm-9">{{ brand.numSIREN }}</dd>
+
+    <dt class="col-sm-3">Ville d’immatriculation de la société (RCS)</dt>
+    <dd class="col-sm-9">{{ brand.RCSTown }}</dd>
+
+    <dt class="col-sm-3">Code APE</dt>
+    <dd class="col-sm-9">{{ brand.APECode }}</dd>
+
+    <dt class="col-sm-3">Adresse de facturation</dt>
+    <dd class="col-sm-9">{{ brand.billingAddress }}, {{ brand.billingZP }} {{ brand.billingTown }}
+        , {{ brand.billingCountry }}</dd>
+
+    <dt class="col-sm-3">Téléphone</dt>
+    <dd class="col-sm-9">{{ brand.phone }}</dd>
+
+
+    <dt class="col-sm-3">Numéro de TVA</dt>
+    <dd class="col-sm-9">{{ brand.numTVA }}</dd>
+
+    <dt class="col-sm-3">Franchise en base de TVA / Société en création</dt>
+    <dd class="col-sm-9">{% if brand.deductibleTVA %}OUI{% else %}NON{% endif %}</dd>
+
+    <dt class="col-sm-3">Capital</dt>
+    <dd class="col-sm-9">{{ brand.capital }} €</dd>
+</div>
+
+<div class="row">
+    <h3 class="col-md-12">Contacts</h3>
+    {% if brand.getContacts()|length > 0 %}
+        {% for row in brand.getContacts() %}
+            <dt class="col-sm-3">Fonction</dt>
+            <dd class="col-sm-9">{{ row.getfunction() }} </dd>
+
+            <dt class="col-sm-3">Nom</dt>
+            <dd class="col-sm-9">{{ row.getLastName() }} </dd>
+
+            <dt class="col-sm-3">Prénom</dt>
+            <dd class="col-sm-9">{{ row.getFirstName() }} </dd>
+
+            <dt class="col-sm-3">Adresse Email</dt>
+            <dd class="col-sm-9">{{ row.getMail() }} </dd>
+
+            <dt class="col-sm-3">Numéro de téléphone</dt>
+            <dd class="col-sm-9">{{ row.getPhone() }} </dd>
+            {% if not loop.last %}
+                <dt class="col-sm-3">------------------------</dt><dt class="col-sm-9"> ------------------------ </dt>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <dd class="col-sm-9">Aucun contact</dd>
+    {% endif %}
+
+</div>
+
+<div class="row">
+    <h3 class="col-md-12">Informations sur la marque</h3>
+    <dt class="col-sm-3">Nom de la marque</dt>
+    <dd class="col-sm-9">{{ brand.brandName }}</dd>
+
+    {% if var is not defined %}
+    <dt class="col-sm-3">Recommandation</dt>
+    <dd class="col-sm-9">{{ brand.recommandation }}</dd>
+    {% endif %}
+
+    <dt class="col-sm-3">Accès restreint au catalogue</dt>
+    <dd class="col-sm-9">{% if brand.accessRestricted %}OUI{% else %}NON{% endif %}</dd>
+
+
+    <dt class="col-sm-3">Slogan (phrase de présentation)</dt>
+    <dd class="col-sm-9">{{ brand.slogan }}</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">{{ brand.description }}</dd>
+
+    <dt class="col-sm-3">Pays de la marque</dt>
+    <dd class="col-sm-9">{{ brand.country }}</dd>
+
+    <dt class="col-sm-3">Pays de fabrication</dt>
+    <dd class="col-sm-9">{{ brand.manufactureCountry }}</dd>
+
+    <dt class="col-sm-3">Année de création</dt>
+    <dd class="col-sm-9">{{ brand.yearCreation }}</dd>
+
+    <dt class="col-sm-3">Site Web</dt>
+    <dd class="col-sm-9">{% if brand.urlWebsite == '' %}<i>Aucun site</i>{% else %}<a
+            href="{{ brand.urlWebsite }}">{{ brand.urlWebsite }}</a>{% endif %}</dd>
+
+    <dt class="col-sm-3">Profil Instagram</dt>
+    <dd class="col-sm-9">{% if brand.urlInsta == '' %}<i>Aucun profil</i>{% else %}<a
+            href="{{ brand.urlInsta }}">{{ brand.urlInsta }}</a>{% endif %}</dd>
+
+    <dt class="col-sm-3">Profil Facebook</dt>
+    <dd class="col-sm-9">{% if brand.urlFac == '' %}<i>Aucun profil</i>{% else %}<a
+            href="{{ brand.urlFac }}">{{ brand.urlFac }}</a>{% endif %}</dd>
+</div>
+{% if var is not defined %}
+<div class="row">
+    <h3 class="col-md-12">Style de la marque</h3>
+    <dt class="col-sm-3">Cible principale</dt>
+    <dd class="col-sm-9">{{ brand.primarytarget }}</dd>
+
+    <dt class="col-sm-3">Cibles secondaires</dt>
+    <dd class="col-sm-9">
+        {% for target in brand.targets %}
+            <span class="badge badge-secondary">{{ target }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Catégories</dt>
+    <dd class="col-sm-9">
+        {% for category in brand.categories %}
+            <span class="badge badge-secondary">{{ category }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Gamme de prix</dt>
+    <dd class="col-sm-9">{{ brand.priceRange }}</dd>
+
+    <dt class="col-sm-3">Styles</dt>
+    <dd class="col-sm-9">
+        {% for style in brand.styles %}
+            <span class="badge badge-secondary">{{ style }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Particularités</dt>
+    <dd class="col-sm-9">
+        {% for feature in brand.feature %}
+            <span class="badge badge-secondary">{{ feature }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Univers</dt>
+    <dd class="col-sm-9">
+        {% for univers in brand.univers %}
+            <span class="badge badge-secondary">{{ univers }}</span>
+        {% endfor %}
+    </dd>
+</div>
+{% endif %}
+
+<div class="row">
+    <h3 class="col-md-12">Informations sur les conditions commerciales</h3>
+    <dt class="col-sm-3">Minimum de commande</dt>
+    <dd class="col-sm-9">{{ brand.commandMin }} €</dd>
+
+
+    <dt class="col-sm-3">Marge commerciale conseillée</dt>
+    <dd class="col-sm-9">{{ brand.marginAvg }}</dd>
+
+    <dt class="col-sm-3">Franco de port</dt>
+    <dd class="col-sm-9">{{ brand.franco }} €</dd>
+
+    <dt class="col-sm-3">Frais de port si forfaitaire</dt>
+    <dd class="col-sm-9">{{ brand.deliveryCharges }} €</dd>
+
+    <dt class="col-sm-3">Conditions Générales de Vente</dt>
+    <dd class="col-sm-9">
+        {% if brand.CGV is null %}
+            <i>Aucun fichier</i>
+        {% else %}
+            <a href="{{ asset('uploads/' ~ brand.CGV.url) }}">Fichier PDF</a>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Délais de paiement autorisés</dt>
+    <dd class="col-sm-9">
+        {% for paymentTerm in brand.paymentTerms %}
+            <span class="badge badge-secondary">{{ paymentTerm }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Moyens de paiement</dt>
+    <dd class="col-sm-9">
+        {% for paymentMethod in brand.paymentMethods %}
+            <span class="badge badge-secondary">{{ paymentMethod }}</span>
+        {% endfor %}
+    </dd>
+</div>
+
+{% if var is not defined %}
+<div class="row">
+    <h3 class="col-md-12">Images</h3>
+    <dt class="col-sm-3">Logo</dt>
+    <dd class="col-sm-9">
+        {% if brand.logo is null %}
+            <i>Aucun fichier</i>
+        {% else %}
+            <img src="{{ asset('uploads/' ~ brand.logo.url) }}">
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Lifestyle principale</dt>
+    <dd class="col-sm-9">
+        {% if brand.lifestyle2 is not null %}
+            <img src="{{ asset('uploads/' ~ brand.lifestyle2.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo lifestyle</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Lifestyle homme</dt>
+    <dd class="col-sm-9">
+        {% if brand.lifestyleHomme is not null %}
+            <img src="{{ asset('uploads/' ~ brand.lifestyleHomme.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo lifestyle</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Lifestyle femme</dt>
+    <dd class="col-sm-9">
+        {% if brand.lifestyleFemme is not null %}
+            <img src="{{ asset('uploads/' ~ brand.lifestyleFemme.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo lifestyle</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Lifestyle enfant</dt>
+    <dd class="col-sm-9">
+        {% if brand.lifestyleEnfant is not null %}
+            <img src="{{ asset('uploads/' ~ brand.lifestyleEnfant.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo lifestyle</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Picture homme</dt>
+    <dd class="col-sm-9">
+        {% if brand.pictureHomme is not null %}
+            <img src="{{ asset('uploads/' ~ brand.pictureHomme.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Picture femme</dt>
+    <dd class="col-sm-9">
+        {% if brand.pictureFemme is not null %}
+            <img src="{{ asset('uploads/' ~ brand.pictureFemme.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo</i>
+        {% endif %}
+    </dd>
+
+    <dt class="col-sm-3">Picture enfant</dt>
+    <dd class="col-sm-9">
+        {% if brand.pictureEnfant is not null %}
+            <img src="{{ asset('uploads/' ~ brand.pictureEnfant.url) }}" class="img-fluid">
+        {% else %}
+            <i>Aucune photo</i>
+        {% endif %}
+    </dd>
+</div>
+
+{% endif %}
+
+{% if var is not defined %}
+<div class="row">
+    <h3 class="col-md-12">Marques recommandées</h3>
+    <dt class="col-sm-3">Homme</dt>
+    <dd class="col-sm-9">
+        {% for row in brandRecommande if row.getRecommandeHomme() != null %}
+            <span class="badge badge-secondary">{{ row.getRecommandeHomme().getName() }}</span>
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Femme</dt>
+    <dd class="col-sm-9">
+        {% for row in brandRecommande if row.getRecommandeFemme() != null %}
+            <span class="badge badge-secondary">{{ row.getRecommandeFemme().getName() }}</span>
+        {% endfor %}
+    </dd>
+    <dt class="col-sm-3">Enfant</dt>
+    <dd class="col-sm-9">
+        {% for row in brandRecommande if row.getRecommandeEnfant() != null %}
+            <span class="badge badge-secondary">{{ row.getRecommandeEnfant().getName() }}</span>
+        {% endfor %}
+    </dd>
+</div>
+{% endif %}
+
+
+{% if var is not defined %}
+<div class="row">
+    <h3 class="col-md-12">Calcul des univers</h3>
+    {% for row in brandUniversCalcul %}
+        <dt class="col-sm-3">{{ row.getUnivers() }} : {{ row.getPoids() }}pts</dt>
+    {% endfor %}
+</div>
+
+{% endif %}

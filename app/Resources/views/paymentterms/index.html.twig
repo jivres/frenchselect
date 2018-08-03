@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Paymentterms list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Label</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paymentTerm in paymentTerms %}
+            <tr>
+                <td><a href="{{ path('backoffice_paymentterms_show', { 'id': paymentTerm.id }) }}">{{ paymentTerm.id }}</a></td>
+                <td>{{ paymentTerm.label }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('backoffice_paymentterms_show', { 'id': paymentTerm.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('backoffice_paymentterms_edit', { 'id': paymentTerm.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('backoffice_paymentterms_new') }}">Create a new paymentTerm</a>
+        </li>
+    </ul>
+{% endblock %}

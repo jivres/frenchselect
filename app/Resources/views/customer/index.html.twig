@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Clients</li>
+    </ol>
+<div class="d-flex justify-content-center">
+    <a href="{{ path('backoffice_customer_new') }}" class="btn btn-primary">Créer un nouveau client</a>
+</div>
+
+    <table class="table table-striped mt-3 bg-white border">
+        <thead>
+            <tr>
+                <th scope="col">Statut</th>
+                <th scope="col">Boutique</th>
+                <th scope="col">Société</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+            {% for shop in customer.getShops() %}
+            <tr>
+                <td>{% if customer.isEnabled %}Actif{% else %}Non actif{% endif %}</td>
+                <td>{{ shop.name }}</td>
+                <td>{{ customer.companyName }}</td>
+                <td>{{ shop.zipCode }}</td>
+                <td>{{ shop.town }}</td>
+                <td>{{ shop.country }}</td>
+                <td>
+                    <a href="{{ path('backoffice_customer_show', { 'id': customer.id }) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('backoffice_customer_edit', { 'id': customer.id }) }}" class="btn btn-primary">Modifier</a>
+                    {% if is_granted('ROLE_ADMIN') and not customer.isEnabled %}
+                        <a href="{{ path('backoffice_user_activate', { 'id': customer.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

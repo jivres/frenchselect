@@ -1,0 +1,32 @@
+index:
+    path:      /showroom-b2b-mode
+    defaults:
+        _controller: B2bBundle:VitrineDefault:index
+
+connexion:
+    path:    /app/se-connecter
+    defaults:
+        _controller: B2bBundle:VitrineDefault:connexion
+
+details_marques:
+    path:    /{marque}
+    defaults:
+        _controller: B2bBundle:VitrineBrandDetails:getOneBrand
+
+details_salons:
+    path:    /salon/{ville}-{id}
+    defaults:
+        _controller: B2bBundle:VitrineDetails:getOneShowroom
+
+marques_index:
+    resource: "@B2bBundle/Resources/config/routing/vitrine/marques.yml"
+
+boutiques_index:
+    resource: "@B2bBundle/Resources/config/routing/vitrine/boutiques.yml"
+
+legal_index:
+    resource: "@B2bBundle/Resources/config/routing/vitrine/legal.yml"
+    prefix:    /legal
+
+info_index:
+    resource: "@B2bBundle/Resources/config/routing/vitrine/info.yml"

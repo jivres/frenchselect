@@ -1,0 +1,24 @@
+allowedcolor_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:AllowedColor:index" }
+    methods:  GET
+
+allowedcolor_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:AllowedColor:show" }
+    methods:  GET
+
+allowedcolor_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:AllowedColor:new" }
+    methods:  [GET, POST]
+
+allowedcolor_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:AllowedColor:edit" }
+    methods:  [GET, POST]
+
+allowedcolor_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:AllowedColor:delete" }
+    methods:  DELETE

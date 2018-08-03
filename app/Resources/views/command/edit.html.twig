@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <script>
+        function totalAmount(){
+            let totalAmount = document.getElementById("cart-total");
+            let total = 0;
+            let amounts = document.getElementsByClassName("price-total");
+            for(var i = 0; i < amounts.length; i++){
+                let str =  amounts[i].innerHTML.split(" ");
+                let valeur = Number(str[0]);
+                total = total + valeur;
+            }
+            totalAmount.innerHTML = total + " €";
+        }
+    </script>
+
+
+    <h1>Modification de la Commande {{ form.vars.value.command.id }} - Collection {{ form.vars.value.command.cartCollection.collection }}</h1>
+    {{ form_start(form) }}
+        {% include 'cart/cart-collection-form.html.twig' with { 'collection' : form.command.cartCollection } %}
+
+        <h2>Montant total de la commande : <span id="cart-total"></span></h2>
+
+        <div class="form-group row d-flex justify-content-end">
+            <div class='input-group date col-sm-6' id='datetimepicker'>
+                {{ form_label(form.command.cartCollection.deliveryDate, null, { 'label_attr': {'class': 'col-sm-4 col-form-label control-label'} }) }}
+                {{ form_widget(form.command.cartCollection.deliveryDate, {'attr': {'class': 'form-control col-sm-8 input-inline js-datepicker'}}) }}
+                <!--<span class="input-group-addon">
+                    <span class="oi oi-calendar" title="calendar"></span>
+                </span>-->
+            </div>
+        </div>
+        <h3 class="mt-5">Détails de la commande</h3>
+
+        <div class="form-group row">
+            {{ form_label(form.command.paymentTerms, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+            <div class="col-sm-9">
+                {{ form_widget(form.command.paymentTerms, {'attr': {'class': 'custom-select'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ form_label(form.command.paymentMethod, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+            <div class="col-sm-9">
+                {{ form_widget(form.command.paymentMethod, {'attr': {'class': 'custom-select'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ form_label(form.command.comment, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+            <div class="col-sm-9">
+                {{ form_widget(form.command.comment) }}
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        <input class="btn btn-primary" type="submit" value="Modifier la commande" />
+    {{ form_end(form, { 'render_rest': false }) }}
+{% endblock %}

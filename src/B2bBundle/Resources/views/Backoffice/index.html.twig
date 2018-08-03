@@ -1,0 +1,333 @@
+{% extends "base.html.twig" %}
+
+{% block title %}B2bBundle:Admin:index{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        function cancel() {
+            $('.lightbox').hide();
+            $('#accept-lightbox').hide();
+            $('#refuse-lightbox').hide();
+        }
+
+        $(document).ready(function () {
+            $('.js-datepicker').datepicker({
+                format: 'dd/mm/yyyy'
+            });
+            cancel();
+        });
+
+        function acceptMessage(id) {
+            $('#access-id').html(id);
+            $('.lightbox').show();
+            $('#accept-lightbox').show();
+        }
+
+        function refuseMessage(id) {
+            $('#access-id').html(id);
+            $('.lightbox').show();
+            $('#refuse-lightbox').show();
+        }
+
+        function accept() {
+            var id = $('#access-id').html();
+            var reason = $('#access-accept-reason').val();
+            $.ajax({
+                url: "{{ path('backoffice_access_accept') }}",
+                type: 'POST',
+                data: {id: id, reason: reason},
+                datatype: 'json'
+            }).done(function () {
+                $('#accept-lightbox').hide();
+                $('.lightbox').hide();
+                location.reload();
+            });
+        }
+
+        function refuse() {
+            var id = $('#access-id').html();
+            var reason = $('#access-refuse-reason').val();
+            /*if (reason == '') {
+                var form = document.getElementById("refuse-lightbox");
+                form.checkValidity();
+                form.classList.add("was-validated");
+                return;
+            }*/
+            $.ajax({
+                url: "{{ path('backoffice_access_refuse') }}",
+                type: 'POST',
+                data: {id: id, reason: reason},
+                datatype: 'json'
+            }).done(function () {
+                $('#refuse-lightbox').hide();
+                $('.lightbox').hide();
+                location.reload();
+            });
+        }
+
+        /*(function() {
+            "use strict";
+            window.addEventListener("load", function() {
+                var form = document.getElementById("needs-validation");
+                form.addEventListener("submit", function(event) {
+                    console.log('form validity');
+                    console.log(form.checkValidity());
+                    if (form.checkValidity() == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add("was-validated");
+                }, false);
+            }, false);
+        }());*/
+    </script>
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+<div class="row">
+    <div class="col-lg-3 column-filters p-4 shadow-sm bg-white">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <h2>Administrateur</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_admin_index') }}">Liste des administrateurs</a></li>
+                    <li><a href="{{ path('backoffice_admin_new') }}">Nouvel administrateur</a></li>
+                </ul>
+                <h2>Marques</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_brand_index') }}">Liste des marques</a></li>
+                    <li><a href="{{ path('backoffice_brand_new') }}">Nouvelle marque</a></li>
+                    <li><a href="{{ path('backoffice_brand_customer') }}">Relier marque / boutique</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Clients</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_customer_index') }}">Liste des clients</a></li>
+                    <li><a href="{{ path('backoffice_customer_import') }}">Importer des clients</a></li>
+                    <li><a href="{{ path('backoffice_customer_new') }}">Nouveau client</a></li>
+                    <li><a href="{{ path('backoffice_access_index') }}">Demandes d'accès à une marque</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Commerciaux</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_salesman_index') }}">Liste des commerciaux</a></li>
+                    <li><a href="{{ path('backoffice_salesman_new') }}">Nouveau commercial</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Salons</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_salon_index') }}">Liste des salons</a></li>
+                    <li><a href="{{ path('backoffice_salon_new') }}">Nouveau salon</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Commandes</h2>
+                <ul>
+                    <li><a href="{{ path('command_index') }}">Consulter les commandes</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Factures</h2>
+                <ul>
+                    <li><a href="{{ path('invoice_index') }}">Consulter les factures</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Bons de livraison</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_delivery_index') }}">Consulter les bons</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Gestion des e-mailing</h2>
+                <ul>
+                    <li><a href="{{ path('b2b_customer_mailing') }}">Consulter les campagnes d'e-mailing</a></li>
+                    <li><a href="{{ path('b2b_customer_mailing') }}">Lancer une campagne d'e-mailing</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <h2>Gestion des paramètres</h2>
+                <ul>
+                    <li><a href="{{ path('backoffice_color_index') }}">Couleurs principales</a></li>
+                    <li><a href="{{ path('backoffice_country_index') }}">Pays</a></li>
+                    <li><a href="{{ path('backoffice_style_index') }}">Styles / Univers</a></li>
+                    <li><a href="{{ path('backoffice_paymentmethod_index') }}">Mode de paiement</a></li>
+                    <li><a href="{{ path('backoffice_primarycategory_index') }}">Catégorie primaire</a></li>
+                    <li><a href="{{ path('backoffice_secondarycategory_index') }}">Catégorie secondaire</a></li>
+                    <li><a href="{{ path('backoffice_size_index') }}">Taille</a></li>
+                    <li><a href="{{ path('backoffice_pricerange_index') }}">Gamme de prix</a></li>
+                    <li><a href="{{ path('backoffice_season_index') }}">Saison</a></li>
+                    <li><a href="{{ path('backoffice_target_index') }}">Cible</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-9">
+
+        <section class="m-2">
+            <div>
+                <a href="{{ path('backoffice_brand_new') }}" class="btn btn-primary">Nouvelle marque</a>
+                <a href="{{ path('backoffice_customer_new') }}" class="btn btn-primary">Nouveau client</a>
+                <a href="{{ path('backoffice_salesman_new') }}" class="btn btn-primary">Nouveau commercial</a>
+                <a href="#" class="btn btn-primary">Nouveau salon</a>
+            </div>
+        </section>
+
+        <!-- STATISTIQUES GÉNÉRALES -->
+        <div class="card bg-white">
+            <div class="card-header">
+                <h1 class="text-center">Statistiques</h1>
+            </div>
+            <div class="card-body horizontal-list">
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalBrandsActifs }}</span> marques actives
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalCustomersActifs }}</span> clients actifs
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalSalesmanActifs }}</span> commerciaux actifs
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalCommands }}</span> commandes passées
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ nbTotalProductsSold }}</span> produits vendus
+                </div>
+                <div class="horizontal-item">
+                    <span class="value">{{ totalSold }} €</span> de chiffre d'affaires HT
+                </div>
+            </div>
+        </div>
+
+        <span id="access-id" style="display:none;"></span>
+
+        <div class="lightbox lightbox-center">
+            <div class="lightbox-content">
+                <div id="accept-lightbox">
+                    <div class="form-group">
+                        <label for="access-accept-reason">Raison de l'acceptation</label>
+                        <textarea class="form-control" id="access-accept-reason" rows="3"
+                                  placeholder="Raison de l'acceptation"></textarea>
+                        <div class="row">
+                            <button style="display:block; margin:5px auto" onclick="cancel();"
+                                    class="btn btn-outline-primary">Annuler
+                            </button>
+                            <button style="display:block; margin:5px auto;" onclick="accept();"
+                                    class="btn btn-outline-success" type="submit">Accepter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="refuse-lightbox">
+                    <div class="form-group">
+                        <label for="access-refuse-reason">Raison du refus</label>
+                        <textarea class="form-control" id="access-refuse-reason" rows="3" placeholder="Raison du refus"
+                                  required></textarea>
+                        <div class="invalid-feedback">
+                            Vous devez saisir la raison du refus.
+                        </div>
+                        <div class="row">
+                            <button style="display:block; margin:5px auto" onclick="cancel();"
+                                    class="btn btn-outline-primary">Annuler
+                            </button>
+                            <button style="display:block; margin:5px auto;" onclick="refuse();"
+                                    class="btn btn-outline-danger" type="submit">Refuser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border rounded p-3 m-3 bg-white">
+            <h2 class="text-center">Demandes d'inscription</h2>
+            {% if waitingacces|length > 0 %}
+
+                <table class="table table-stripped bg-white">
+                    <thead>
+                    <tr>
+                        <th>Nom de société</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for customer in waitingacces %}
+                        <tr>
+                            <td>{{ customer.companyName }}</td>
+                            <td>
+                                <a href="{{ path('backoffice_customer_show', { 'id': customer.id }) }}"
+                                   class="btn btn-primary">Détail</a>
+                                <a href="{{ path('backoffice_user_activate', { 'id': customer.id }) }}"
+                                   class="btn btn-outline-success">Activer le compte</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <i>Aucune demande en attente</i>
+            {% endif %}
+        </div>
+
+        <div class="border rounded p-3 m-3 bg-white">
+            <h2 class="text-center">Commandes non validées</h2>
+            {% if waitingcommands|length > 0 %}
+                {% include 'command/list.html.twig' with { 'commands': waitingcommands, 'showModal': true, 'viewer': 'admin' } %}
+            {% else %}
+                <i>Aucune commande en attente</i>
+            {% endif %}
+        </div>
+
+        <div class="border rounded p-3 m-3 bg-white">
+            <h2 class="text-center">Factures en attente de paiement</h2>
+            {% if waitinginvoices|length > 0 %}
+                {% include 'invoice/list.html.twig' with {'invoices': waitinginvoices, 'admin': true} %}
+            {% else %}
+                <i>Aucun paiement en attente</i>
+            {% endif %}
+        </div>
+
+        <div class="border rounded p-3 m-3 bg-white">
+            <h2 class="text-center">Demandes d'accès à une marque</h2>
+            {% if accessToHandle|length > 0 %}
+            <table class="table table-stripped">
+                <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Marque</th>
+                    <th>Motif</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for access in accessToHandle %}
+                    <tr>
+                        <td>{{ access.customer }}</td>
+                        <td>{{ access.brand }}</td>
+                        <td>{{ access.motive }}</td>
+                        <td>
+                            <button onclick="acceptMessage({{ access.id }});" class="btn btn-outline-success">Accepter</button>
+                            <button onclick="refuseMessage({{ access.id }});" class="btn btn-outline-danger">Refuser</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <i>Aucune demande en attente</i>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+        {% endblock %}

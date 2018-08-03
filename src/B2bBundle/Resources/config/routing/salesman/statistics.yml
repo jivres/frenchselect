@@ -1,0 +1,14 @@
+statistics_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:Statistics:index" }
+    methods:  GET
+
+statistics_sales_for_brand:
+    path:     /salesForBrand
+    defaults: { _controller: "B2bBundle:Statistics:salesForBrand" }
+    methods:  [POST]
+
+statistics_bestsellers:
+    path:     /bestsellers
+    defaults: { _controller: "B2bBundle:Statistics:bestsellers" }
+    methods:  [POST]

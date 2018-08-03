@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('b2b_backoffice_index') }}">Accueil</a></li>
+        <li class="breadcrumb-item active">Salons</li>
+    </ol>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backoffice_salon_new') }}" class="btn btn-primary">Créer un nouveau salon</a>
+    </div>
+
+    <table class="table table-striped mt-3 bg-white border">
+        <thead>
+        <tr>
+            <th scope="col">Statut</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Pays</th>
+            <th scope="col">Date début</th>
+            <th scope="col">Date fin</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for salon in salons %}
+            <tr>
+
+                {% if salon.getIsActive %}
+                    <td>Actif</td>
+                {% else %}
+                    <td>Non actif</td>
+                {% endif %}
+                <td>{{ salon.name }}</td>
+                <td>{{ salon.adresse }}</td>
+                <td>{{ salon.ville }}</td>
+                <td>{{ salon.pays }}</td>
+                <td>{{ salon.getDateDebut()|date("d") }}/{{ salon.getDateDebut()|date("m") }}
+                    /{{ salon.getDateDebut()|date("Y") }}</td>
+                <td>{{ salon.getDateFin()|date("d") }}/{{ salon.getDateFin()|date("m") }}
+                    /{{ salon.getDateFin()|date("Y") }}</td>
+                <td>
+
+
+                    <a href="{{ path('backoffice_salon_details', {'id': salon.id } ) }}"
+                       class="btn btn-primary">Voir</a>
+
+
+                    <a href="{{ path('backoffice_salon_edit', {'id': salon.id } ) }}"
+                       class="btn btn-primary">Modifier</a>
+
+                    {% if is_granted('ROLE_ADMIN') and not salon.getIsActive %}
+                        <a href="{{ path('backoffice_salon_activate', { 'id': salon.id }) }}" class="btn btn-outline-success">Activer le compte</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

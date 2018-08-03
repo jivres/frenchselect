@@ -1,0 +1,24 @@
+backoffice_paymentmethod_index:
+    path:     /
+    defaults: { _controller: "B2bBundle:PaymentMethod:index" }
+    methods:  GET
+
+backoffice_paymentmethod_show:
+    path:     /{id}/show
+    defaults: { _controller: "B2bBundle:PaymentMethod:show" }
+    methods:  GET
+
+backoffice_paymentmethod_new:
+    path:     /new
+    defaults: { _controller: "B2bBundle:PaymentMethod:new" }
+    methods:  [GET, POST]
+
+backoffice_paymentmethod_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "B2bBundle:PaymentMethod:edit" }
+    methods:  [GET, POST]
+
+backoffice_paymentmethod_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "B2bBundle:PaymentMethod:delete" }
+    methods:  DELETE
