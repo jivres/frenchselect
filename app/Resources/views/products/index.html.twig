@@ -128,7 +128,7 @@
 
 
 
-            {% if access is defined and access is not null %}
+            {% if access is defined and access is not null and not access.allowed %}
                 <section class="container-fluid sub-title-brands p-2">
                     <div class="container-book-detail">
                         <div class="container-book-detail-text">
